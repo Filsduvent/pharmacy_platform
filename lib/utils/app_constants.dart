@@ -8,6 +8,8 @@ import 'package:pharmacy_plateform/controllers/profile_controller.dart';
 import 'package:pharmacy_plateform/pharmacist/controllers/navigation_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controllers/slide_drug_controller.dart';
+
 class AppConstants {
   static const String CART_LIST = "cart-list";
   static const String CART_HISTORY_LIST = "cart-history-list";
@@ -35,3 +37,4 @@ var authController = AuthController.instance;
 var profileController = ProfileController.instance;
 var cartController = CartController.instance;
 var navigationController = NavigationController.instance;
+var slideDrugController = SlideDrugController.instance;

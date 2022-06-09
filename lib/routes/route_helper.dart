@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
-import 'package:pharmacy_plateform/pharmacist/view/screens/pharmacy_medecines_screen.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_medecines_screen.dart';
 import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
 import 'package:pharmacy_plateform/screens/drug/popular_drug_detail.dart';
 import 'package:pharmacy_plateform/screens/home/home_page.dart';

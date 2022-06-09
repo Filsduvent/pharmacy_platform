@@ -10,6 +10,7 @@ import '../utils/colors.dart';
 import 'cart_controller.dart';
 
 class SlideDrugController extends GetxController {
+  static SlideDrugController instance = Get.find();
   final Rx<List<Drug>> _slideDrugList = Rx<List<Drug>>([]);
 
   List<Drug> get slideDrugList => _slideDrugList.value;
