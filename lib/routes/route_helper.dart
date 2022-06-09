@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/pharmacy_medecines_screen.dart';
 import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
 import 'package:pharmacy_plateform/screens/drug/popular_drug_detail.dart';
 import 'package:pharmacy_plateform/screens/home/home_page.dart';
@@ -18,6 +19,7 @@ class RouteHelper {
   static const String signIn = "/sign-in";
 //Routers for pharmacist
   static const String mainPharmacyPage = "/main-pharmacy-page";
+  static const String pharmacyMedecinePage = "/pharmacy-medecine-page";
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -29,6 +31,7 @@ class RouteHelper {
   static String getSignInPage() => '$signIn';
   //Routers for pharmacist
   static String getMainPharmacyPage() => '$mainPharmacyPage';
+  static String getPharmacyMedecinePage() => '$pharmacyMedecinePage';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -67,6 +70,13 @@ class RouteHelper {
         name: mainPharmacyPage,
         page: () {
           return MainPharmacyScreen();
+        },
+        transition: Transition.fade),
+
+    GetPage(
+        name: pharmacyMedecinePage,
+        page: () {
+          return PharmacyMedicinesScreen();
         },
         transition: Transition.fade),
   ];

@@ -44,7 +44,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               color: Colors.white70,
             ),
             SizedBox(height: 24),
-            buildList(items: itemsSecond, isCollapsed: isCollapsed),
+            buildList(
+                indexOffset: itemsFirst.length,
+                items: itemsSecond,
+                isCollapsed: isCollapsed),
             Spacer(),
             buildCollapseIcon(context, isCollapsed),
             SizedBox(
@@ -100,8 +103,11 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     );
   }
 
-  Widget buildList(
-          {required List<DrawerItem> items, required bool isCollapsed}) =>
+  Widget buildList({
+    required List<DrawerItem> items,
+    required bool isCollapsed,
+    int indexOffset = 0,
+  }) =>
       ListView.separated(
         padding: isCollapsed ? EdgeInsets.zero : padding,
         shrinkWrap: true,
@@ -117,7 +123,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             isCollapsed: isCollapsed,
             text: item.title,
             icon: item.icon,
-            onClicked: () => selectItem(context, index),
+            onClicked: () => selectItem(context, indexOffset + index),
           );
         },
       );
@@ -152,9 +158,22 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   selectItem(BuildContext context, int index) {
+    navigator?.pop();
     switch (index) {
       case 0:
         Get.toNamed(RouteHelper.getCartPage());
+        break;
+
+      case 1:
+        Get.toNamed(RouteHelper.getPharmacyMedecinePage());
+        break;
+
+      case 2:
+        Get.toNamed(RouteHelper.getMainPharmacyPage());
+        break;
+
+      case 3:
+        Get.toNamed(RouteHelper.getSignInPage());
         break;
     }
   }

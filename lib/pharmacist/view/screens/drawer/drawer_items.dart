@@ -5,6 +5,7 @@ import 'package:pharmacy_plateform/pharmacist/model/drawer_item_model.dart';
 
 final itemsFirst = [
   DrawerItem(title: 'Get Started', icon: Icons.people),
+  DrawerItem(title: 'Medecines', icon: Icons.medical_services),
   DrawerItem(title: 'Samples & Tutorials', icon: Icons.phone_android),
   DrawerItem(title: 'Testing & Debugging', icon: Icons.settings_applications),
   DrawerItem(title: 'Performance & Optimization', icon: Icons.build),
