@@ -130,6 +130,8 @@ class RecentDrugDetail extends StatelessWidget {
             ),
           ],
         ),
+
+        // Bottom part
         bottomNavigationBar: Obx(() {
           return Column(
             mainAxisSize: MainAxisSize.min,

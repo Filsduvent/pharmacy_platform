@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_drug_details.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_medecines_screen.dart';
 import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
 import 'package:pharmacy_plateform/screens/drug/popular_drug_detail.dart';
@@ -20,6 +22,8 @@ class RouteHelper {
 //Routers for pharmacist
   static const String mainPharmacyPage = "/main-pharmacy-page";
   static const String pharmacyMedecinePage = "/pharmacy-medecine-page";
+  static const String pharmacyDetailsPage = '/pharmacy-details-page';
+  static const String pharmacyPostDrug = '/pharmacy-post-drug';
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -32,6 +36,9 @@ class RouteHelper {
   //Routers for pharmacist
   static String getMainPharmacyPage() => '$mainPharmacyPage';
   static String getPharmacyMedecinePage() => '$pharmacyMedecinePage';
+  static String getPharmacyDetailsPage(int pageId, String page) =>
+      '$pharmacyDetailsPage?pageId=$pageId&page=$page';
+  static String getPharmacyPostDrug() => '$pharmacyPostDrug';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -79,5 +86,21 @@ class RouteHelper {
           return PharmacyMedicinesScreen();
         },
         transition: Transition.fade),
+
+    GetPage(
+        name: pharmacyDetailsPage,
+        page: () {
+          var pageId = Get.parameters['pageId'];
+          var page = Get.parameters["page"];
+          return PharmacyDrugDetails(pageId: int.parse(pageId!), page: page!);
+        },
+        transition: Transition.fadeIn),
+
+    GetPage(
+        name: pharmacyPostDrug,
+        page: () {
+          return PostDrugForm();
+        },
+        transition: Transition.zoom),
   ];
 }
