@@ -3,6 +3,8 @@ import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_drug_details.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_medecines_screen.dart';
+import 'package:pharmacy_plateform/screens/address/add_address_screen.dart';
+import 'package:pharmacy_plateform/screens/address/address_screen.dart';
 import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
 import 'package:pharmacy_plateform/screens/drug/popular_drug_detail.dart';
 import 'package:pharmacy_plateform/screens/home/home_page.dart';
@@ -19,6 +21,8 @@ class RouteHelper {
   static const String recentDrug = '/recent-drug';
   static const String cartPage = "/cart-page";
   static const String signIn = "/sign-in";
+  static const String addressScreen = "/address-screen";
+  static const String addAddressScreen = "/add-address";
 //Routers for pharmacist
   static const String mainPharmacyPage = "/main-pharmacy-page";
   static const String pharmacyMedecinePage = "/pharmacy-medecine-page";
@@ -33,6 +37,8 @@ class RouteHelper {
       '$recentDrug?pageId=$pageId&page=$page';
   static String getCartPage() => '$cartPage';
   static String getSignInPage() => '$signIn';
+  static String getAddressScreen() => '$addressScreen';
+  static String getAddAddressScreen() => '$addAddressScreen';
   //Routers for pharmacist
   static String getMainPharmacyPage() => '$mainPharmacyPage';
   static String getPharmacyMedecinePage() => '$pharmacyMedecinePage';
@@ -71,6 +77,20 @@ class RouteHelper {
           return CartPage();
         },
         transition: Transition.fadeIn),
+
+    GetPage(
+        name: addressScreen,
+        page: () {
+          return AddressScreen();
+        },
+        transition: Transition.fadeIn),
+
+    GetPage(
+        name: addAddressScreen,
+        page: () {
+          return AddAddressScreen();
+        },
+        transition: Transition.zoom),
 
     //Routers for the pharmacist
     GetPage(

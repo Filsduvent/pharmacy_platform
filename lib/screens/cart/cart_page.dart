@@ -296,7 +296,8 @@ class CartPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (firebaseAuth.currentUser != null) {
-                          cartController.addToHistory();
+                          Get.toNamed(RouteHelper.getAddressScreen());
+                          //cartController.addToHistory();
                         } else {
                           Get.toNamed(RouteHelper.getSignInPage());
                         }
