@@ -123,7 +123,7 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                                               image: DecorationImage(
                                                   fit: BoxFit.cover,
                                                   image: NetworkImage(
-                                                      data.photoUrl!))),
+                                                      data.photoUrl))),
                                         ),
                                       ),
                                       Align(
@@ -166,7 +166,7 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                                                   CrossAxisAlignment.center,
                                               children: [
                                                 SmallText(
-                                                  text: data.title!,
+                                                  text: data.title,
                                                   color:
                                                       AppColors.mainBlackColor,
                                                   size: Dimensions.font20,
@@ -191,7 +191,7 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                                                               3,
                                                     ),
                                                     SmallText(
-                                                      text: data.categories!,
+                                                      text: data.categories,
                                                       size: Dimensions.font20,
                                                     ),
                                                   ],

@@ -226,11 +226,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                                       if (firebaseAuth
                                                               .currentUser !=
                                                           null) {
+                                                        /*
                                                         authController
                                                             .clearShareData();
                                                         cartController.clear();
                                                         cartController
-                                                            .clearCartHistory();
+                                                            .clearCartHistory();*/
                                                         authController.logOut();
                                                       }
                                                     },

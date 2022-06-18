@@ -93,7 +93,7 @@ class RecentDrugDetail extends StatelessWidget {
                 child: Container(
                   child: Center(
                       child:
-                          BigText(size: Dimensions.font26, text: drug.title!)),
+                          BigText(size: Dimensions.font26, text: drug.title)),
                   width: double.maxFinite,
                   padding: EdgeInsets.only(top: 5, bottom: 10),
                   decoration: BoxDecoration(
@@ -109,7 +109,7 @@ class RecentDrugDetail extends StatelessWidget {
               expandedHeight: 300,
               flexibleSpace: FlexibleSpaceBar(
                 background: Image.network(
-                  drug.photoUrl!,
+                  drug.photoUrl,
                   width: double.maxFinite,
                   fit: BoxFit.cover,
                 ),

@@ -33,16 +33,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.find<CartController>().getCartData();
     return GetBuilder<SlideDrugController>(builder: (_) {
-      return GetBuilder<CategoriesController>(builder: (_) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+      return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
 
-          //home: SignInScreen(),
-          initialRoute: RouteHelper.getSplashPage(),
-          getPages: RouteHelper.routes,
-        );
-      });
+        //home: SignInScreen(),
+        initialRoute: RouteHelper.getSplashPage(),
+        getPages: RouteHelper.routes,
+      );
     });
   }
 }

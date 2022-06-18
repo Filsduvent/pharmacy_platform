@@ -1,59 +1,75 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Drug {
-  String? id;
-  String? title;
-  //final String manifacturingDate;
-  String? expiringDate;
-  String? photoUrl;
-  String? categories;
-  int? price;
-  //String? description;
+  String id;
+  String title;
+  String manufacturingDate;
+  String expiringDate;
+  String photoUrl;
+  String categories;
+  int price;
+  String uid;
+  String publishedDate;
+  String status;
+  String description;
   Drug({
-    this.id,
-    this.title,
-    // this.manifacturingDate,
-    this.expiringDate,
-    this.photoUrl,
-    this.categories,
-    this.price,
-    // this.description,
+    required this.id,
+    required this.title,
+    required this.manufacturingDate,
+    required this.expiringDate,
+    required this.photoUrl,
+    required this.categories,
+    required this.price,
+    required this.uid,
+    required this.publishedDate,
+    required this.status,
+    required this.description,
   });
 
-  Drug.fromSnap(DocumentSnapshot snap) {
+  static Drug fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
-
-    id = snap.id;
-    title = snapshot['title'].toString();
-    //manifacturingDate: snapshot['manifacturing_date'].toString();
-    expiringDate = snapshot['expiring_date'].toString();
-    photoUrl = snapshot['photo_url'].toString();
-    categories = snapshot['categories'].toString();
-    price = snapshot['price'] as int;
-    //description = snapshot['description'].toString();
+    return Drug(
+      id: snap.id,
+      title: snapshot['title'].toString(),
+      manufacturingDate: snapshot['manufacturing_date'].toString(),
+      expiringDate: snapshot['expiring_date'].toString(),
+      photoUrl: snapshot['photo_url'].toString(),
+      categories: snapshot['categories'].toString(),
+      price: snapshot['price'] as int,
+      uid: snapshot['uid'].toString(),
+      publishedDate: snapshot['published_date'].toString(),
+      status: snapshot['status'].toString(),
+      description: snapshot['description'].toString(),
+    );
   }
 
-  Drug.fromMaps(Map<String, dynamic> data) {
-    id = data['id'];
-    title = data['title'].toString();
-    //manifacturingDate: snapshot['manifacturing_date'].toString(),
-    expiringDate = data['expiring_date'].toString();
-    photoUrl = data['photo_url'].toString();
-    categories = data['categories'].toString();
-    price = data['price'] as int;
-    //description = data['description'].toString();
+  static Drug fromMaps(Map<String, dynamic> data) {
+    return Drug(
+      id: data['id'],
+      title: data['title'].toString(),
+      manufacturingDate: data['manufacturing_date'].toString(),
+      expiringDate: data['expiring_date'].toString(),
+      photoUrl: data['photo_url'].toString(),
+      categories: data['categories'].toString(),
+      price: data['price'] as int,
+      uid: data['uid'].toString(),
+      publishedDate: data['published_date'],
+      status: data['status'],
+      description: data['description'].toString(),
+    );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'title': title,
-      //'manifacturing_date': manifacturingDate,
-      'expiring_date': expiringDate,
-      'photo_url': photoUrl,
-      'categories': categories,
-      'price': price,
-      //'description': description,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "title": title,
+        "manufacturing_date": manufacturingDate,
+        "expiring_date": expiringDate,
+        "photo_url": photoUrl,
+        "categories": categories,
+        "price": price,
+        "uid": uid,
+        "published_date": publishedDate,
+        "status": status,
+        "description": description,
+      };
 }

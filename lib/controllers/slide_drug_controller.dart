@@ -30,7 +30,7 @@ class SlideDrugController extends GetxController {
   onInit() async {
     super.onInit();
     _slideDrugList.bindStream(FirebaseFirestore.instance
-        .collection('drug')
+        .collection('Medicines')
         //.limit(5)
         .snapshots()
         .map((QuerySnapshot query) {

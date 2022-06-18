@@ -22,7 +22,7 @@ class CartController extends GetxController {
   void addItem(Drug drug, int quantity) {
     var totalQuantity = 0;
     if (_items.containsKey(drug.id)) {
-      _items.update(drug.id!, (value) {
+      _items.update(drug.id, (value) {
         totalQuantity = value.quantity! + quantity;
         update();
         return CartModel(
@@ -37,11 +37,11 @@ class CartController extends GetxController {
       });
 
       if (totalQuantity <= 0) {
-        _items.remove(drug.id!);
+        _items.remove(drug.id);
       }
     } else {
       if (quantity > 0) {
-        _items.putIfAbsent(drug.id!, () {
+        _items.putIfAbsent(drug.id, () {
           return CartModel(
               id: drug.id,
               title: drug.title,
@@ -125,7 +125,7 @@ class CartController extends GetxController {
     print("Length of cart items ${storageItems.length}");
 
     for (int i = 0; i < storageItems.length; i++) {
-      _items.putIfAbsent(storageItems[i].drug!.id!, () => storageItems[i]);
+      _items.putIfAbsent(storageItems[i].drug!.id, () => storageItems[i]);
     }
   }
 

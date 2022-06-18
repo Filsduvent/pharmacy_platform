@@ -117,7 +117,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
             height: Dimensions.height10 * 10,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: categoryController.categoryModel.length,
+              itemCount: categoryController.categoryList.length,
               itemBuilder: (context, index) {
                 return Column(
                   children: [
@@ -132,13 +132,12 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                       height: Dimensions.height30 * 2,
                       width: Dimensions.width30 * 2,
                       child: Image.network(
-                          categoryController.categoryModel[index].image!),
+                          categoryController.categoryList[index].image!),
                     ),
                     SizedBox(
                       height: Dimensions.height15,
                     ),
-                    BigText(
-                        text: categoryController.categoryModel[index].name!),
+                    BigText(text: categoryController.categoryList[index].name!),
                   ],
                 );
               },
@@ -214,7 +213,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(
-                                              recentdata.photoUrl!))),
+                                              recentdata.photoUrl))),
                                 ),
                               ),
                               Align(
@@ -252,7 +251,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        BigText(text: recentdata.title!),
+                                        BigText(text: recentdata.title),
                                         SizedBox(
                                           height: Dimensions.height10,
                                         ),
@@ -378,7 +377,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(
-                                              recentdata.photoUrl!))),
+                                              recentdata.photoUrl))),
                                 ),
                               ),
                               Align(
@@ -416,7 +415,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        BigText(text: recentdata.title!),
+                                        BigText(text: recentdata.title),
                                         SizedBox(
                                           height: Dimensions.height10,
                                         ),
@@ -542,7 +541,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                       image: DecorationImage(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(
-                                              recentdata.photoUrl!))),
+                                              recentdata.photoUrl))),
                                 ),
                               ),
                               Align(
@@ -580,7 +579,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        BigText(text: recentdata.title!),
+                                        BigText(text: recentdata.title),
                                         SizedBox(
                                           height: Dimensions.height10,
                                         ),
@@ -696,7 +695,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                 color: Colors.white38,
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
-                                    image: NetworkImage(recentdata.photoUrl!)),
+                                    image: NetworkImage(recentdata.photoUrl)),
                               ),
                             ),
                             //text container
@@ -721,7 +720,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      BigText(text: recentdata.title!),
+                                      BigText(text: recentdata.title),
                                       SizedBox(
                                         height: Dimensions.height10,
                                       ),
@@ -808,7 +807,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                   color: index.isEven ? Color(0xFF69c5df) : Color(0xFF9294cc),
                   image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(slideDrugList.photoUrl!))),
+                      image: NetworkImage(slideDrugList.photoUrl))),
             ),
           ),
           Align(
@@ -844,7 +843,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BigText(text: slideDrugList.title!),
+                    BigText(text: slideDrugList.title),
                     SizedBox(
                       height: Dimensions.height10,
                     ),

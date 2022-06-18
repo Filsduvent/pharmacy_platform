@@ -15,7 +15,7 @@ class RecentDrugController extends GetxController {
   void onInit() {
     super.onInit();
     _recentDrugList.bindStream(FirebaseFirestore.instance
-        .collection('drug')
+        .collection('Medicines')
         .snapshots()
         .map((QuerySnapshot query) {
       List<Drug> retVal = [];

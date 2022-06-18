@@ -56,7 +56,7 @@ class CartModel {
       "quantity": this.quantity,
       "isExist": this.isExist,
       "time": this.time,
-      "drug": this.drug!.toMap(),
+      "drug": this.drug!.toJson(),
     };
   }
 }

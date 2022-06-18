@@ -11,6 +11,7 @@ class User {
   String role;
   String profilePhoto;
   String uid;
+  List userCart;
 
   User({
     required this.username,
@@ -22,6 +23,7 @@ class User {
     required this.role,
     required this.profilePhoto,
     required this.uid,
+    required this.userCart,
   });
 
   Map<String, dynamic> toJson() => {
@@ -34,6 +36,7 @@ class User {
         "password": password,
         "profilePhoto": profilePhoto,
         "uid": uid,
+        "userCart": userCart,
       };
 
   static User fromSnap(DocumentSnapshot snap) {
@@ -48,6 +51,7 @@ class User {
       password: snapshot['password'],
       profilePhoto: snapshot['profilePhoto'],
       uid: snapshot['uid'],
+      userCart: snapshot['userCart'],
     );
   }
 }

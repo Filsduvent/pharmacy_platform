@@ -41,8 +41,7 @@ class PopularDrugDetail extends StatelessWidget {
                 height: Dimensions.popularFoodImgSize,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(drug.photoUrl!))),
+                        fit: BoxFit.cover, image: NetworkImage(drug.photoUrl))),
               ),
             ),
 
@@ -130,7 +129,7 @@ class PopularDrugDetail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppColumn(
-                      text: drug.title!,
+                      text: drug.title,
                     ),
                     SizedBox(
                       height: Dimensions.height20,
@@ -141,8 +140,7 @@ class PopularDrugDetail extends StatelessWidget {
                     ),
                     Expanded(
                       child: SingleChildScrollView(
-                        child: ExpandableTextWidget(text: "" //drug.description!
-                            ),
+                        child: ExpandableTextWidget(text: drug.description),
                       ),
                     ),
                   ],

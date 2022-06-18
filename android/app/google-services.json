@@ -29,6 +29,13 @@
             {
               "client_id": "475508724472-ake179dii5h2tjor6qv304hspm2qc7is.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "475508724472-574p5c4if1v7sgousrgdc86vljir0mtf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.pharmacyPlateform"
+              }
             }
           ]
         }

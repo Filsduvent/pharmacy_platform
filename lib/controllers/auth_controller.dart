@@ -114,7 +114,7 @@ class AuthController extends GetxController {
           password: password,
           profilePhoto: downloadUrl,
           uid: cred.user!.uid,
-          //AppConstants.userCartList: ["garbageValue"],
+          userCart: ["garbageValue"],
         );
         await firestore
             .collection('Users')
@@ -135,8 +135,8 @@ class AuthController extends GetxController {
               AppConstants.userPassword, password);
           await sharedPreferences.setString(
               AppConstants.userProfilePhoto, downloadUrl);
-          // await sharedPreferences
-          //     .setStringList(AppConstants.userCartList, ["garbageValue"]);
+          await sharedPreferences
+              .setStringList(AppConstants.userCartList, ["garbageValue"]);
 
           if (cred != null) {
             readData(cred).then((value) async {
@@ -251,8 +251,9 @@ class AuthController extends GetxController {
       await sharedPreferences.setString(
           AppConstants.userProfilePhoto, json[AppConstants.userProfilePhoto]);
 
-      // List<String> cartList= json[AppConstants.userCartList].Cast<String>();
-      // await sharedPreferences.setStringList(AppConstants.userCartList, cartList);
+      List<String> cartList = json[AppConstants.userCartList].Cast<String>();
+      await sharedPreferences.setStringList(
+          AppConstants.userCartList, cartList);
     });
   }
 
@@ -265,6 +266,7 @@ class AuthController extends GetxController {
     AppConstants.sharedPreferences!.remove(AppConstants.userStatus);
     AppConstants.sharedPreferences!.remove(AppConstants.userPassword);
     AppConstants.sharedPreferences!.remove(AppConstants.userProfilePhoto);
+    AppConstants.sharedPreferences!.remove(AppConstants.userCartList);
     return true;
   }
 }

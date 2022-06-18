@@ -85,7 +85,12 @@ class CartRepo {
       return cart.add(jsonEncode(element));
     });
 
-    sharedPreferences.setStringList(AppConstants.CART_LIST, cart);
+    firestore
+        .collection('Users')
+        .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+        .update({AppConstants.userCartList: cart});
+
+    sharedPreferences.setStringList(AppConstants.userCartList, cart);
     // print(sharedPreferences.getStringList(AppConstants.CART_LIST));
     //getCartList();
   }
@@ -93,8 +98,8 @@ class CartRepo {
   List<CartModel> getCartList() {
     List<String> carts = [];
 
-    if (sharedPreferences.containsKey(AppConstants.CART_LIST)) {
-      carts = sharedPreferences.getStringList(AppConstants.CART_LIST)!;
+    if (sharedPreferences.containsKey(AppConstants.userCartList)) {
+      carts = sharedPreferences.getStringList(AppConstants.userCartList)!;
       print("inside getCartList $carts");
     }
     List<CartModel> cartList = [];
@@ -137,7 +142,7 @@ class CartRepo {
 
   void removeCart() {
     cart = [];
-    sharedPreferences.remove(AppConstants.CART_LIST);
+    sharedPreferences.remove(AppConstants.userCartList);
   }
 
   void clearCartHistory() {
