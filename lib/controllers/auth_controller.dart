@@ -251,7 +251,8 @@ class AuthController extends GetxController {
       await sharedPreferences.setString(
           AppConstants.userProfilePhoto, json[AppConstants.userProfilePhoto]);
 
-      List<String> cartList = json[AppConstants.userCartList].Cast<String>();
+      List<String> cartList =
+          json[AppConstants.userCartList] /*.Cast<String>()*/;
       await sharedPreferences.setStringList(
           AppConstants.userCartList, cartList);
     });

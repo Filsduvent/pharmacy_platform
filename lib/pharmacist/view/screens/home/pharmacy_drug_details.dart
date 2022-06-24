@@ -121,7 +121,9 @@ class PharmacyDrugDetails extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(RouteHelper.getPharmacyUpdateDrugPage());
+              },
               child: Container(
                 padding: EdgeInsets.only(
                     top: Dimensions.height20,

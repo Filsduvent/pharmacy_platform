@@ -1,13 +1,11 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, unused_field, prefer_final_fields, sort_child_properties_last
 
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pharmacy_plateform/pharmacist/controllers/post_drug_controller.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/widgets/Pharmacy_app_text_field.dart';
-import '../../../../utils/app_constants.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/dimensions.dart';
 import '../../../../widgets/app_icon.dart';
@@ -29,9 +27,6 @@ class _PostDrugFormState extends State<PostDrugForm> {
   var priceController = TextEditingController();
   var _date = TextEditingController();
   var _mandate = TextEditingController();
-
-  bool isObscure = true;
-  bool isVisible = true;
 
   var selectedType;
   List<String> _accountType = ['Pills', 'Injectables', 'Sirop', 'Gellule'];
