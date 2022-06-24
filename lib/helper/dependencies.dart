@@ -1,3 +1,5 @@
+import 'package:pharmacy_plateform/controllers/address_changer_controller.dart';
+import 'package:pharmacy_plateform/controllers/address_controller.dart';
 import 'package:pharmacy_plateform/controllers/auth_controller.dart';
 import 'package:pharmacy_plateform/controllers/categories_controller.dart';
 import 'package:pharmacy_plateform/controllers/profile_controller.dart';
@@ -28,4 +30,6 @@ Future<void> init() async {
   Get.lazyPut(() => ProfileController());
   Get.lazyPut(() => NavigationController());
   Get.lazyPut(() => PostDrugController());
+  Get.lazyPut(() => AddressController());
+  Get.lazyPut(() => AddressChangerController());
 }

@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/utils/app_constants.dart';
 
 import '../../pharmacist/view/screens/widgets/Pharmacy_app_text_field.dart';
-import '../../routes/route_helper.dart';
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/big_text.dart';
@@ -147,7 +147,26 @@ class AddAddressScreen extends StatelessWidget {
 
       //floatingActionButton
 
-      floatingActionButton: BuildAddAddressButton(),
+      floatingActionButton: FloatingActionButton.extended(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(Dimensions.radius15)),
+          backgroundColor: AppColors.mainColor,
+          label: BigText(
+            text: 'Done',
+            color: Colors.white,
+          ),
+          icon: const Icon(Icons.check),
+          onPressed: () {
+            addressController.saveAddressToFirestore(
+                _nameController.text.trim(),
+                _phoneNumberController.text.trim(),
+                _provinceController.text.trim(),
+                _communeController.text.trim(),
+                _zoneController.text.trim(),
+                _quarterController.text.trim(),
+                _avenueController.text.trim(),
+                _houseNumberController.text.trim());
+          }),
     ));
   }
 
@@ -160,7 +179,5 @@ class AddAddressScreen extends StatelessWidget {
         color: Colors.white,
       ),
       icon: const Icon(Icons.check),
-      onPressed: () {
-        Get.toNamed(RouteHelper.getAddAddressScreen());
-      });
+      onPressed: () {});
 }

@@ -73,8 +73,8 @@ class CartRepo {
   List<String> cartHistory = [];
 
   void addToCartList(List<CartModel> cartList) {
-    //sharedPreferences.remove(AppConstants.CART_LIST);
-    //sharedPreferences.remove(AppConstants.CART_HISTORY_LIST);
+    // sharedPreferences.remove(AppConstants.CART_LIST);
+    // sharedPreferences.remove(AppConstants.CART_HISTORY_LIST);
     //return;
     var time = DateTime.now().toString();
     cart = [];
@@ -85,14 +85,9 @@ class CartRepo {
       return cart.add(jsonEncode(element));
     });
 
-    firestore
-        .collection('Users')
-        .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
-        .update({AppConstants.userCartList: cart});
-
     sharedPreferences.setStringList(AppConstants.userCartList, cart);
     // print(sharedPreferences.getStringList(AppConstants.CART_LIST));
-    //getCartList();
+    getCartList();
   }
 
   List<CartModel> getCartList() {
@@ -106,6 +101,10 @@ class CartRepo {
     carts.forEach(
         (element) => cartList.add(CartModel.fromMap(jsonDecode(element))));
 
+    firestore
+        .collection('Users')
+        .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+        .update({AppConstants.userCartList: carts});
     return cartList;
   }
 

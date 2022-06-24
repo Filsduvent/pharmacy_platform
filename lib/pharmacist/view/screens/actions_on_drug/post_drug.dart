@@ -288,7 +288,7 @@ class _PostDrugFormState extends State<PostDrugForm> {
                               _date.text,
                               postDrugController.drugPhoto,
                               category,
-                              priceController.text,
+                              int.parse(priceController.text),
                               descriptionController.text,
                             );
                           },

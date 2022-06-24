@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
+import 'dart:convert';
+
 import 'package:pharmacy_plateform/base/no_data_page.dart';
 import 'package:pharmacy_plateform/controllers/cart_controller.dart';
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/models/cart_model.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import '../../controllers/recent_drug_controller.dart';
 import '../../routes/route_helper.dart';
@@ -18,6 +21,7 @@ class CartPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<CartModel> retVal = [];
     return Scaffold(
       body: Stack(
         children: [
@@ -76,9 +80,29 @@ class CartPage extends StatelessWidget {
                         child: GetBuilder<CartController>(
                             builder: (cartController) {
                           var _cartList = cartController.getItems;
+
+                          final getCart = cartControllers.data;
+
+                          print(
+                              "============ LOG: ${getCart['userCart'].toString().substring(3000)}");
+                          final cartContents =
+                              jsonDecode(getCart['userCart'].toString())
+                                  as List;
+
+                          // final cartContents = jsonDecode(cartControllers
+                          //     .cartDrugList[0].userCart
+                          //     .toString()) as List;
+
+                          print("------------------ ${getCart.runtimeType}");
+
+                          print(
+                              "le client a dans son cart ${cartContents.length} produit.");
+
                           return ListView.builder(
                               itemCount: _cartList.length,
                               itemBuilder: (_, index) {
+                                print(
+                                    "===============> ${cartContents[index]['title']} - ${cartContents[index]['time']}");
                                 return Container(
                                   width: double.maxFinite,
                                   height: Dimensions.height20 * 5,
@@ -126,6 +150,8 @@ class CartPage extends StatelessWidget {
                                               image: DecorationImage(
                                                   fit: BoxFit.cover,
                                                   image: NetworkImage(
+                                                      /*cartContents[index][
+                                                          'photoUrl'] */
                                                       cartController
                                                               .getItems[index]
                                                               .photoUrl ??
@@ -149,13 +175,19 @@ class CartPage extends StatelessWidget {
                                                 MainAxisAlignment.spaceEvenly,
                                             children: [
                                               BigText(
-                                                text: cartController
-                                                        .getItems[index]
-                                                        .title ??
-                                                    "",
+                                                text: /*cartContents[index]
+                                                    ['title']*/
+                                                    cartController
+                                                            .getItems[index]
+                                                            .title ??
+                                                        "",
                                                 color: Colors.black54,
                                               ),
-                                              SmallText(text: "Pills"),
+                                              SmallText(
+                                                  text:
+                                                      "Pills" /* cartContents[index]
+                                                      ['time']*/
+                                                  ),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -163,7 +195,7 @@ class CartPage extends StatelessWidget {
                                                 children: [
                                                   BigText(
                                                     text:
-                                                        "\$ ${cartController.getItems[index].price.toString()}",
+                                                        "\$ ${cartController.getItems[index].price.toString() /*cartContents[index]['price'].toString()*/}",
                                                     color: Colors.redAccent,
                                                   ),
                                                   Container(
@@ -206,10 +238,13 @@ class CartPage extends StatelessWidget {
                                                               2,
                                                         ),
                                                         BigText(
-                                                            text: _cartList[
-                                                                    index]
-                                                                .quantity
-                                                                .toString()), // popularProduct.inCartItems.toString()),
+                                                            text: /* cartContents[
+                                                                        index]
+                                                                    ['quantity']
+                                                                .toString() */
+                                                                _cartList[index]
+                                                                    .quantity
+                                                                    .toString()), // popularProduct.inCartItems.toString()),
                                                         SizedBox(
                                                           width: Dimensions
                                                                   .width10 /

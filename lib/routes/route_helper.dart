@@ -9,6 +9,7 @@ import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
 import 'package:pharmacy_plateform/screens/drug/popular_drug_detail.dart';
 import 'package:pharmacy_plateform/screens/home/home_page.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/screens/orders/place_order.dart';
 
 import '../screens/cart/cart_page.dart';
 import '../screens/drug/recent_drug_detail.dart';
@@ -23,6 +24,7 @@ class RouteHelper {
   static const String signIn = "/sign-in";
   static const String addressScreen = "/address-screen";
   static const String addAddressScreen = "/add-address";
+  static const String placeOrder = "/place-order";
 //Routers for pharmacist
   static const String mainPharmacyPage = "/main-pharmacy-page";
   static const String pharmacyMedecinePage = "/pharmacy-medecine-page";
@@ -39,6 +41,8 @@ class RouteHelper {
   static String getSignInPage() => '$signIn';
   static String getAddressScreen() => '$addressScreen';
   static String getAddAddressScreen() => '$addAddressScreen';
+  static String getPlaceOrder({required String addressId}) =>
+      '$placeOrder?addressId=$addressId';
   //Routers for pharmacist
   static String getMainPharmacyPage() => '$mainPharmacyPage';
   static String getPharmacyMedecinePage() => '$pharmacyMedecinePage';
@@ -91,6 +95,15 @@ class RouteHelper {
           return AddAddressScreen();
         },
         transition: Transition.zoom),
+
+    GetPage(
+        name: placeOrder,
+        page: () {
+          var addressId = Get.parameters['addressId'];
+
+          return PlaceOrder(addressId: addressId!);
+        },
+        transition: Transition.fadeIn),
 
     //Routers for the pharmacist
     GetPage(

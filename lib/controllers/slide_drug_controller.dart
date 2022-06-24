@@ -39,6 +39,7 @@ class SlideDrugController extends GetxController {
         retVal.add(
           Drug.fromSnap(element),
         );
+
         _isLoaded.value = true;
       }
       return retVal;

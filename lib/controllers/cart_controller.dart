@@ -1,9 +1,12 @@
 // ignore_for_file: avoid_print
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmacy_plateform/models/cart_model.dart';
 import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/models/user_model.dart';
+import 'package:pharmacy_plateform/utils/app_constants.dart';
 
 import '../repository/cart_repo.dart';
 import '../utils/colors.dart';
@@ -16,8 +19,57 @@ class CartController extends GetxController {
 
   Map<String, CartModel> get items => _items;
 
+  Map _data = {};
+
+  Map get data => _data;
+
   //Only for storage and sharedpreferences
   List<CartModel> storageItems = [];
+
+  final Rx<List<User>> _cartDrugList = Rx<List<User>>([]);
+
+  List<User> get cartDrugList => _cartDrugList.value;
+
+  @override
+  onInit() async {
+    super.onInit();
+    _cartDrugList.bindStream(FirebaseFirestore.instance
+        .collection('Users')
+        //.limit(5)
+        .snapshots()
+        .map((QuerySnapshot query) {
+      List<User> retVal = [];
+      for (var element in query.docs) {
+        retVal.add(
+          User.fromSnap(element),
+        );
+      }
+      return retVal;
+    }));
+  }
+
+  void onReady() {
+    super.onReady();
+    getCartContentData();
+  }
+
+  Future<void> getCartContentData() async {
+    try {
+      final response = await firestore
+          .collection('Users')
+          .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+          .get();
+
+      if (response.exists) {
+        _data = response.data() as Map;
+      }
+      // print("************************* ${data}");
+    } on FirebaseException catch (e) {
+      print(e);
+    } catch (error) {
+      print(error);
+    }
+  }
 
   void addItem(Drug drug, int quantity) {
     var totalQuantity = 0;
@@ -97,6 +149,7 @@ class CartController extends GetxController {
     _items.forEach((key, value) {
       totalQuantity = totalQuantity + value.quantity!;
     });
+
     return totalQuantity;
   }
 

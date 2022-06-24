@@ -130,7 +130,7 @@ class AuthController extends GetxController {
           await sharedPreferences.setString(AppConstants.userPhone, phone);
           await sharedPreferences.setString(AppConstants.userAddress, address);
           await sharedPreferences.setString(
-              AppConstants.userStatus, "activeted");
+              AppConstants.userStatus, "activated");
           await sharedPreferences.setString(
               AppConstants.userPassword, password);
           await sharedPreferences.setString(

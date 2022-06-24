@@ -107,7 +107,7 @@ class PostDrugController extends GetxController {
     String expiringDate,
     File? photoUrl,
     String categories,
-    String price,
+    int price,
     String description,
   ) async {
     try {
@@ -132,7 +132,7 @@ class PostDrugController extends GetxController {
         showCustomSnackBar("Fill your expiring date please", title: "exp date");
       } else if (categories.isEmpty) {
         showCustomSnackBar("Fill your category please", title: "category");
-      } else if (price.isEmpty) {
+      } else if (price == null) {
         showCustomSnackBar("Fill your price please", title: "price");
       } else if (description.isEmpty) {
         showCustomSnackBar("Fill your description please",
@@ -153,7 +153,7 @@ class PostDrugController extends GetxController {
           expiringDate: expiringDate,
           photoUrl: downloadUrl,
           categories: categories,
-          price: price as int,
+          price: price,
           uid: uid,
           publishedDate: DateTime.now().toString(),
           status: "Available",
@@ -166,7 +166,7 @@ class PostDrugController extends GetxController {
       }
     } catch (e) {
       showCustomSnackBar(
-        'Error Uploading Item',
+        e.toString(),
         title: "Create drug item",
       );
     }

@@ -226,12 +226,52 @@ class _AccountScreenState extends State<AccountScreen> {
                                                       if (firebaseAuth
                                                               .currentUser !=
                                                           null) {
-                                                        /*
                                                         authController
                                                             .clearShareData();
-                                                        cartController.clear();
-                                                        cartController
-                                                            .clearCartHistory();*/
+                                                        cartControllers.clear();
+                                                        cartControllers
+                                                            .clearCartHistory();
+
+                                                        emptyCartNow() {
+                                                          AppConstants
+                                                              .sharedPreferences!
+                                                              .setStringList(
+                                                                  AppConstants
+                                                                      .userCartList,
+                                                                  [
+                                                                "garbageValue"
+                                                              ]);
+                                                          List<String>
+                                                              tempList =
+                                                              AppConstants
+                                                                  .sharedPreferences!
+                                                                  .getStringList(
+                                                                      AppConstants
+                                                                          .userCartList) as List<
+                                                                  String>;
+
+                                                          firestore
+                                                              .collection(
+                                                                  'Users')
+                                                              .doc(AppConstants
+                                                                  .sharedPreferences!
+                                                                  .getString(
+                                                                      AppConstants
+                                                                          .userUID))
+                                                              .update({
+                                                            AppConstants
+                                                                    .userCartList:
+                                                                tempList,
+                                                          }).then((value) {
+                                                            AppConstants
+                                                                .sharedPreferences!
+                                                                .setStringList(
+                                                                    AppConstants
+                                                                        .userCartList,
+                                                                    tempList);
+                                                          });
+                                                        }
+
                                                         authController.logOut();
                                                       }
                                                     },
