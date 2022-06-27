@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/base/custom_loader.dart';
+import 'package:pharmacy_plateform/base/no_data_page.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 import '../../../../routes/route_helper.dart';
@@ -26,7 +27,7 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(() {
-        return slideDrugController.isLoaded
+        return postDrugController.drugList.isNotEmpty
             ? Stack(
                 children: [
                   // color cover back ground
@@ -81,16 +82,14 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                       child: Stack(
                         children: [
                           GridView.builder(
-                              itemCount:
-                                  slideDrugController.slideDrugList.length,
+                              itemCount: postDrugController.drugList.length,
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
                                       mainAxisSpacing: 10,
                                       crossAxisSpacing: 10),
                               itemBuilder: (context, index) {
-                                final data =
-                                    slideDrugController.slideDrugList[index];
+                                final data = postDrugController.drugList[index];
                                 return GestureDetector(
                                   onTap: () {
                                     Get.toNamed(
@@ -243,7 +242,10 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                   ),
                 ],
               )
-            : CustomLoader();
+            : NoDataPage(
+                text: "No data found",
+                imgPath: "assets/image/No_data.png",
+              );
       }),
 
       // floatingactionbutton

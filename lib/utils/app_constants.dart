@@ -30,6 +30,8 @@ class AppConstants {
   static const String userProfilePhoto = "profilePhoto";
   static const String userUID = "uid";
   static const String addressId = "addressId";
+
+  static const String drugId = "id";
 }
 
 //FireBase

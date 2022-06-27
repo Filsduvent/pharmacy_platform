@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/models/drug_model.dart';
+import 'package:pharmacy_plateform/pharmacist/controllers/post_drug_controller.dart';
+import 'package:pharmacy_plateform/utils/app_constants.dart';
 import '../../../../controllers/cart_controller.dart';
 import '../../../../controllers/slide_drug_controller.dart';
 import '../../../../routes/route_helper.dart';
@@ -25,6 +28,7 @@ class PharmacyDrugDetails extends StatelessWidget {
     Future.delayed(Duration.zero, () {
       slideDrugController.initData(drug, Get.find<CartController>());
     });
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -37,7 +41,7 @@ class PharmacyDrugDetails extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(RouteHelper.getPharmacyMedecinePage());
+                    Get.offAllNamed(RouteHelper.getPharmacyMedecinePage());
                   },
                   child: AppIcon(icon: Icons.clear),
                 ),
@@ -103,7 +107,9 @@ class PharmacyDrugDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                postDrugController.deleteByChangeVisibility();
+              },
               child: Container(
                 padding: EdgeInsets.only(
                     top: Dimensions.height20,

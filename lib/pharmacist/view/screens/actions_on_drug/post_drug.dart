@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/pharmacist/controllers/post_drug_controller.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/widgets/Pharmacy_app_text_field.dart';
 import '../../../../utils/colors.dart';
@@ -35,10 +36,11 @@ class _PostDrugFormState extends State<PostDrugForm> {
   DateTime _dateTime = DateTime.now();
   List<DropdownMenuItem> categoriesItems = [];
   PostDrugController postDrugController = Get.put(PostDrugController());
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Obx(() {
-      return Stack(
+    return Scaffold(
+      body: Stack(
         children: [
           Positioned(
             left: 0,
@@ -315,8 +317,8 @@ class _PostDrugFormState extends State<PostDrugForm> {
             ),
           ),
         ],
-      );
-    }));
+      ),
+    );
   }
 
   _scan() async {

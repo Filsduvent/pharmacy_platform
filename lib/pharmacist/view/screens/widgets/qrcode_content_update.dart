@@ -17,8 +17,9 @@ class QrCodeContentUpdate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: Dimensions.width45 * 8.3,
       padding: EdgeInsets.only(
-        left: Dimensions.width20 * 5,
+        left: Dimensions.width20,
         top: Dimensions.width20,
       ),
       margin: EdgeInsets.only(

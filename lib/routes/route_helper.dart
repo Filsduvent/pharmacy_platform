@@ -12,6 +12,7 @@ import 'package:pharmacy_plateform/screens/home/home_page.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/place_order.dart';
 
+import '../models/drug_model.dart';
 import '../screens/cart/cart_page.dart';
 import '../screens/drug/recent_drug_detail.dart';
 import '../screens/splash/splash_screen.dart';
