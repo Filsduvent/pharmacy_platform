@@ -78,14 +78,21 @@ class CartController extends GetxController {
         totalQuantity = value.quantity! + quantity;
         update();
         return CartModel(
-            id: value.id,
-            title: value.title?.toString(),
-            price: value.price,
-            photoUrl: value.photoUrl?.toString(),
-            quantity: value.quantity! + quantity,
-            isExist: true,
-            time: DateTime.now().toString(),
-            drug: drug);
+          id: value.id,
+          title: value.title?.toString(),
+          price: value.price,
+          photoUrl: value.photoUrl?.toString(),
+          quantity: value.quantity! + quantity,
+          isExist: true,
+          time: DateTime.now().toString(),
+          drug: drug,
+          totalAmount: totalAmount,
+          orderBy:
+              AppConstants.sharedPreferences!.getString(AppConstants.userUID),
+          orderTime: DateTime.now().millisecondsSinceEpoch.toString(),
+          isSuccess: true,
+          paymentDetails: "Cash on Delivery",
+        );
       });
 
       if (totalQuantity <= 0) {
@@ -95,14 +102,21 @@ class CartController extends GetxController {
       if (quantity > 0) {
         _items.putIfAbsent(drug.id, () {
           return CartModel(
-              id: drug.id,
-              title: drug.title,
-              price: drug.price,
-              photoUrl: drug.photoUrl,
-              quantity: quantity,
-              isExist: true,
-              time: DateTime.now().toString(),
-              drug: drug);
+            id: drug.id,
+            title: drug.title,
+            price: drug.price,
+            photoUrl: drug.photoUrl,
+            quantity: quantity,
+            isExist: true,
+            time: DateTime.now().toString(),
+            drug: drug,
+            totalAmount: totalAmount,
+            orderBy:
+                AppConstants.sharedPreferences!.getString(AppConstants.userUID),
+            orderTime: DateTime.now().millisecondsSinceEpoch.toString(),
+            isSuccess: true,
+            paymentDetails: "Cash on Delivery",
+          );
         });
       } else {
         Get.snackbar(

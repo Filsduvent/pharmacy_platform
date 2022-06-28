@@ -7,6 +7,7 @@ import 'package:pharmacy_plateform/screens/home/main_drug_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:pharmacy_plateform/screens/orders/orders_screen.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 
 import '../../utils/colors.dart';
@@ -48,9 +49,7 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _buildScreens() {
     return [
       MainDrugScreen(),
-      Container(
-        child: Center(child: Text("History page")),
-      ),
+      OrderScreen(),
       CartHistory(),
       AccountScreen(),
     ];

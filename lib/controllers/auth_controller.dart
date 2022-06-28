@@ -114,7 +114,31 @@ class AuthController extends GetxController {
           password: password,
           profilePhoto: downloadUrl,
           uid: cred.user!.uid,
-          userCart: ["garbageValue"],
+          userCart: [
+            {
+              "id": "",
+              "title": "",
+              "price": 0,
+              "photoUrl": "",
+              "quantity": 0,
+              "isExist": true,
+              "time": "",
+              "drug": {
+                "id": "",
+                "title": "",
+                "manufacturing_date": "",
+                "expiring_date": "",
+                "photo_url": "",
+                "categories": "",
+                "price": 0,
+                "uid": "",
+                "published_date": "",
+                "status": "Available",
+                "description": "",
+                "visibility": true
+              }
+            }
+          ],
         );
         await firestore
             .collection('Users')
@@ -135,8 +159,7 @@ class AuthController extends GetxController {
               AppConstants.userPassword, password);
           await sharedPreferences.setString(
               AppConstants.userProfilePhoto, downloadUrl);
-          await sharedPreferences
-              .setStringList(AppConstants.userCartList, ["garbageValue"]);
+          await sharedPreferences.setStringList(AppConstants.userCartList, []);
 
           if (cred != null) {
             readData(cred).then((value) async {
@@ -251,8 +274,7 @@ class AuthController extends GetxController {
       await sharedPreferences.setString(
           AppConstants.userProfilePhoto, json[AppConstants.userProfilePhoto]);
 
-      List<String> cartList =
-          json[AppConstants.userCartList] /*.Cast<String>()*/;
+      List<String> cartList = json[AppConstants.userCartList].Cast<String>();
       await sharedPreferences.setStringList(
           AppConstants.userCartList, cartList);
     });

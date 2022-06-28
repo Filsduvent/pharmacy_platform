@@ -1,10 +1,15 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/models/cart_model.dart';
+import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PlaceOrder extends StatefulWidget {
   final String addressId;
@@ -21,7 +26,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
         body: Container(
       decoration: new BoxDecoration(
         gradient: new LinearGradient(
-          colors: [Colors.pink, Colors.lightGreenAccent],
+          colors: [Colors.white, Colors.white],
           begin: const FractionalOffset(1.0, 0.0),
           stops: [0.0, 1.0],
           tileMode: TileMode.clamp,
@@ -59,6 +64,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
       "paymentDetails": "Cash on Delivery",
       "orderTime": DateTime.now().millisecondsSinceEpoch.toString(),
       "isSuccess": true,
+      "totalAmount": cartControllers.totalAmount,
     });
 
     writeOrderDetailsPharmacy({
@@ -70,12 +76,13 @@ class _PlaceOrderState extends State<PlaceOrder> {
       "paymentDetails": "Cash on Delivery",
       "orderTime": DateTime.now().millisecondsSinceEpoch.toString(),
       "isSuccess": true,
-    }).whenComplete(() => {emptyCartNow()});
+      "totalAmount": cartControllers.totalAmount,
+    }).whenComplete(() => {emptyCartNow(), cartControllers.addToHistory()});
   }
 
   emptyCartNow() {
     AppConstants.sharedPreferences!
-        .setStringList(AppConstants.userCartList, ["garbageValue"]);
+        .setStringList(AppConstants.userCartList, []);
     List<String> tempList = AppConstants.sharedPreferences!
         .getStringList(AppConstants.userCartList) as List<String>;
 

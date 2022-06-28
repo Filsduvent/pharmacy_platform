@@ -52,7 +52,7 @@ class _PostDrugFormState extends State<PostDrugForm> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: FileImage(postDrugController.drugPhoto!)))),
+                        image: FileImage(postDrugController.drugPhoto)))),
           ),
           //The back button
 

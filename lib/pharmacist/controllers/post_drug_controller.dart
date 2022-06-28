@@ -23,17 +23,20 @@ class PostDrugController extends GetxController {
   final Rx<List<Drug>> _drugList = Rx<List<Drug>>([]);
   List<Drug> get drugList => _drugList.value;
 
+  final Rx<List<Drug>> _drugListDel = Rx<List<Drug>>([]);
+  List<Drug> get drugListDel => _drugListDel.value;
+
   final Rx<bool> _isLoaded = false.obs;
   bool get isLoaded => _isLoaded.value;
 
-  Rx<File?>? _file;
-  File? get drugPhoto => _file?.value;
+  late Rx<File> _file;
+  File get drugPhoto => _file.value;
 
   Rx<File?>? _fileUpdate;
   File? get drugPhotoUpdate => _fileUpdate?.value;
 
-  Map _data = {};
-  Map get data => _data;
+  RxMap _data = {}.obs;
+  RxMap get data => _data;
 
 //Method to fetch all data
 
@@ -46,6 +49,26 @@ class PostDrugController extends GetxController {
             isEqualTo:
                 AppConstants.sharedPreferences!.getString(AppConstants.userUID))
         .where('visibility', isEqualTo: true)
+        //.limit(5)
+        .snapshots()
+        .map((QuerySnapshot query) {
+      List<Drug> retVal = [];
+      for (var element in query.docs) {
+        retVal.add(
+          Drug.fromSnap(element),
+        );
+
+        _isLoaded.value = true;
+      }
+      return retVal;
+    }));
+
+    _drugListDel.bindStream(FirebaseFirestore.instance
+        .collection('Medicines')
+        .where('uid',
+            isEqualTo:
+                AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+        .where('visibility', isEqualTo: false)
         //.limit(5)
         .snapshots()
         .map((QuerySnapshot query) {
@@ -78,7 +101,7 @@ class PostDrugController extends GetxController {
           .get();
 
       if (response.exists) {
-        _data = response.data() as Map;
+        _data.value = response.data() as Map;
       }
     } on FirebaseException catch (e) {
       print(e);
@@ -150,7 +173,6 @@ class PostDrugController extends GetxController {
 //capture to add in storage
 
   capturePhotoWithCamera() async {
-    _isLoaded.value = false;
     navigator!.pop();
     final imageFile = (await ImagePicker().pickImage(
         source: ImageSource.camera, maxHeight: 680.0, maxWidth: 970.0));
@@ -162,13 +184,12 @@ class PostDrugController extends GetxController {
       Get.snackbar('Profile Picture', 'errrooooooooooooooooooooooor!');
     }
 
-    _file = Rx<File?>(File(imageFile!.path));
+    _file = Rx<File>(File(imageFile!.path));
   }
 
 // pick from galery to add in storage
 
   pickPhotoFromGallery() async {
-    _isLoaded.value = false;
     navigator!.pop();
     final imageFile =
         (await ImagePicker().pickImage(source: ImageSource.gallery));
@@ -180,7 +201,7 @@ class PostDrugController extends GetxController {
       Get.snackbar('Profile Picture', 'errrooooooooooooooooooooooor!');
     }
 
-    _file = Rx<File?>(File(imageFile!.path));
+    _file = Rx<File>(File(imageFile!.path));
   }
 
   // upload image to firebase storage
@@ -383,7 +404,6 @@ class PostDrugController extends GetxController {
     int price,
     String description,
   ) async {
-    _isLoaded.value = true;
     try {
       if (id.isEmpty) {
         showCustomSnackBar("Fill your id please", title: "id");
