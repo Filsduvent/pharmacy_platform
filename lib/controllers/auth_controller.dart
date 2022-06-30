@@ -114,31 +114,7 @@ class AuthController extends GetxController {
           password: password,
           profilePhoto: downloadUrl,
           uid: cred.user!.uid,
-          userCart: [
-            {
-              "id": "",
-              "title": "",
-              "price": 0,
-              "photoUrl": "",
-              "quantity": 0,
-              "isExist": true,
-              "time": "",
-              "drug": {
-                "id": "",
-                "title": "",
-                "manufacturing_date": "",
-                "expiring_date": "",
-                "photo_url": "",
-                "categories": "",
-                "price": 0,
-                "uid": "",
-                "published_date": "",
-                "status": "Available",
-                "description": "",
-                "visibility": true
-              }
-            }
-          ],
+          userCart: ["garbageValue"],
         );
         await firestore
             .collection('Users')
@@ -159,7 +135,8 @@ class AuthController extends GetxController {
               AppConstants.userPassword, password);
           await sharedPreferences.setString(
               AppConstants.userProfilePhoto, downloadUrl);
-          await sharedPreferences.setStringList(AppConstants.userCartList, []);
+          await sharedPreferences
+              .setStringList(AppConstants.userCartList, ["garbageValue"]);
 
           if (cred != null) {
             readData(cred).then((value) async {

@@ -82,7 +82,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
 
   emptyCartNow() {
     AppConstants.sharedPreferences!
-        .setStringList(AppConstants.userCartList, []);
+        .setStringList(AppConstants.userCartList, ["garbageValue"]);
     List<String> tempList = AppConstants.sharedPreferences!
         .getStringList(AppConstants.userCartList) as List<String>;
 

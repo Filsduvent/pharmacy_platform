@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last
 
 import 'package:pharmacy_plateform/controllers/cart_controller.dart';
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
+import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 import 'package:pharmacy_plateform/widgets/app_icon.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
@@ -212,6 +213,7 @@ class PopularDrugDetail extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     slideDrugController.addItem(drug);
+                    checkItemInCart(drug.title);
                   },
                   child: Container(
                     padding: EdgeInsets.only(
@@ -234,4 +236,41 @@ class PopularDrugDetail extends StatelessWidget {
           );
         }));
   }
+}
+
+void checkItemInCart(String title) {
+  AppConstants.sharedPreferences!
+          .getStringList(AppConstants.userCartList)!
+          .contains(title)
+      ? Get.snackbar(
+          "Item existence",
+          "Item already in cart try to increase or decrease the quantity",
+          backgroundColor: AppColors.mainColor,
+          colorText: Colors.white,
+          icon: const Icon(
+            Icons.alarm,
+            color: Colors.white,
+          ),
+          barBlur: 20,
+          isDismissible: true,
+          duration: const Duration(seconds: 5),
+        )
+      : addItemToCartById(title);
+}
+
+void addItemToCartById(String title) {
+  List tempCartList = AppConstants.sharedPreferences!
+      .getStringList(AppConstants.userCartList) as List;
+  tempCartList.add(title);
+
+  print(
+      "==================indani muri++++++++++++++++++  ${tempCartList.toString()}");
+
+  firestore
+      .collection('Users')
+      .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+      .update({AppConstants.userCartList: tempCartList});
+
+  AppConstants.sharedPreferences!
+      .setStringList(AppConstants.userCartList, tempCartList as List<String>);
 }

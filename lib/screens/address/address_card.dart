@@ -96,12 +96,6 @@ class _AddresscardState extends State<Addresscard> {
                 ? WideButton(
                     message: "Proceed",
                     onPressed: () {
-                      print("Im tapeeeeeed niga");
-                      /* Routes routes = MaterialPageRoute(builder:(c)=>PaymentPage(
-                    addressId: widget.addressId,
-                    totalAmount: widget.totalAmount,
-                  )) ;
-                  Navigator.push(context,route);*/
                       Get.toNamed(RouteHelper.getPlaceOrder(
                           addressId: widget.addressId));
                     },

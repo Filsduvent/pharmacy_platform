@@ -11,7 +11,7 @@ class User {
   String role;
   String profilePhoto;
   String uid;
-  List userCart;
+  List<String> userCart;
 
   User({
     required this.username,
@@ -51,7 +51,7 @@ class User {
       password: snapshot['password'],
       profilePhoto: snapshot['profilePhoto'],
       uid: snapshot['uid'],
-      userCart: snapshot['userCart'],
+      userCart: snapshot['userCart'] as List<String>,
     );
   }
 }
