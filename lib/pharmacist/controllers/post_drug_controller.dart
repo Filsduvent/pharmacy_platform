@@ -225,6 +225,7 @@ class PostDrugController extends GetxController {
     File? photoUrl,
     String categories,
     int price,
+    int quantity,
     String description,
   ) async {
     _isLoaded.value = true;
@@ -242,6 +243,8 @@ class PostDrugController extends GetxController {
         showCustomSnackBar("Fill your category please", title: "category");
       } else if (price == null) {
         showCustomSnackBar("Fill your price please", title: "price");
+      } else if (quantity == null) {
+        showCustomSnackBar("Fill your quantity please", title: "quantity");
       } else if (description.isEmpty) {
         showCustomSnackBar("Fill your description please",
             title: "description");
@@ -260,6 +263,7 @@ class PostDrugController extends GetxController {
           photoUrl: downloadUrl,
           categories: categories,
           price: price,
+          quantity: quantity,
           uid: uid,
           publishedDate: DateTime.now().toString(),
           status: "Available",
@@ -402,6 +406,7 @@ class PostDrugController extends GetxController {
     File? photoUrl,
     String categories,
     int price,
+    int quantity,
     String description,
   ) async {
     try {
@@ -418,6 +423,8 @@ class PostDrugController extends GetxController {
         showCustomSnackBar("Fill your category please", title: "category");
       } else if (price == null) {
         showCustomSnackBar("Fill your price please", title: "price");
+      } else if (quantity == null) {
+        showCustomSnackBar("Fill your quantity please", title: "quantity");
       } else if (description.isEmpty) {
         showCustomSnackBar("Fill your description please",
             title: "description");
@@ -436,6 +443,7 @@ class PostDrugController extends GetxController {
           photoUrl: downloadUrlUpdate,
           categories: categories,
           price: price,
+          quantity: quantity,
           uid: uid,
           publishedDate: DateTime.now().toString(),
           status: "Available",

@@ -26,6 +26,7 @@ class _PostDrugFormState extends State<PostDrugForm> {
   var titleController = TextEditingController();
   var descriptionController = TextEditingController();
   var priceController = TextEditingController();
+  var quantityController = TextEditingController();
   var _date = TextEditingController();
   var _mandate = TextEditingController();
 
@@ -260,6 +261,18 @@ class _PostDrugFormState extends State<PostDrugForm> {
                           textInputAction: TextInputAction.next,
                           hintText: "Price",
                         ),
+
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+
+                        //Quantity
+                        PharmacyAppTextField(
+                          textController: quantityController,
+                          textInputType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          hintText: "Quantity",
+                        ),
                         SizedBox(
                           height: Dimensions.height20,
                         ),
@@ -286,6 +299,7 @@ class _PostDrugFormState extends State<PostDrugForm> {
                               postDrugController.drugPhoto,
                               category,
                               int.parse(priceController.text),
+                              int.parse(quantityController.text),
                               descriptionController.text,
                             );
                           },

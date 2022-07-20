@@ -1,27 +1,38 @@
-// ignore_for_file: unnecessary_new, prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_const_constructors, avoid_unnecessary_containers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pharmacy_plateform/models/address_model.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
-import 'package:pharmacy_plateform/screens/address/address_card.dart';
-import 'package:pharmacy_plateform/utils/app_constants.dart';
-import 'package:pharmacy_plateform/utils/dimensions.dart';
-import 'package:pharmacy_plateform/widgets/big_text.dart';
-import 'package:pharmacy_plateform/widgets/order_card.dart';
-import '../../utils/colors.dart';
 
-String getOrderId = "";
+import '../../../../models/address_model.dart';
+import '../../../../screens/address/address_card.dart';
+import '../../../../utils/app_constants.dart';
+import '../../../../utils/colors.dart';
+import '../../../../utils/dimensions.dart';
+import '../../../../widgets/big_text.dart';
+import '../../../../widgets/order_card.dart';
 
-class OrderDetailsScreen extends StatelessWidget {
+String getOrderId = " ";
+
+class PharmacistOrderDetails extends StatelessWidget {
   final String orderID;
-  const OrderDetailsScreen({Key? key, required this.orderID}) : super(key: key);
+  final String orderBy;
+  final String addressId;
+  const PharmacistOrderDetails(
+      {Key? key,
+      required this.orderID,
+      required this.orderBy,
+      required this.addressId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    getOrderId = orderID;
+    String getOrderId = orderID;
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -31,13 +42,7 @@ class OrderDetailsScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<DocumentSnapshot>(
-            future: firestore
-                .collection('Users')
-                .doc(AppConstants.sharedPreferences!
-                    .getString(AppConstants.userUID))
-                .collection('Orders')
-                .doc(orderID)
-                .get(),
+            future: firestore.collection('Orders').doc(getOrderId).get(),
             builder: (c, snapshot) {
               Map dataMap = {};
               if (snapshot.hasData) {
@@ -47,15 +52,12 @@ class OrderDetailsScreen extends StatelessWidget {
                   ? Container(
                       child: Column(
                         children: [
-                          // StatusBanner(
-                          //   status: dataMap['isSuccess'],
-                          // ),
                           SizedBox(
                             height: Dimensions.height20,
                           ),
                           Container(
                             margin: EdgeInsets.all(Dimensions.width10),
-                            height: Dimensions.height45 * 4,
+                            height: Dimensions.height45 * 4.8,
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(Dimensions.radius30),
@@ -142,11 +144,27 @@ class OrderDetailsScreen extends StatelessWidget {
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      BigText(
+                                        text: "By : ",
+                                        color: Colors.grey,
+                                      ),
+                                      BigText(
+                                        text: dataMap['orderBy'],
+                                        color: AppColors.yellowColor,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: Dimensions.height10,
+                                  ),
                                 ],
                               ),
                             ),
                           ),
-
                           FutureBuilder<QuerySnapshot>(
                               future: firestore
                                   .collection('Medicines')
@@ -154,42 +172,40 @@ class OrderDetailsScreen extends StatelessWidget {
                                   .get(),
                               builder: (c, dataSnapshot) {
                                 return dataSnapshot.hasData
-                                    ? OrderCard(
+                                    ? PharmacistOrderCard(
                                         itemCount:
                                             dataSnapshot.data!.docs.length,
                                         data: dataSnapshot.data!.docs,
-                                        orderID: orderID)
+                                        orderID: orderID,
+                                        orderBy: orderBy,
+                                        addressId: addressId,
+                                      )
                                     : Center(
                                         child: CircularProgressIndicator(),
                                       );
                               }),
-
                           FutureBuilder<DocumentSnapshot>(
                               future: firestore
                                   .collection('Users')
-                                  .doc(AppConstants.sharedPreferences!
-                                      .getString(AppConstants.userUID))
+                                  .doc(orderBy)
                                   .collection('Address')
-                                  .doc(dataMap[AppConstants.addressId])
+                                  .doc(addressId)
                                   .get(),
                               builder: (c, snap) {
                                 return snap.hasData
-                                    ? ShippingDetails(
+                                    ? PharmacyShippingDetails(
                                         model: AddressModel.fromJson(snap.data!
                                             .data() as Map<String, dynamic>))
                                     : Center(
                                         child: CircularProgressIndicator(),
                                       );
                               }),
-
                           SizedBox(
                             height: Dimensions.height20,
                           ),
-                          //sign up button
-
                           GestureDetector(
                             onTap: () {
-                              confirmedUserOrderReceived(context, getOrderId);
+                              confirmParcelShifted(context, getOrderId);
                             },
                             child: Container(
                               width: Dimensions.screenWidth,
@@ -222,18 +238,18 @@ class OrderDetailsScreen extends StatelessWidget {
     ));
   }
 
-  void confirmedUserOrderReceived(BuildContext context, String mOrderId) async {
-    final response = await firestore
-        .collection('Users')
-        .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
-        .collection('Orders')
-        .doc(mOrderId)
-        .get();
+  void confirmParcelShifted(BuildContext context, String mOrderId) async {
+    final response = await firestore.collection('Orders').doc(mOrderId).get();
+    // .collection('Users')
+    // .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+    // .collection('Orders')
+    // .doc(mOrderId)
+    // .get();
     var orderStatus = response.data() as Map;
-    if (orderStatus['orderStatus'] == "Pending") {
+    if (orderStatus['orderStatus'] == "Delivering") {
       Get.snackbar(
-        'Waiting',
-        'Please wait your order is in progress',
+        'Delivering',
+        'Order in progress of Delivering',
         backgroundColor: AppColors.mainColor,
         colorText: Colors.white,
         icon: const Icon(
@@ -247,7 +263,7 @@ class OrderDetailsScreen extends StatelessWidget {
     } else if (orderStatus['orderStatus'] == "Received") {
       Get.snackbar(
         'Reminder',
-        'This order have been already received',
+        'This order have been already delivered',
         backgroundColor: AppColors.mainColor,
         colorText: Colors.white,
         icon: const Icon(
@@ -258,97 +274,50 @@ class OrderDetailsScreen extends StatelessWidget {
         isDismissible: true,
         duration: const Duration(seconds: 5),
       );
-    } else if (orderStatus['orderStatus'] == "Delivering") {
+    } else if (orderStatus['orderStatus'] == "Pending") {
+      var uid = response.data() as Map;
       firestore
           .collection('Users')
-          .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+          .doc(orderBy)
           .collection('Orders')
           .doc(mOrderId)
-          .update({'orderStatus': "Received"});
+          .update({'orderStatus': "Delivering"});
 
-      await firestore
+      firestore
           .collection('Orders')
           .doc(mOrderId)
-          .update({'orderStatus': "Received"});
+          .update({'orderStatus': "Delivering"});
 
       getOrderId = "";
 
-      Get.toNamed(RouteHelper.getOrderDetailsScreen(orderID));
-
-      Get.snackbar('Confirmation', 'Order has been Received');
+      Get.toNamed(RouteHelper.getPharmacistOrderScreen());
+      Get.snackbar(
+        'Confirmation',
+        'Order has been Sent successfully',
+        backgroundColor: AppColors.mainColor,
+        colorText: Colors.white,
+        icon: const Icon(
+          Icons.alarm,
+          color: Colors.white,
+        ),
+        barBlur: 20,
+        isDismissible: true,
+        duration: const Duration(seconds: 5),
+      );
     }
   }
 }
 
-/*class StatusBanner extends StatelessWidget {
-  final bool status;
-  const StatusBanner({Key? key, required this.status}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    String msg;
-    IconData iconData;
-
-    status ? iconData = Icons.done : iconData = Icons.cancel;
-    status ? msg = "Successful" : msg = "UnSuccessful";
-
-    return Container(
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-          colors: [Colors.white, Colors.lightGreenAccent],
-          begin: const FractionalOffset(1.0, 0.0),
-          stops: [0.0, 1.0],
-          tileMode: TileMode.clamp,
-        ),
-      ),
-      height: Dimensions.height20 * 2,
-      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        GestureDetector(
-          onTap: () {
-            SystemNavigator.pop();
-          },
-          child: Container(
-            child: Icon(
-              Icons.arrow_drop_down_circle,
-              color: Colors.white,
-            ),
-          ),
-        ),
-        SizedBox(
-          width: Dimensions.width20,
-        ),
-        Text(
-          "Order placed " + msg,
-          style: TextStyle(color: Colors.white),
-        ),
-        SizedBox(
-          width: Dimensions.width10 / 2,
-        ),
-        CircleAvatar(
-          radius: 8.0,
-          backgroundColor: Colors.grey,
-          child: Center(
-              child: Icon(
-            iconData,
-            color: Colors.white,
-            size: 14.0,
-          )),
-        ),
-      ]),
-    );
-  }
-}
-*/
-class ShippingDetails extends StatelessWidget {
+class PharmacyShippingDetails extends StatelessWidget {
   final AddressModel model;
-  const ShippingDetails({Key? key, required this.model}) : super(key: key);
+  const PharmacyShippingDetails({Key? key, required this.model})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Container(
       margin: EdgeInsets.all(Dimensions.width10),
-      // height: Dimensions.height45 * 4,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.radius30),
           color: Colors.white,
@@ -389,7 +358,10 @@ class ShippingDetails extends StatelessWidget {
                 ),
               ]),
               TableRow(children: [
-                KeyText(msg: "Phone Number : ", color: Colors.grey),
+                KeyText(
+                  msg: "Phone Number : ",
+                  color: Colors.grey,
+                ),
                 BigText(
                   text: model.phoneNumber,
                   color: Colors.grey,
@@ -397,7 +369,10 @@ class ShippingDetails extends StatelessWidget {
                 ),
               ]),
               TableRow(children: [
-                KeyText(msg: "Province : ", color: Colors.grey),
+                KeyText(
+                  msg: "Province : ",
+                  color: Colors.grey,
+                ),
                 BigText(
                   text: model.province,
                   color: Colors.grey,
@@ -416,7 +391,10 @@ class ShippingDetails extends StatelessWidget {
                 ),
               ]),
               TableRow(children: [
-                KeyText(msg: "Zone : ", color: Colors.grey),
+                KeyText(
+                  msg: "Zone : ",
+                  color: Colors.grey,
+                ),
                 BigText(
                   text: model.zone,
                   color: Colors.grey,
@@ -424,7 +402,10 @@ class ShippingDetails extends StatelessWidget {
                 ),
               ]),
               TableRow(children: [
-                KeyText(msg: "Quarter : ", color: Colors.grey),
+                KeyText(
+                  msg: "Quarter : ",
+                  color: Colors.grey,
+                ),
                 BigText(
                   text: model.quarter,
                   color: Colors.grey,
@@ -432,7 +413,10 @@ class ShippingDetails extends StatelessWidget {
                 ),
               ]),
               TableRow(children: [
-                KeyText(msg: "Avenue : ", color: Colors.grey),
+                KeyText(
+                  msg: "Avenue : ",
+                  color: Colors.grey,
+                ),
                 BigText(
                   text: model.avenue,
                   color: Colors.grey,
@@ -440,7 +424,10 @@ class ShippingDetails extends StatelessWidget {
                 ),
               ]),
               TableRow(children: [
-                KeyText(msg: "House Number : ", color: Colors.grey),
+                KeyText(
+                  msg: "House Number : ",
+                  color: Colors.grey,
+                ),
                 BigText(
                   text: model.houseNumber,
                   color: Colors.grey,

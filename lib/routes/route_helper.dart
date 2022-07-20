@@ -4,6 +4,9 @@ import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/updat
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_drug_details.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_medecines_screen.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_details.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_screen.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacy_shift_orders.dart';
 import 'package:pharmacy_plateform/screens/address/add_address_screen.dart';
 import 'package:pharmacy_plateform/screens/address/address_screen.dart';
 import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
@@ -12,8 +15,6 @@ import 'package:pharmacy_plateform/screens/home/home_page.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/order_details_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/place_order.dart';
-
-import '../models/drug_model.dart';
 import '../screens/cart/cart_page.dart';
 import '../screens/drug/recent_drug_detail.dart';
 import '../screens/splash/splash_screen.dart';
@@ -29,12 +30,16 @@ class RouteHelper {
   static const String addAddressScreen = "/add-address";
   static const String placeOrder = "/place-order";
   static const String orderDetailsScreen = "/order-details-screen";
+
 //Routers for pharmacist
   static const String mainPharmacyPage = "/main-pharmacy-page";
   static const String pharmacyMedecinePage = "/pharmacy-medecine-page";
   static const String pharmacyDetailsPage = '/pharmacy-details-page';
   static const String pharmacyPostDrug = '/pharmacy-post-drug';
   static const String pharmacyUpdateDrug = '/pharmacy-update-drug';
+  static const String pharmacistOrderDetails = '/pharmacist-order-details';
+  static const String pharmacyShiftOrders = "/pharmacy-shift-orders";
+  static const String pharmacyOrderScreen = "/pharmacy-order-screen";
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -57,6 +62,11 @@ class RouteHelper {
       '$pharmacyDetailsPage?pageId=$pageId&page=$page';
   static String getPharmacyPostDrug() => '$pharmacyPostDrug';
   static String getPharmacyUpdateDrugPage() => '$pharmacyUpdateDrug';
+  static String getPharmacistOrderDetailsScreen(
+          String orderID, String orderBy, String addressId) =>
+      '$pharmacistOrderDetails?orderID=$orderID&orderBy=$orderBy&addressId=$addressId';
+  static String getPharmacyShiftOrders() => '$pharmacyShiftOrders';
+  static String getPharmacistOrderScreen() => '$pharmacyOrderScreen';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -159,5 +169,28 @@ class RouteHelper {
           return UpdateDrugScreen();
         },
         transition: Transition.zoom),
+
+    GetPage(
+        name: pharmacistOrderDetails,
+        page: () {
+          var orderID = Get.parameters['orderID'];
+          var orderBy = Get.parameters['orderBy'];
+          var addressId = Get.parameters['addressId'];
+          return PharmacistOrderDetails(
+              orderID: orderID!, orderBy: orderBy!, addressId: addressId!);
+        },
+        transition: Transition.fadeIn),
+    GetPage(
+        name: pharmacyShiftOrders,
+        page: () {
+          return PharmacyShiftOrders();
+        },
+        transition: Transition.fade),
+    GetPage(
+        name: pharmacyOrderScreen,
+        page: () {
+          return PharmacistOrderScreen();
+        },
+        transition: Transition.fade),
   ];
 }

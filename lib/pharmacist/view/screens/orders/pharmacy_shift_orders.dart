@@ -1,30 +1,26 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:pharmacy_plateform/base/custom_loader.dart';
-import 'package:pharmacy_plateform/utils/app_constants.dart';
-import 'package:pharmacy_plateform/widgets/order_card.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
 
-import '../../utils/colors.dart';
+import '../../../../base/custom_loader.dart';
+import '../../../../utils/app_constants.dart';
+import '../../../../utils/colors.dart';
+import '../../../../widgets/order_card.dart';
 
-class MyOrdersScreen extends StatefulWidget {
-  const MyOrdersScreen({Key? key}) : super(key: key);
+class PharmacyShiftOrders extends StatefulWidget {
+  const PharmacyShiftOrders({Key? key}) : super(key: key);
 
   @override
-  State<MyOrdersScreen> createState() => _MyOrdersScreenState();
+  State<PharmacyShiftOrders> createState() => _PharmacyShiftOrdersState();
 }
 
-class _MyOrdersScreenState extends State<MyOrdersScreen> {
+class _PharmacyShiftOrdersState extends State<PharmacyShiftOrders> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: StreamBuilder<QuerySnapshot>(
             stream: firestore
-                .collection('Users')
-                .doc(AppConstants.sharedPreferences!
-                    .getString(AppConstants.userUID))
                 .collection('Orders')
                 .where('orderStatus', isNotEqualTo: "Received")
                 .snapshots(),
@@ -38,16 +34,26 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                         return FutureBuilder<QuerySnapshot>(
                             future: firestore
                                 .collection('Medicines')
+                                .where('uid',
+                                    isEqualTo: AppConstants.sharedPreferences!
+                                        .getString(AppConstants.userUID))
                                 .where('title',
                                     whereIn: (snapshot.data?.docs[index].data()
                                         as Map<String, dynamic>)['productID'])
                                 .get(),
                             builder: (c, snap) {
                               return snap.hasData
-                                  ? OrderCard(
+                                  ? PharmacistOrderCard(
                                       itemCount: snap.data!.docs.length,
                                       data: snap.data!.docs,
-                                      orderID: snapshot.data!.docs[index].id)
+                                      orderID: snapshot.data!.docs[index].id,
+                                      orderBy: (snapshot.data?.docs[index]
+                                              .data()
+                                          as Map<String, dynamic>)['orderBy'],
+                                      addressId: (snapshot.data?.docs[index]
+                                              .data()
+                                          as Map<String, dynamic>)['addressId'],
+                                    )
                                   : const Center(
                                       child: CircularProgressIndicator(),
                                     );

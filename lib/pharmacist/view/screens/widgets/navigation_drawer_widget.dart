@@ -7,6 +7,9 @@ import 'package:pharmacy_plateform/pharmacist/view/screens/drawer/drawer_items.d
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 
+import '../../../../utils/colors.dart';
+import '../../../../widgets/big_text.dart';
+
 class NavigationDrawerWidget extends StatefulWidget {
   NavigationDrawerWidget({Key? key}) : super(key: key);
 
@@ -161,7 +164,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     navigator?.pop();
     switch (index) {
       case 0:
-        Get.toNamed(RouteHelper.getCartPage());
+        Get.toNamed(RouteHelper.getMainPharmacyPage());
         break;
 
       case 1:
@@ -169,11 +172,48 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         break;
 
       case 2:
-        Get.toNamed(RouteHelper.getMainPharmacyPage());
+        Get.toNamed(RouteHelper.getPharmacistOrderScreen());
         break;
 
       case 3:
         Get.toNamed(RouteHelper.getSignInPage());
+        break;
+
+      case 7:
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Are you sure?'),
+              content: BigText(
+                text: "You are Quitting the App",
+                color: AppColors.mainBlackColor,
+              ),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      //print('Im tapeeeeeeeed');
+                      if (firebaseAuth.currentUser != null) {
+                        authController.clearShareData();
+                        cartControllers.clear();
+                        cartControllers.clearCartHistory();
+                        authController.logOut();
+                      }
+                    },
+                    child: BigText(
+                      text: "Yes",
+                      color: Colors.redAccent,
+                    )),
+                TextButton(
+                    onPressed: () => Get.back(),
+                    child: BigText(
+                      text: "No",
+                      color: AppColors.mainColor,
+                    ))
+              ],
+            );
+          },
+        );
         break;
     }
   }

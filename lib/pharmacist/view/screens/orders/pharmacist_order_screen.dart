@@ -1,36 +1,33 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_history.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacy_shift_orders.dart';
 import 'package:pharmacy_plateform/screens/orders/my_orders_history_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/my_orders_screen.dart';
-import 'package:pharmacy_plateform/screens/orders/view_orders.dart';
 import 'package:pharmacy_plateform/utils/colors.dart';
 
-import '../../utils/app_constants.dart';
-import '../../utils/dimensions.dart';
+import '../../../../utils/app_constants.dart';
+import '../../../../utils/dimensions.dart';
 
-class OrderScreen extends StatefulWidget {
-  const OrderScreen({Key? key}) : super(key: key);
+class PharmacistOrderScreen extends StatefulWidget {
+  const PharmacistOrderScreen({Key? key}) : super(key: key);
 
   @override
-  State<OrderScreen> createState() => _OrderScreenState();
+  State<PharmacistOrderScreen> createState() => _PharmacistOrderScreenState();
 }
 
-class _OrderScreenState extends State<OrderScreen>
+class _PharmacistOrderScreenState extends State<PharmacistOrderScreen>
     with TickerProviderStateMixin {
   late TabController _tabController;
   late bool _isLoggedIn;
-
+  @override
   @override
   void initState() {
     super.initState();
     _isLoggedIn = firebaseAuth.currentUser != null;
     if (_isLoggedIn) {
       _tabController = TabController(length: 2, vsync: this);
-      Get.find<SlideDrugController>()
-          .slideDrugList; //function to display all the orders from firebase;
     }
   }
 
@@ -38,7 +35,7 @@ class _OrderScreenState extends State<OrderScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My orders'),
+        title: const Text('My orders'),
         backgroundColor: AppColors.mainColor,
         centerTitle: true,
       ),
@@ -52,7 +49,7 @@ class _OrderScreenState extends State<OrderScreen>
                 labelColor: AppColors.mainColor,
                 unselectedLabelColor: AppColors.yellowColor,
                 controller: _tabController,
-                tabs: [
+                tabs: const [
                   Tab(
                     text: "Current",
                   ),
@@ -62,9 +59,9 @@ class _OrderScreenState extends State<OrderScreen>
                 ]),
           ),
           Expanded(
-            child: TabBarView(controller: _tabController, children: [
-              MyOrdersScreen(),
-              MyOrdersHistoryScreen(),
+            child: TabBarView(controller: _tabController, children: const [
+              PharmacyShiftOrders(),
+              PharmacistOrderHistory(),
             ]),
           )
         ],

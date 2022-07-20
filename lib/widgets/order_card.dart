@@ -25,10 +25,11 @@ class OrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (counter == 0) {
-          counter = counter + 1;
-          Get.toNamed(RouteHelper.getOrderDetailsScreen(orderID));
-        }
+        // if (counter == 0) {
+        //   counter = counter + 1;
+        //   Get.toNamed(RouteHelper.getOrderDetailsScreen(orderID));
+        // }
+        Get.toNamed(RouteHelper.getOrderDetailsScreen(orderID));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -115,9 +116,20 @@ Widget sourceOrderInfo(Drug model, BuildContext context) {
                     ),
                   ],
                 ),
-                BigText(
-                  text: "Quantity : ",
-                  color: Colors.black54,
+                Row(
+                  children: [
+                    BigText(
+                      text: "5",
+                      color: Colors.black54,
+                    ),
+                    SizedBox(
+                      width: Dimensions.width10 / 10,
+                    ),
+                    BigText(
+                      text: "Pieces",
+                      color: Colors.black54,
+                    ),
+                  ],
                 ),
                 Divider(
                   height: Dimensions.height10 / 2,

@@ -19,7 +19,7 @@ class ViewOrders extends StatelessWidget {
     return Scaffold(
       body: Obx(() {
         if (postDrugController.isLoaded == false) {
-          List<Drug> orderList = postDrugController.drugList;
+          List<Drug> orderList = [];
           if (postDrugController.drugList.isNotEmpty) {
             orderList = isCurrent
                 ? postDrugController.drugList

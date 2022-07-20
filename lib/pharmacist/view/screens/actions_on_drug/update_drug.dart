@@ -34,6 +34,8 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
       TextEditingController(text: postDrugController.data['description']);
   var priceController =
       TextEditingController(text: postDrugController.data['price'].toString());
+  var quantityController = TextEditingController(
+      text: postDrugController.data['quantity'].toString());
   var _date =
       TextEditingController(text: postDrugController.data['expiring_date']);
   var _mandate = TextEditingController(
@@ -54,6 +56,8 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
         TextEditingController(text: postDrugController.data['description']);
     var priceController = TextEditingController(
         text: postDrugController.data['price'].toString());
+    var quantityController = TextEditingController(
+        text: postDrugController.data['quantity'].toString());
     var _date =
         TextEditingController(text: postDrugController.data['expiring_date']);
     var _mandate = TextEditingController(
@@ -263,6 +267,17 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                         SizedBox(
                           height: Dimensions.height20,
                         ),
+
+                        //quantity
+                        PharmacyAppTextField(
+                          textController: quantityController,
+                          textInputType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          hintText: "quantity",
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
                         //Description
                         PharmacyAppTextField(
                           textController: descriptionController,
@@ -321,6 +336,7 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                   postDrugController.drugPhotoUpdate,
                                   category,
                                   int.parse(priceController.text),
+                                  int.parse(quantityController.text),
                                   descriptionController.text,
                                 );
                               }

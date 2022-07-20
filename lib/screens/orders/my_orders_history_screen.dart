@@ -1,21 +1,20 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/widgets/order_card.dart';
 
 import '../../utils/colors.dart';
 
-class MyOrdersScreen extends StatefulWidget {
-  const MyOrdersScreen({Key? key}) : super(key: key);
+class MyOrdersHistoryScreen extends StatefulWidget {
+  const MyOrdersHistoryScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyOrdersScreen> createState() => _MyOrdersScreenState();
+  State<MyOrdersHistoryScreen> createState() => _MyOrdersHistoryScreenState();
 }
 
-class _MyOrdersScreenState extends State<MyOrdersScreen> {
+class _MyOrdersHistoryScreenState extends State<MyOrdersHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,7 +25,7 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                 .doc(AppConstants.sharedPreferences!
                     .getString(AppConstants.userUID))
                 .collection('Orders')
-                .where('orderStatus', isNotEqualTo: "Received")
+                .where('orderStatus', isEqualTo: "Received")
                 .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData

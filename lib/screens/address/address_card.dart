@@ -1,9 +1,13 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/models/address_model.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
+import 'package:pharmacy_plateform/widgets/big_text.dart';
 
+import '../../utils/dimensions.dart';
 import '../../widgets/wide_button.dart';
 
 class Addresscard extends StatefulWidget {
@@ -55,35 +59,35 @@ class _AddresscardState extends State<Addresscard> {
                       width: screenWidth * 0.8,
                       child: Table(children: [
                         TableRow(children: [
-                          const KeyText(msg: "Name "),
+                          BigText(text: "Name "),
                           Text(widget.model.name),
                         ]),
                         TableRow(children: [
-                          const KeyText(msg: "Phone Number "),
+                          KeyText(msg: "Phone Number "),
                           Text(widget.model.phoneNumber),
                         ]),
                         TableRow(children: [
-                          const KeyText(msg: "Province "),
+                          KeyText(msg: "Province "),
                           Text(widget.model.province),
                         ]),
                         TableRow(children: [
-                          const KeyText(msg: "Commune "),
+                          KeyText(msg: "Commune "),
                           Text(widget.model.commune),
                         ]),
                         TableRow(children: [
-                          const KeyText(msg: "Zone "),
+                          KeyText(msg: "Zone "),
                           Text(widget.model.zone),
                         ]),
                         TableRow(children: [
-                          const KeyText(msg: "Quarter "),
+                          KeyText(msg: "Quarter "),
                           Text(widget.model.quarter),
                         ]),
                         TableRow(children: [
-                          const KeyText(msg: "Avenue "),
+                          KeyText(msg: "Avenue "),
                           Text(widget.model.avenue),
                         ]),
                         TableRow(children: [
-                          const KeyText(msg: "House Number "),
+                          KeyText(msg: "House Number "),
                           Text(widget.model.houseNumber)
                         ]),
                       ]),
@@ -109,16 +113,28 @@ class _AddresscardState extends State<Addresscard> {
 }
 
 class KeyText extends StatelessWidget {
+  Color? color;
+  double size;
+  TextOverflow overflow;
   final String msg;
-  const KeyText({Key? key, required this.msg}) : super(key: key);
+  KeyText(
+      {Key? key,
+      required this.msg,
+      this.color = const Color(0xFF332d2b),
+      this.size = 0,
+      this.overflow = TextOverflow.ellipsis})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Text(
       msg,
-      style: const TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-      ),
+      maxLines: 1,
+      overflow: overflow,
+      style: TextStyle(
+          fontFamily: 'Roboto',
+          color: color,
+          fontSize: size == 0 ? Dimensions.font20 : size,
+          fontWeight: FontWeight.w400),
     );
   }
 }

@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:pharmacy_plateform/pharmacist/model/drawer_item_model.dart';
 
 final itemsFirst = [
-  DrawerItem(title: 'Get Started', icon: Icons.people),
+  DrawerItem(title: 'Home', icon: Icons.home),
   DrawerItem(title: 'Medecines', icon: Icons.medical_services),
-  DrawerItem(title: 'Samples & Tutorials', icon: Icons.phone_android),
-  DrawerItem(title: 'Testing & Debugging', icon: Icons.settings_applications),
-  DrawerItem(title: 'Performance & Optimization', icon: Icons.build),
+  DrawerItem(title: 'Orders', icon: Icons.reorder),
+  DrawerItem(title: 'Profile', icon: Icons.person),
+  DrawerItem(title: 'Settings', icon: Icons.settings),
 ];
 
 final itemsSecond = [
   DrawerItem(title: 'Deployment', icon: Icons.cloud_upload),
-  DrawerItem(title: ' Resources', icon: Icons.extension),
+  DrawerItem(title: ' Log Out', icon: Icons.logout),
 ];

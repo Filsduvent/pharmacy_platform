@@ -13,6 +13,7 @@ class Drug {
   String status;
   String description;
   bool visibility;
+  int quantity;
   Drug({
     required this.id,
     required this.title,
@@ -26,6 +27,7 @@ class Drug {
     required this.status,
     required this.description,
     required this.visibility,
+    required this.quantity,
   });
 
   static Drug fromSnap(DocumentSnapshot snap) {
@@ -43,6 +45,7 @@ class Drug {
       status: snapshot['status'].toString(),
       description: snapshot['description'].toString(),
       visibility: snapshot['visibility'],
+      quantity: snapshot['quantity'],
     );
   }
 
@@ -60,6 +63,7 @@ class Drug {
       status: data['status'],
       description: data['description'].toString(),
       visibility: data['visibility'] as bool,
+      quantity: data['quantity'],
     );
   }
 
@@ -75,6 +79,7 @@ class Drug {
         "published_date": publishedDate,
         "status": status,
         "description": description,
-        "visibility": visibility
+        "visibility": visibility,
+        "quantity": quantity,
       };
 }

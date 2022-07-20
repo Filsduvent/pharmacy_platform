@@ -1,32 +1,26 @@
-import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmacy_plateform/base/custom_loader.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
-import 'package:pharmacy_plateform/widgets/order_card.dart';
 
-import '../../utils/colors.dart';
-
-class MyOrdersScreen extends StatefulWidget {
-  const MyOrdersScreen({Key? key}) : super(key: key);
+class PharmacistOrderHistory extends StatefulWidget {
+  const PharmacistOrderHistory({Key? key}) : super(key: key);
 
   @override
-  State<MyOrdersScreen> createState() => _MyOrdersScreenState();
+  State<PharmacistOrderHistory> createState() => _PharmacistOrderHistoryState();
 }
 
-class _MyOrdersScreenState extends State<MyOrdersScreen> {
+class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: StreamBuilder<QuerySnapshot>(
             stream: firestore
-                .collection('Users')
-                .doc(AppConstants.sharedPreferences!
-                    .getString(AppConstants.userUID))
                 .collection('Orders')
-                .where('orderStatus', isNotEqualTo: "Received")
+                .where('orderStatus', isEqualTo: "Received")
                 .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData
@@ -44,10 +38,17 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                                 .get(),
                             builder: (c, snap) {
                               return snap.hasData
-                                  ? OrderCard(
+                                  ? PharmacistOrderCard(
                                       itemCount: snap.data!.docs.length,
                                       data: snap.data!.docs,
-                                      orderID: snapshot.data!.docs[index].id)
+                                      orderID: snapshot.data!.docs[index].id,
+                                      orderBy: (snapshot.data?.docs[index]
+                                              .data()
+                                          as Map<String, dynamic>)['orderBy'],
+                                      addressId: (snapshot.data?.docs[index]
+                                              .data()
+                                          as Map<String, dynamic>)['addressId'],
+                                    )
                                   : const Center(
                                       child: CircularProgressIndicator(),
                                     );
