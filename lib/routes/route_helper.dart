@@ -16,6 +16,7 @@ import 'package:pharmacy_plateform/screens/home/home_page.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/order_details_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/place_order.dart';
+import '../admin/category/categories_main_screen.dart';
 import '../screens/cart/cart_page.dart';
 import '../screens/drug/recent_drug_detail.dart';
 import '../screens/splash/splash_screen.dart';
@@ -44,6 +45,7 @@ class RouteHelper {
 
   //Routes for Admin
   static const String adminHomeScreen = "/admin-home-screen";
+  static const String categoriesMainScreen = "/categories-main-screen";
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -75,6 +77,7 @@ class RouteHelper {
 
   //Routes for admin
   static String getAdminHomeScreen() => '$adminHomeScreen';
+  static String getCategoriesMainScreen() => '$categoriesMainScreen';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -216,6 +219,12 @@ class RouteHelper {
         name: adminHomeScreen,
         page: () {
           return AdminHomeScreen();
+        },
+        transition: Transition.fadeIn),
+    GetPage(
+        name: categoriesMainScreen,
+        page: () {
+          return CategoriesMainScreen();
         },
         transition: Transition.fadeIn),
   ];

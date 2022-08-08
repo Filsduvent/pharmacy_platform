@@ -3,12 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CategoriesModel {
-  String? id, name, image;
-  CategoriesModel({
-    this.id,
-    this.name,
-    this.image,
-  });
+  String? id, name, image, description;
+  CategoriesModel({this.id, this.name, this.image, this.description});
 
   CategoriesModel.fromjson(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<dynamic, dynamic>;
@@ -19,6 +15,7 @@ class CategoriesModel {
     id = snap.id;
     name = snapshot['name'];
     image = snapshot['image'];
+    description = snapshot['description'];
   }
 
   tojson() {
@@ -26,6 +23,7 @@ class CategoriesModel {
       'id': id,
       'name': name,
       'image': image,
+      'description': description,
     };
   }
 }
