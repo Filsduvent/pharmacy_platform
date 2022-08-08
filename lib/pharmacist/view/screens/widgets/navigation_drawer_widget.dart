@@ -6,6 +6,7 @@ import 'package:pharmacy_plateform/pharmacist/model/drawer_item_model.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/drawer/drawer_items.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
+import 'package:pharmacy_plateform/utils/dimensions.dart';
 
 import '../../../../utils/colors.dart';
 import '../../../../widgets/big_text.dart';
@@ -63,14 +64,64 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   }
 
   Widget buildHeader(bool isCollapsed) => isCollapsed
-      ? FlutterLogo(size: 48)
+      ? // FlutterLogo(size: 48)
+      Container(
+          height: 70,
+          width: 70,
+          child: CircleAvatar(
+            radius: Dimensions.radius30 * 2,
+            backgroundImage: NetworkImage(
+              AppConstants.sharedPreferences!
+                  .getString(AppConstants.userProfilePhoto)
+                  .toString(),
+            ),
+            backgroundColor: AppColors.mainColor,
+          ),
+        )
       : Row(
           children: [
             SizedBox(width: 24),
-            FlutterLogo(size: 48),
-            Text(
-              "Flutter",
-              style: TextStyle(fontSize: 32, color: Colors.white),
+            Container(
+              height: 70,
+              width: 70,
+              child: CircleAvatar(
+                radius: Dimensions.radius30 * 2,
+                backgroundImage: NetworkImage(
+                  AppConstants.sharedPreferences!
+                      .getString(AppConstants.userProfilePhoto)
+                      .toString(),
+                ),
+                backgroundColor: AppColors.mainColor,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  BigText(
+                      text: AppConstants.sharedPreferences!
+                          .getString(AppConstants.userName)
+                          .toString(),
+                      color: Colors.white,
+                      size: Dimensions.font26
+                      // style: TextStyle(
+                      //     fontSize: Dimensions.font20, color: Colors.white),
+                      ),
+                  SizedBox(
+                    height: Dimensions.height10,
+                  ),
+                  BigText(
+                      text: AppConstants.sharedPreferences!
+                          .getString(AppConstants.userRole)
+                          .toString(),
+                      size: Dimensions.font20,
+                      color: Colors.white
+                      // style: TextStyle(
+                      //     fontSize: Dimensions.font20, color: Colors.white),
+                      ),
+                ],
+              ),
             ),
           ],
         );
@@ -177,43 +228,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
 
       case 3:
         Get.toNamed(RouteHelper.getSignInPage());
-        break;
-
-      case 7:
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Are you sure?'),
-              content: BigText(
-                text: "You are Quitting the App",
-                color: AppColors.mainBlackColor,
-              ),
-              actions: [
-                TextButton(
-                    onPressed: () {
-                      //print('Im tapeeeeeeeed');
-                      if (firebaseAuth.currentUser != null) {
-                        authController.clearShareData();
-                        cartControllers.clear();
-                        cartControllers.clearCartHistory();
-                        authController.logOut();
-                      }
-                    },
-                    child: BigText(
-                      text: "Yes",
-                      color: Colors.redAccent,
-                    )),
-                TextButton(
-                    onPressed: () => Get.back(),
-                    child: BigText(
-                      text: "No",
-                      color: AppColors.mainColor,
-                    ))
-              ],
-            );
-          },
-        );
         break;
     }
   }

@@ -28,8 +28,10 @@ class AppConstants {
   static const String userStatus = "status";
   static const String userPassword = "password";
   static const String userProfilePhoto = "profilePhoto";
+  static const String userRole = "role";
   static const String userUID = "uid";
   static const String addressId = "addressId";
+  static const String orderTime = "orderTime";
 
   static const String drugId = "id";
 }

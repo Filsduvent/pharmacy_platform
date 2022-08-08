@@ -278,7 +278,7 @@ class PharmacistOrderDetails extends StatelessWidget {
       var uid = response.data() as Map;
       firestore
           .collection('Users')
-          .doc(orderBy)
+          .doc()
           .collection('Orders')
           .doc(mOrderId)
           .update({'orderStatus': "Delivering"});

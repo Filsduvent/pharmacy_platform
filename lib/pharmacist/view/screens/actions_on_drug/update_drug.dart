@@ -1,16 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors, prefer_final_fields, unused_field, prefer_typing_uninitialized_variables
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/pharmacist/controllers/post_drug_controller.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_drug_details.dart';
+
+import '../../../../controllers/slide_drug_controller.dart';
 import '../../../../models/drug_model.dart';
 import '../../../../routes/route_helper.dart';
 import '../../../../utils/app_constants.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/dimensions.dart';
+import '../../../../utils/styles.dart';
 import '../../../../widgets/app_icon.dart';
 import '../../../../widgets/big_text.dart';
 import '../widgets/Pharmacy_app_text_field _Date.dart';
@@ -19,8 +25,12 @@ import '../widgets/qrcode_content_update.dart';
 import '../widgets/qrcode_field_widget.dart';
 
 class UpdateDrugScreen extends StatefulWidget {
-  const UpdateDrugScreen({
+  String medId;
+  int pageId;
+  UpdateDrugScreen({
     Key? key,
+    required this.medId,
+    required this.pageId,
   }) : super(key: key);
 
   @override
@@ -28,48 +38,44 @@ class UpdateDrugScreen extends StatefulWidget {
 }
 
 class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
-  var titleController =
-      TextEditingController(text: postDrugController.data['title']);
-  var descriptionController =
-      TextEditingController(text: postDrugController.data['description']);
-  var priceController =
-      TextEditingController(text: postDrugController.data['price'].toString());
-  var quantityController = TextEditingController(
-      text: postDrugController.data['quantity'].toString());
-  var _date =
-      TextEditingController(text: postDrugController.data['expiring_date']);
-  var _mandate = TextEditingController(
-      text: postDrugController.data['manufacturing_date']);
+  var titleController;
+  var descriptionController;
+  var priceController;
+  var quantityController;
+  var _date;
+  var _mandate;
 
   var selectedType;
+  var selectedUnits;
   List<String> _accountType = ['Pills', 'Injectables', 'Sirop', 'Gellule'];
-  var category = postDrugController.data['categories'];
-  String _data = postDrugController.data['id'];
+  var category;
+  var unit;
+  // String _data = widget.medId;
   DateTime _dateTime = DateTime.now();
   List<DropdownMenuItem> categoriesItems = [];
-  //PostDrugController postDrugController = Get.put(PostDrugController());
+  PostDrugController postDrugController = Get.put(PostDrugController());
   @override
   void initState() {
-    var titleController =
-        TextEditingController(text: postDrugController.data['title']);
-    var descriptionController =
-        TextEditingController(text: postDrugController.data['description']);
-    var priceController = TextEditingController(
-        text: postDrugController.data['price'].toString());
-    var quantityController = TextEditingController(
-        text: postDrugController.data['quantity'].toString());
-    var _date =
-        TextEditingController(text: postDrugController.data['expiring_date']);
-    var _mandate = TextEditingController(
-        text: postDrugController.data['manufacturing_date']);
-    var category = postDrugController.data['categories'].toString();
-    String _data = postDrugController.data['id'];
+    var drug = Get.find<PostDrugController>().drugList[widget.pageId];
+    Get.put(PostDrugController());
+    titleController = TextEditingController(text: drug.title);
+    descriptionController = TextEditingController(text: drug.description);
+    priceController = TextEditingController(text: drug.price.toString());
+    quantityController = TextEditingController(text: drug.quantity.toString());
+    _date = TextEditingController(text: drug.expiringDate);
+    _mandate = TextEditingController(text: drug.manufacturingDate);
+    category = drug.categories.toString();
+    unit = drug.units.toString();
+
+    // String _data = postDrugController.data['id'];
+    // File image = postDrugController.data['photo_url'];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Obx(() {
+      var drug = Get.find<PostDrugController>().drugList[widget.pageId];
       return Stack(
         children: [
           Positioned(
@@ -82,8 +88,7 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(
-                            postDrugController.data['photo_url'])))),
+                        image: NetworkImage(drug.photoUrl)))),
           ),
           //The back button
 
@@ -153,7 +158,7 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                           children: [
                             QrCodeContentUpdate(
                                 bigText: BigText(
-                              text: _data,
+                              text: widget.medId,
                               color: Colors.black.withOpacity(0.6),
                             )),
                           ],
@@ -278,6 +283,85 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                         SizedBox(
                           height: Dimensions.height20,
                         ),
+                        //Units
+                        StreamBuilder<QuerySnapshot>(
+                          stream: firestore.collection("Units").snapshots(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              Text("Loading..");
+                            } else {
+                              List<DropdownMenuItem> unitsItems = [];
+                              for (int i = 0;
+                                  i < snapshot.data!.docs.length;
+                                  i++) {
+                                DocumentSnapshot snap = snapshot.data!.docs[i];
+                                unitsItems.add(DropdownMenuItem(
+                                  child: Text(
+                                    snap.id,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  value: "${snap.id}",
+                                ));
+                              }
+                              return Container(
+                                clipBehavior: Clip.none,
+                                margin: EdgeInsets.only(
+                                    left: Dimensions.height10,
+                                    right: Dimensions.height10),
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.radius30),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 1,
+                                        // spreadRadius: 7,
+                                        offset: Offset(0, 2),
+                                        color: Colors.grey.withOpacity(0.3)),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    SizedBox(width: Dimensions.width30 - 7),
+                                    DropdownButton<dynamic>(
+                                      items: unitsItems,
+                                      onChanged: (unitsValue) {
+                                        final snackBar = SnackBar(
+                                          content: Text(
+                                            'Selected Currency value is $unitsValue',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily:
+                                                    robotoRegular.toString()),
+                                          ),
+                                        );
+                                        Scaffold.of(context)
+                                            .showSnackBar(snackBar);
+                                        setState(() {
+                                          selectedUnits = unitsValue;
+                                          unit = unitsValue.toString();
+                                        });
+                                      },
+                                      value: selectedUnits,
+                                      isExpanded: false,
+                                      hint: Text(unit,
+                                          style:
+                                              TextStyle(color: Colors.black87)),
+                                    )
+                                  ],
+                                ),
+                              );
+                            }
+                            return Container();
+                          },
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
                         //Description
                         PharmacyAppTextField(
                           textController: descriptionController,
@@ -296,28 +380,23 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                             // Only update if new data was entered
                             setState(() {
                               final drugChangedTitle =
-                                  postDrugController.data['title'] !=
-                                      titleController.text;
-                              final drugChangedManDate = postDrugController
-                                      .data['manufactured_date'] !=
-                                  _mandate.text;
+                                  drug.title != titleController.text;
+                              final drugChangedManDate =
+                                  drug.manufacturingDate != _mandate.text;
                               final drugChangedExpDate =
-                                  postDrugController.data['expiring_date'] !=
-                                      _date.text;
-                              final drugChangedId =
-                                  postDrugController.data['id'] != _data;
-                              final drugChangedPhotoUrl =
-                                  postDrugController.data['photo_url'] !=
-                                      postDrugController.drugPhotoUpdate;
+                                  drug.expiringDate != _date.text;
+                              final drugChangedId = drug.id != widget.medId;
+                              final drugChangedPhotoUrl = drug.photoUrl !=
+                                  postDrugController.drugPhotoUpdate;
                               final drugChangedCategory =
-                                  postDrugController.data['categories'] !=
-                                      category;
+                                  drug.categories != category;
                               final drugChangedPrice =
-                                  postDrugController.data['price'] !=
-                                      priceController.text;
-                              final drugChangedDesc =
-                                  postDrugController.data['description'] !=
-                                      descriptionController.text;
+                                  drug.price != priceController.text;
+                              final drugChangedQuantity =
+                                  drug.quantity != quantityController.text;
+                              final drugChangedUnit = drug.units != unit;
+                              final drugChangedDesc = drug.description !=
+                                  descriptionController.text;
 
                               final drugUpdate = drugChangedTitle ||
                                   drugChangedManDate ||
@@ -326,17 +405,20 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                   drugChangedPhotoUrl ||
                                   drugChangedCategory ||
                                   drugChangedPrice ||
+                                  drugChangedQuantity ||
+                                  drugChangedUnit ||
                                   drugChangedDesc;
                               if (drugUpdate) {
                                 postDrugController.updateDrugDataList(
-                                  _data,
+                                  widget.medId,
                                   titleController.text,
                                   _mandate.text,
                                   _date.text,
-                                  postDrugController.drugPhotoUpdate,
+                                  postDrugController.drugPhotoUpdate!,
                                   category,
                                   int.parse(priceController.text),
                                   int.parse(quantityController.text),
+                                  unit,
                                   descriptionController.text,
                                 );
                               }

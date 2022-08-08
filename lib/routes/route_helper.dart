@@ -58,10 +58,11 @@ class RouteHelper {
   //Routers for pharmacist
   static String getMainPharmacyPage() => '$mainPharmacyPage';
   static String getPharmacyMedecinePage() => '$pharmacyMedecinePage';
-  static String getPharmacyDetailsPage(int pageId, String page) =>
-      '$pharmacyDetailsPage?pageId=$pageId&page=$page';
+  static String getPharmacyDetailsPage(int pageId, String page, String medId) =>
+      '$pharmacyDetailsPage?pageId=$pageId&page=$page&medId=$medId';
   static String getPharmacyPostDrug() => '$pharmacyPostDrug';
-  static String getPharmacyUpdateDrugPage() => '$pharmacyUpdateDrug';
+  static String getPharmacyUpdateDrugPage(String medId, int pageId) =>
+      '$pharmacyUpdateDrug?medId=$medId&pageId=$pageId';
   static String getPharmacistOrderDetailsScreen(
           String orderID, String orderBy, String addressId) =>
       '$pharmacistOrderDetails?orderID=$orderID&orderBy=$orderBy&addressId=$addressId';
@@ -152,7 +153,12 @@ class RouteHelper {
         page: () {
           var pageId = Get.parameters['pageId'];
           var page = Get.parameters["page"];
-          return PharmacyDrugDetails(pageId: int.parse(pageId!), page: page!);
+          var medId = Get.parameters["medId"];
+          return PharmacyDrugDetails(
+            pageId: int.parse(pageId!),
+            page: page!,
+            medId: medId!,
+          );
         },
         transition: Transition.fadeIn),
 
@@ -166,7 +172,12 @@ class RouteHelper {
     GetPage(
         name: pharmacyUpdateDrug,
         page: () {
-          return UpdateDrugScreen();
+          var medId = Get.parameters["medId"];
+          var pageId = Get.parameters['pageId'];
+          return UpdateDrugScreen(
+            medId: medId!,
+            pageId: int.parse(pageId!),
+          );
         },
         transition: Transition.zoom),
 

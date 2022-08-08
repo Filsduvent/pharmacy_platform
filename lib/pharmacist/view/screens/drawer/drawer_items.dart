@@ -8,10 +8,8 @@ final itemsFirst = [
   DrawerItem(title: 'Medecines', icon: Icons.medical_services),
   DrawerItem(title: 'Orders', icon: Icons.reorder),
   DrawerItem(title: 'Profile', icon: Icons.person),
-  DrawerItem(title: 'Settings', icon: Icons.settings),
 ];
 
 final itemsSecond = [
   DrawerItem(title: 'Deployment', icon: Icons.cloud_upload),
-  DrawerItem(title: ' Log Out', icon: Icons.logout),
 ];

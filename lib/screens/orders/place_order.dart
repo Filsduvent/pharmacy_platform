@@ -2,8 +2,10 @@
 
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/models/cart_model.dart';
 import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
@@ -22,41 +24,48 @@ class PlaceOrder extends StatefulWidget {
 }
 
 class _PlaceOrderState extends State<PlaceOrder> {
+  final Rx<bool> _isLoaded = false.obs;
+  bool get isLoaded => _isLoaded.value;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Container(
-      decoration: new BoxDecoration(
-        gradient: new LinearGradient(
-          colors: [Colors.white, Colors.white],
-          begin: const FractionalOffset(1.0, 0.0),
-          stops: [0.0, 1.0],
-          tileMode: TileMode.clamp,
-        ),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Image.asset('assets/image/truck.png'),
-            ),
-            SizedBox(height: 10.0),
-            FlatButton(
-                color: AppColors.mainColor,
-                textColor: Colors.white,
-                padding: EdgeInsets.all(8.0),
-                splashColor: Colors.deepOrange,
-                onPressed: () => addOrderDetails(),
-                child: BigText(text: "Place order", color: Colors.white))
-          ],
-        ),
-      ),
-    ));
+    return Scaffold(body: Obx(() {
+      return !isLoaded
+          ? Container(
+              decoration: new BoxDecoration(
+                gradient: new LinearGradient(
+                  colors: [Colors.white, Colors.white],
+                  begin: const FractionalOffset(1.0, 0.0),
+                  stops: [0.0, 1.0],
+                  tileMode: TileMode.clamp,
+                ),
+              ),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Image.asset('assets/image/truck.png'),
+                    ),
+                    SizedBox(height: 10.0),
+                    FlatButton(
+                        color: AppColors.mainColor,
+                        textColor: Colors.white,
+                        padding: EdgeInsets.all(8.0),
+                        splashColor: Colors.deepOrange,
+                        onPressed: () => addOrderDetails(),
+                        child:
+                            BigText(text: "Place order", color: Colors.white))
+                  ],
+                ),
+              ),
+            )
+          : CustomLoader();
+    }));
   }
 
   addOrderDetails() async {
+    _isLoaded.value = true;
     var _cartList = cartControllers.getItems;
     var _tmp = [];
 
@@ -93,7 +102,8 @@ class _PlaceOrderState extends State<PlaceOrder> {
           "orderTime": DateTime.now().millisecondsSinceEpoch.toString(),
           "isSuccess": true,
           "totalAmount": cartControllers.totalAmount,
-          "orderStatus": "Pending"
+          "orderStatus": "Pending",
+          "id": AppConstants.sharedPreferences!.getString(AppConstants.userUID)!
         });
         writeOrderDetailsPharmacy({
           AppConstants.addressId: widget.addressId,
@@ -103,22 +113,27 @@ class _PlaceOrderState extends State<PlaceOrder> {
               .getStringList(AppConstants.userCartList),
           "orderedProduct": _tmp,
           "paymentDetails": "Cash on Delivery",
-          "orderTime": DateTime.now().millisecondsSinceEpoch.toString(),
+          AppConstants.orderTime:
+              DateTime.now().millisecondsSinceEpoch.toString(),
           "isSuccess": true,
           "totalAmount": cartControllers.totalAmount,
           "orderStatus": "Pending",
-        }).whenComplete(() => {emptyCartNow(), cartControllers.addToHistory()});
+        }).whenComplete(() => {
+              emptyCartNow(),
+              cartControllers.addToHistory(),
+              _isLoaded.value = false
+            });
       }
     }
   }
 
-  emptyCartNow() {
+  Future emptyCartNow() async {
     AppConstants.sharedPreferences!
         .setStringList(AppConstants.userCartList, ["garbageValue"]);
     List<String> tempList = AppConstants.sharedPreferences!
         .getStringList(AppConstants.userCartList) as List<String>;
 
-    firestore
+    await firestore
         .collection('Users')
         .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
         .update({
@@ -155,13 +170,16 @@ class _PlaceOrderState extends State<PlaceOrder> {
           await firestore.collection('Medicines').doc(product.id).get();
       var quantity = response.data() as Map;
 
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await firestore
+          .collection('Orders')
+          .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
+          .get();
+
       await firestore
           .collection('Users')
           .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
           .collection('Orders')
-          .doc(
-              AppConstants.sharedPreferences!.getString(AppConstants.userUID)! +
-                  data['orderTime'])
+          .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
           .set(data);
 
       if (quantity['quantity'] < product.quantity) {
@@ -185,12 +203,22 @@ class _PlaceOrderState extends State<PlaceOrder> {
           await firestore.collection('Medicines').doc(product.id).get();
       var quantity = response.data() as Map;
 
-      await firestore
+      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await firestore
           .collection('Orders')
-          .doc(
-              AppConstants.sharedPreferences!.getString(AppConstants.userUID)! +
-                  data['orderTime'])
-          .set(data);
+          .doc(data['orderTime'] +
+              AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
+          .get();
+      // var exist = response.data() as Map;
+
+      if (documentSnapshot.exists) {
+      } else {
+        await firestore
+            .collection('Orders')
+            .doc(data['orderTime'] +
+                AppConstants.sharedPreferences!
+                    .getString(AppConstants.userUID)!)
+            .set(data);
+      }
 
       if (quantity['quantity'] < product.quantity) {
       } else {

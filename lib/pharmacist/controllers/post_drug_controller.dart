@@ -45,10 +45,14 @@ class PostDrugController extends GetxController {
     super.onInit();
     _drugList.bindStream(FirebaseFirestore.instance
         .collection('Medicines')
+        .where('id',
+            isEqualTo:
+                AppConstants.sharedPreferences!.getString(AppConstants.drugId))
         .where('uid',
             isEqualTo:
                 AppConstants.sharedPreferences!.getString(AppConstants.userUID))
         .where('visibility', isEqualTo: true)
+        .where('quantity', isGreaterThan: 0)
         //.limit(5)
         .snapshots()
         .map((QuerySnapshot query) {
@@ -57,6 +61,7 @@ class PostDrugController extends GetxController {
         retVal.add(
           Drug.fromSnap(element),
         );
+        update();
 
         _isLoaded.value = true;
       }
@@ -89,16 +94,14 @@ class PostDrugController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    getDrugData();
+    String id = _data['id'];
+    getDrugData(id);
   }
 
   //Get Drug data from firebase
-  Future<void> getDrugData() async {
+  Future<void> getDrugData(String id) async {
     try {
-      final response = await firestore
-          .collection('Medicines')
-          .doc(AppConstants.sharedPreferences!.getString(AppConstants.drugId))
-          .get();
+      final response = await firestore.collection('Medicines').doc(id).get();
 
       if (response.exists) {
         _data.value = response.data() as Map;
@@ -185,6 +188,7 @@ class PostDrugController extends GetxController {
     }
 
     _file = Rx<File>(File(imageFile!.path));
+    _isLoaded.value = false;
   }
 
 // pick from galery to add in storage
@@ -202,6 +206,7 @@ class PostDrugController extends GetxController {
     }
 
     _file = Rx<File>(File(imageFile!.path));
+    _isLoaded.value = false;
   }
 
   // upload image to firebase storage
@@ -226,6 +231,7 @@ class PostDrugController extends GetxController {
     String categories,
     int price,
     int quantity,
+    String units,
     String description,
   ) async {
     _isLoaded.value = true;
@@ -245,6 +251,8 @@ class PostDrugController extends GetxController {
         showCustomSnackBar("Fill your price please", title: "price");
       } else if (quantity == null) {
         showCustomSnackBar("Fill your quantity please", title: "quantity");
+      } else if (units.isEmpty) {
+        showCustomSnackBar("Fill the unit of the drug please", title: "units");
       } else if (description.isEmpty) {
         showCustomSnackBar("Fill your description please",
             title: "description");
@@ -256,20 +264,20 @@ class PostDrugController extends GetxController {
         String downloadUrl = await _uploadToStorage(photoUrl, id);
 
         Drug drug = Drug(
-          id: id,
-          title: title,
-          manufacturingDate: manufacturingDate,
-          expiringDate: expiringDate,
-          photoUrl: downloadUrl,
-          categories: categories,
-          price: price,
-          quantity: quantity,
-          uid: uid,
-          publishedDate: DateTime.now().toString(),
-          status: "Available",
-          description: description,
-          visibility: true,
-        );
+            id: id,
+            title: title,
+            manufacturingDate: manufacturingDate,
+            expiringDate: expiringDate,
+            photoUrl: downloadUrl,
+            categories: categories,
+            price: price,
+            quantity: quantity,
+            uid: uid,
+            publishedDate: DateTime.now().toString(),
+            status: "Available",
+            description: description,
+            visibility: true,
+            units: units);
         firestore
             .collection('Medicines')
             .doc(id)
@@ -281,8 +289,8 @@ class PostDrugController extends GetxController {
               await SharedPreferences.getInstance();
           await sharedPreferences.setString(AppConstants.drugId, id);
         });
-        Get.toNamed(RouteHelper.getPharmacyMedecinePage());
         _isLoaded.value = false;
+        Get.toNamed(RouteHelper.getPharmacyMedecinePage());
       }
     } catch (e) {
       showCustomSnackBar(
@@ -403,12 +411,14 @@ class PostDrugController extends GetxController {
     String title,
     String manufacturingDate,
     String expiringDate,
-    File? photoUrl,
+    File photoUrl,
     String categories,
     int price,
     int quantity,
+    String units,
     String description,
   ) async {
+    _isLoaded.value = true;
     try {
       if (id.isEmpty) {
         showCustomSnackBar("Fill your id please", title: "id");
@@ -425,6 +435,8 @@ class PostDrugController extends GetxController {
         showCustomSnackBar("Fill your price please", title: "price");
       } else if (quantity == null) {
         showCustomSnackBar("Fill your quantity please", title: "quantity");
+      } else if (units.isEmpty) {
+        showCustomSnackBar("Fill the unit of the drug please", title: "units");
       } else if (description.isEmpty) {
         showCustomSnackBar("Fill your description please",
             title: "description");
@@ -449,11 +461,12 @@ class PostDrugController extends GetxController {
           status: "Available",
           description: description,
           visibility: true,
+          units: units,
         );
         firestore.collection('Medicines').doc(id).update(
               drug.toJson(),
             );
-        Get.offAllNamed(RouteHelper.getPharmacyMedecinePage());
+        Get.toNamed(RouteHelper.getPharmacyMedecinePage());
       }
     } catch (e) {
       showCustomSnackBar(
@@ -465,12 +478,9 @@ class PostDrugController extends GetxController {
   }
 
 /*========================================Delete=============================*/
-  Future<void> deleteDrug() async {
+  Future<void> deleteDrug(String id) async {
     try {
-      await firestore
-          .collection('Medicines')
-          .doc(AppConstants.sharedPreferences!.getString(AppConstants.drugId))
-          .delete();
+      await firestore.collection('Medicines').doc(id).delete();
       Get.toNamed(RouteHelper.getPharmacyMedecinePage());
     } catch (e) {
       showCustomSnackBar(
@@ -480,22 +490,19 @@ class PostDrugController extends GetxController {
     }
   }
 
-  Future deleteByChangeVisibility() async {
+  Future deleteByChangeVisibility(String id) async {
     try {
       _isLoaded.value = true;
-      await firestore
-          .collection('Medicines')
-          .doc(AppConstants.sharedPreferences!.getString(AppConstants.drugId))
-          .update({
+      await firestore.collection('Medicines').doc(id).update({
         'visibility': false,
       });
       Get.offAllNamed(RouteHelper.getPharmacyMedecinePage());
-      _isLoaded.value = false;
     } catch (e) {
       showCustomSnackBar(
         e.toString(),
         title: "Deleting drug item",
       );
     }
+    _isLoaded.value = false;
   }
 }

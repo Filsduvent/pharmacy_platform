@@ -16,6 +16,7 @@ class RecentDrugController extends GetxController {
     super.onInit();
     _recentDrugList.bindStream(FirebaseFirestore.instance
         .collection('Medicines')
+        .where('quantity', isGreaterThan: 0)
         .where('visibility', isEqualTo: true)
         .snapshots()
         .map((QuerySnapshot query) {

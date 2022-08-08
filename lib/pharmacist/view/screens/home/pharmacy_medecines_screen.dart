@@ -9,6 +9,7 @@ import 'package:pharmacy_plateform/utils/dimensions.dart';
 import '../../../../routes/route_helper.dart';
 import '../../../../utils/colors.dart';
 import '../../../../widgets/app_icon.dart';
+import '../../../../widgets/big_text.dart';
 import '../../../../widgets/small_text.dart';
 
 class PharmacyMedicinesScreen extends StatefulWidget {
@@ -27,74 +28,133 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Obx(() {
-        return postDrugController.drugList.isNotEmpty
-            ? Stack(
+        return Stack(
+          children: [
+            // color cover back ground
+            Positioned(
+              left: 0,
+              right: 0,
+              child: Container(
+                width: double.maxFinite,
+                height: Dimensions.popularFoodImgSize,
+                color: AppColors.mainColor,
+              ),
+            ),
+
+            //Two buttons
+
+            Positioned(
+              top: Dimensions.height20 * 2,
+              left: Dimensions.width20,
+              right: Dimensions.width20,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // color cover back ground
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      width: double.maxFinite,
-                      height: Dimensions.popularFoodImgSize,
-                      color: Colors.black12,
-                    ),
-                  ),
+                  GestureDetector(
+                      onTap: () {
+                        Get.toNamed(RouteHelper.getMainPharmacyPage());
+                      },
+                      child: AppIcon(icon: Icons.arrow_back_ios)),
+                  AppIcon(icon: Icons.search)
+                ],
+              ),
+            ),
 
-                  //Two buttons
-
-                  Positioned(
-                    top: Dimensions.height20 * 2,
-                    left: Dimensions.width20,
-                    right: Dimensions.width20,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              Get.back();
-                            },
-                            child: AppIcon(icon: Icons.arrow_back_ios)),
-                      ],
-                    ),
-                  ),
-
-                  //the white background on wich we have all delails
-                  Positioned(
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    top: Dimensions.popularFoodImgSize - 120,
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          // left: Dimensions.width20,
-                          // right: Dimensions.width20,
-                          top: Dimensions.height10),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(Dimensions.radius20),
-                            topLeft: Radius.circular(Dimensions.radius20),
-                          ),
-                          color: Colors.white),
-
-                      // the content of the white background
-
-                      child: Stack(
+            //The container with the number of items in firebase
+            Positioned(
+              top: Dimensions.height20 * 5,
+              left: Dimensions.width20,
+              right: Dimensions.width20,
+              child: Container(
+                height: Dimensions.height45 * 1.3,
+                margin: EdgeInsets.symmetric(vertical: 20),
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                decoration: BoxDecoration(
+                  color: AppColors.secondColor,
+                  borderRadius: BorderRadius.circular(29.5),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(0.8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          GridView.builder(
-                              itemCount: postDrugController.drugList.length,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: 10,
-                                      crossAxisSpacing: 10),
-                              itemBuilder: (context, index) {
-                                final data = postDrugController.drugList[index];
-                                return GestureDetector(
+                          BigText(
+                            text: "Medicines in stock : ",
+                            color: Colors.white,
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                                top: Dimensions.height10,
+                                bottom: Dimensions.height10,
+                                left: Dimensions.width10,
+                                right: Dimensions.width10),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(Dimensions.radius20),
+                              color: Colors.white,
+                            ),
+                            child: Row(
+                              children: [
+                                SizedBox(
+                                  width: Dimensions.width10 / 2,
+                                ),
+                                BigText(
+                                    text: postDrugController.drugList.length
+                                        .toString()),
+                                SizedBox(
+                                  width: Dimensions.width10 / 2,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            //the white background on wich we have all delails
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              top: Dimensions.popularFoodImgSize - 120,
+              child: Container(
+                padding: EdgeInsets.only(
+                    // left: Dimensions.width20,
+                    // right: Dimensions.width20,
+                    top: Dimensions.height10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(Dimensions.radius20),
+                      topLeft: Radius.circular(Dimensions.radius20),
+                    ),
+                    color: Colors.white),
+
+                // the content of the white background
+
+                child: Stack(
+                  children: [
+                    postDrugController.drugList.isNotEmpty
+                        ? GridView.builder(
+                            itemCount: postDrugController.drugList.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    mainAxisSpacing: 10,
+                                    crossAxisSpacing: 10),
+                            itemBuilder: (context, index) {
+                              final data = postDrugController.drugList[index];
+                              return GestureDetector(
                                   onTap: () {
                                     Get.toNamed(
                                         RouteHelper.getPharmacyDetailsPage(
-                                            index, "home"));
+                                            index, "home", data.id));
                                   },
                                   child: Stack(
                                     children: [
@@ -102,7 +162,7 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                                         onTap: () {
                                           Get.toNamed(RouteHelper
                                               .getPharmacyDetailsPage(
-                                                  index, "home"));
+                                                  index, "home", data.id));
                                         },
                                         child: Container(
                                           width: Dimensions.width30 * 9,
@@ -233,19 +293,37 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                                         ),
                                       ),
                                     ],
-                                  ),
-                                );
-                              }),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              )
-            : NoDataPage(
-                text: "No data found",
-                imgPath: "assets/image/No_data.png",
-              );
+                                  ));
+                            })
+                        : Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Image.asset(
+                                "assets/image/No_data.png",
+                                height:
+                                    MediaQuery.of(context).size.height * 0.22,
+                                width: MediaQuery.of(context).size.width * 0.22,
+                              ),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.03,
+                              ),
+                              Text(
+                                "No data found",
+                                style: TextStyle(
+                                    fontSize: Dimensions.font26,
+                                    color: Theme.of(context).disabledColor),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        );
       }),
 
       // floatingactionbutton

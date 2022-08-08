@@ -137,6 +137,7 @@ class AuthController extends GetxController {
               AppConstants.userProfilePhoto, downloadUrl);
           await sharedPreferences
               .setStringList(AppConstants.userCartList, ["garbageValue"]);
+          await sharedPreferences.setString(AppConstants.userRole, role);
 
           if (cred != null) {
             readData(cred).then((value) async {
@@ -250,6 +251,8 @@ class AuthController extends GetxController {
           AppConstants.userPassword, json[AppConstants.userPassword]);
       await sharedPreferences.setString(
           AppConstants.userProfilePhoto, json[AppConstants.userProfilePhoto]);
+      await sharedPreferences.setString(
+          AppConstants.userRole, json[AppConstants.userRole]);
 
       List<String> cartList = json[AppConstants.userCartList].Cast<String>();
       await sharedPreferences.setStringList(
@@ -267,6 +270,8 @@ class AuthController extends GetxController {
     AppConstants.sharedPreferences!.remove(AppConstants.userPassword);
     AppConstants.sharedPreferences!.remove(AppConstants.userProfilePhoto);
     AppConstants.sharedPreferences!.remove(AppConstants.userCartList);
+    AppConstants.sharedPreferences!.remove(AppConstants.userRole);
+    AppConstants.sharedPreferences!.remove(AppConstants.drugId);
     return true;
   }
 }
