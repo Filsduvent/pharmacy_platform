@@ -148,7 +148,7 @@ class AuthController extends GetxController {
                   .then((DocumentSnapshot snapshot) {
                 var jsons = snapshot.data() as Map<String, dynamic>;
                 if (jsons['role'] == 'Admin') {
-                  Get.toNamed(RouteHelper.getCartPage());
+                  Get.toNamed(RouteHelper.getAdminHomeScreen());
                 } else if (jsons['role'] == 'Customer') {
                   Get.toNamed(RouteHelper.getInitial());
                 } else if (jsons['role'] == 'Pharmacy owner') {
@@ -189,7 +189,7 @@ class AuthController extends GetxController {
                 .then((DocumentSnapshot snapshot) {
               var jsons = snapshot.data() as Map<String, dynamic>;
               if (jsons['role'] == 'Admin') {
-                Get.toNamed(RouteHelper.getCartPage());
+                Get.toNamed(RouteHelper.getAdminHomeScreen());
               } else if (jsons['role'] == 'Customer') {
                 Get.toNamed(RouteHelper.getInitial());
               } else if (jsons['role'] == 'Pharmacy owner') {

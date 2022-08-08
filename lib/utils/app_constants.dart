@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:pharmacy_plateform/admin/admincontrollers/admin_navigation_controller.dart';
 import 'package:pharmacy_plateform/controllers/address_changer_controller.dart';
 import 'package:pharmacy_plateform/controllers/address_controller.dart';
 import 'package:pharmacy_plateform/controllers/auth_controller.dart';
@@ -51,3 +52,4 @@ var postDrugController = PostDrugController.instance;
 var categoriesController = CategoriesController.instance;
 var addressController = AddressController.instance;
 var addressChangerController = AddressChangerController.instance;
+var adminNavigationController = AdminNavigationController.instance;

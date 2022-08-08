@@ -1,4 +1,5 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+import 'package:pharmacy_plateform/admin/adminscreens/home/admin_home_screen.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/update_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
@@ -41,6 +42,9 @@ class RouteHelper {
   static const String pharmacyShiftOrders = "/pharmacy-shift-orders";
   static const String pharmacyOrderScreen = "/pharmacy-order-screen";
 
+  //Routes for Admin
+  static const String adminHomeScreen = "/admin-home-screen";
+
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
   static String getPopularDrug(int pageId, String page) =>
@@ -68,6 +72,9 @@ class RouteHelper {
       '$pharmacistOrderDetails?orderID=$orderID&orderBy=$orderBy&addressId=$addressId';
   static String getPharmacyShiftOrders() => '$pharmacyShiftOrders';
   static String getPharmacistOrderScreen() => '$pharmacyOrderScreen';
+
+  //Routes for admin
+  static String getAdminHomeScreen() => '$adminHomeScreen';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -203,5 +210,13 @@ class RouteHelper {
           return PharmacistOrderScreen();
         },
         transition: Transition.fade),
+
+    //Routes for admin
+    GetPage(
+        name: adminHomeScreen,
+        page: () {
+          return AdminHomeScreen();
+        },
+        transition: Transition.fadeIn),
   ];
 }
