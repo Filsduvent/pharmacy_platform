@@ -110,8 +110,10 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
                                       width: Dimensions.width10 / 2,
                                     ),
                                     BigText(
-                                        text: snapshot.data!.docs.length
-                                            .toString()),
+                                        text: snapshot.hasData
+                                            ? snapshot.data!.docs.length
+                                                .toString()
+                                            : "0"),
                                     SizedBox(
                                       width: Dimensions.width10 / 2,
                                     ),
@@ -274,6 +276,8 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
         backgroundColor: AppColors.secondColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimensions.radius15)),
-        onPressed: () {},
+        onPressed: () {
+          categoryController.pickImage(context);
+        },
       );
 }

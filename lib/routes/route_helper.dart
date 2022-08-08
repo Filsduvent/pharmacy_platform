@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
 import 'package:pharmacy_plateform/admin/adminscreens/home/admin_home_screen.dart';
+import 'package:pharmacy_plateform/admin/category/post_category.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/update_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
@@ -46,6 +47,7 @@ class RouteHelper {
   //Routes for Admin
   static const String adminHomeScreen = "/admin-home-screen";
   static const String categoriesMainScreen = "/categories-main-screen";
+  static const String postCategoryForm = "/post-category-form";
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -78,6 +80,7 @@ class RouteHelper {
   //Routes for admin
   static String getAdminHomeScreen() => '$adminHomeScreen';
   static String getCategoriesMainScreen() => '$categoriesMainScreen';
+  static String getPostCategoryForm() => '$postCategoryForm';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -227,5 +230,12 @@ class RouteHelper {
           return CategoriesMainScreen();
         },
         transition: Transition.fadeIn),
+
+    GetPage(
+        name: postCategoryForm,
+        page: () {
+          return PostCategoryForm();
+        },
+        transition: Transition.zoom),
   ];
 }
