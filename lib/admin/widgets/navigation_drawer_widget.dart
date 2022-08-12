@@ -225,7 +225,7 @@ class _AdminNavigationDrawerWidgetState
         break;
 
       case 2:
-        //Get.toNamed(RouteHelper.getPharmacistOrderScreen());
+        Get.toNamed(RouteHelper.getAdminDrugMainScreen());
         break;
 
       case 3:

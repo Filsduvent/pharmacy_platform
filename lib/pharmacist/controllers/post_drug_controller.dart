@@ -440,9 +440,10 @@ class PostDrugController extends GetxController {
       } else if (description.isEmpty) {
         showCustomSnackBar("Fill your description please",
             title: "description");
-      } else if (photoUrl == null) {
+      } /*else if (photoUrl == null) {
         showCustomSnackBar("Choose an image", title: "Image");
-      } else {
+      } */
+      else {
         String uid = firebaseAuth.currentUser!.uid;
 
         String downloadUrlUpdate = await _uploadToStorageUpdate(photoUrl, id);

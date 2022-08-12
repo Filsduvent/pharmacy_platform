@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_drug_main_screen.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/home/admin_home_screen.dart';
 import 'package:pharmacy_plateform/admin/category/post_category.dart';
+import 'package:pharmacy_plateform/admin/category/update_category.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/update_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
@@ -18,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/order_details_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/place_order.dart';
 import '../admin/category/categories_main_screen.dart';
+import '../admin/category/category_details_screen.dart';
 import '../screens/cart/cart_page.dart';
 import '../screens/drug/recent_drug_detail.dart';
 import '../screens/splash/splash_screen.dart';
@@ -48,6 +52,10 @@ class RouteHelper {
   static const String adminHomeScreen = "/admin-home-screen";
   static const String categoriesMainScreen = "/categories-main-screen";
   static const String postCategoryForm = "/post-category-form";
+  static const String categoryDetailsScreen = "/category-details-screen";
+  static const String updateCategoryScreen = "/update-category-screen";
+  static const String adminDrugMainScreen = "/admin-drug-main-screen";
+  static const String adminValidDetailsScreen = "/admin-valid-details-screen";
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -81,6 +89,16 @@ class RouteHelper {
   static String getAdminHomeScreen() => '$adminHomeScreen';
   static String getCategoriesMainScreen() => '$categoriesMainScreen';
   static String getPostCategoryForm() => '$postCategoryForm';
+  static String getUpdateCategoryScreen(String catId, int pageId, String image,
+          String name, String description) =>
+      '$updateCategoryScreen?catId=$catId&pageId=$pageId&image=$image&name=$name&description=$description';
+  static String getCategoryDetailsScreen(
+          int pageId, String page, String catId) =>
+      '$categoryDetailsScreen?pageId=$pageId&page=$page&catId=$catId';
+  static String getAdminDrugMainScreen() => '$adminDrugMainScreen';
+  static String getAdminValidDetailsScreen(
+          int pageId, String page, String drugId) =>
+      '$adminValidDetailsScreen?pageId=$pageId&page=$page&drugId=$drugId';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -223,13 +241,13 @@ class RouteHelper {
         page: () {
           return AdminHomeScreen();
         },
-        transition: Transition.fadeIn),
+        transition: Transition.zoom),
     GetPage(
         name: categoriesMainScreen,
         page: () {
           return CategoriesMainScreen();
         },
-        transition: Transition.fadeIn),
+        transition: Transition.zoom),
 
     GetPage(
         name: postCategoryForm,
@@ -237,5 +255,60 @@ class RouteHelper {
           return PostCategoryForm();
         },
         transition: Transition.zoom),
+
+    GetPage(
+        name: categoryDetailsScreen,
+        page: () {
+          var pageId = Get.parameters['pageId'];
+          var page = Get.parameters["page"];
+          var catId = Get.parameters["catId"];
+
+          return CategoryDetailsScreen(
+            pageId: int.parse(pageId!),
+            page: page!,
+            catId: catId!,
+          );
+        },
+        transition: Transition.fadeIn),
+
+    GetPage(
+        name: updateCategoryScreen,
+        page: () {
+          var catId = Get.parameters["catId"];
+          var pageId = Get.parameters['pageId'];
+          var image = Get.parameters['image'];
+          var name = Get.parameters['name'];
+          var description = Get.parameters['description'];
+
+          return UpdateCategoryScreen(
+            catId: catId!,
+            pageId: int.parse(pageId!),
+            image: image!,
+            name: name!,
+            description: description!,
+          );
+        },
+        transition: Transition.zoom),
+    GetPage(
+        name: adminDrugMainScreen,
+        page: () {
+          return AdminDrugMainScreen();
+        },
+        transition: Transition.zoom),
+
+    GetPage(
+        name: adminValidDetailsScreen,
+        page: () {
+          var pageId = Get.parameters['pageId'];
+          var page = Get.parameters["page"];
+          var drugId = Get.parameters["drugId"];
+
+          return AdminValidDetailsScreen(
+            pageId: int.parse(pageId!),
+            page: page!,
+            drugId: drugId!,
+          );
+        },
+        transition: Transition.fadeIn),
   ];
 }

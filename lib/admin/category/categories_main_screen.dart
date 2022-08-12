@@ -14,7 +14,7 @@ import '../../widgets/big_text.dart';
 import '../../widgets/small_text.dart';
 
 class CategoriesMainScreen extends StatefulWidget {
-  const CategoriesMainScreen({
+  CategoriesMainScreen({
     Key? key,
   }) : super(key: key);
 
@@ -160,11 +160,15 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
                                         snapshot.data!.docs.map((category) {
                                       return CategoriesModel.fromjson(category);
                                     }).toList();
-                                    // final recentdata =
-                                    //     recentdrugController.recentDrugList[index];
+
                                     return GestureDetector(
                                       onTap: () {
-                                        //Get.toNamed(RouteHelper.getRecentDrug(index, "home"));
+                                        Get.toNamed(RouteHelper
+                                            .getCategoryDetailsScreen(
+                                          index,
+                                          "details",
+                                          listCategory[index].id.toString(),
+                                        ));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.only(
