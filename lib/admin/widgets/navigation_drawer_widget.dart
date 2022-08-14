@@ -44,20 +44,20 @@ class _AdminNavigationDrawerWidgetState
             ),
             buildList(items: itemsFirst, isCollapsed: isCollapsed),
             SizedBox(
-              height: 24,
+              height: 22,
             ),
             Divider(
               color: Colors.white70,
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 22),
             // buildList(
             //     indexOffset: itemsFirst.length,
             //     items: itemsSecond,
             //     isCollapsed: isCollapsed),
-            Spacer(),
+            //Spacer(),
             buildCollapseIcon(context, isCollapsed),
             SizedBox(
-              height: 12,
+              height: 5,
             ),
           ]),
         ),
@@ -229,7 +229,7 @@ class _AdminNavigationDrawerWidgetState
         break;
 
       case 3:
-        //Get.toNamed(RouteHelper.getSignInPage());
+        Get.toNamed(RouteHelper.getAdminOrderMainScreen());
         break;
     }
   }

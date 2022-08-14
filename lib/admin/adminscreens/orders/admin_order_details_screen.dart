@@ -2,28 +2,26 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
-import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
-import 'package:pharmacy_plateform/routes/route_helper.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_card.dart';
 
-import '../../../../models/address_model.dart';
-import '../../../../screens/address/address_card.dart';
-import '../../../../utils/app_constants.dart';
-import '../../../../utils/colors.dart';
-import '../../../../utils/dimensions.dart';
-import '../../../../widgets/big_text.dart';
-import '../../../../widgets/order_card.dart';
+import '../../../base/show_custom_snackbar.dart';
+import '../../../models/address_model.dart';
+import '../../../routes/route_helper.dart';
+import '../../../screens/address/address_card.dart';
+import '../../../utils/app_constants.dart';
+import '../../../utils/colors.dart';
+import '../../../utils/dimensions.dart';
+import '../../../widgets/big_text.dart';
 
 String getOrderId = " ";
 
-class PharmacistOrderDetails extends StatelessWidget {
+class AdminOrderDetailsScreen extends StatelessWidget {
   final String orderID;
   final String orderBy;
   final String addressId;
-  const PharmacistOrderDetails(
+  const AdminOrderDetailsScreen(
       {Key? key,
       required this.orderID,
       required this.orderBy,
@@ -172,7 +170,7 @@ class PharmacistOrderDetails extends StatelessWidget {
                                   .get(),
                               builder: (c, dataSnapshot) {
                                 return dataSnapshot.hasData
-                                    ? PharmacistOrderCard(
+                                    ? AdminOrderCard(
                                         itemCount:
                                             dataSnapshot.data!.docs.length,
                                         data: dataSnapshot.data!.docs,
@@ -193,7 +191,7 @@ class PharmacistOrderDetails extends StatelessWidget {
                                   .get(),
                               builder: (c, snap) {
                                 return snap.hasData
-                                    ? PharmacyShippingDetails(
+                                    ? AdminShippingDetails(
                                         model: AddressModel.fromJson(snap.data!
                                             .data() as Map<String, dynamic>))
                                     : Center(
@@ -203,27 +201,30 @@ class PharmacistOrderDetails extends StatelessWidget {
                           SizedBox(
                             height: Dimensions.height20,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              confirmParcelShifted(context, getOrderId);
-                            },
-                            child: Container(
-                              width: Dimensions.screenWidth,
-                              height: Dimensions.screenHeight / 13,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius30),
-                                  color: AppColors.mainColor),
-                              child: Center(
-                                child: BigText(
-                                  text: "Confirmed || Items Received",
-                                  size:
-                                      Dimensions.font20 + Dimensions.font20 / 2,
-                                  color: Colors.white,
+                          !(dataMap['orderStatus'] == "Pending")
+                              ? Container()
+                              : GestureDetector(
+                                  onTap: () async {
+                                    confirmPendingToRunning(
+                                        context, getOrderId);
+                                  },
+                                  child: Container(
+                                    width: Dimensions.screenWidth - 20,
+                                    height: Dimensions.screenHeight / 13,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius30),
+                                        color: AppColors.mainColor),
+                                    child: Center(
+                                      child: BigText(
+                                        text: "Running Order",
+                                        size: Dimensions.font20 +
+                                            Dimensions.font20 / 2,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
                           SizedBox(
                             height: Dimensions.height10,
                           ),
@@ -238,62 +239,26 @@ class PharmacistOrderDetails extends StatelessWidget {
     ));
   }
 
-  void confirmParcelShifted(BuildContext context, String mOrderId) async {
-    final response = await firestore.collection('Orders').doc(mOrderId).get();
-    // .collection('Users')
-    // .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
-    // .collection('Orders')
-    // .doc(mOrderId)
-    // .get();
-    var orderStatus = response.data() as Map;
-    if (orderStatus['orderStatus'] == "Delivering") {
-      Get.snackbar(
-        'Delivering',
-        'Order in progress of Delivering',
-        backgroundColor: AppColors.mainColor,
-        colorText: Colors.white,
-        icon: const Icon(
-          Icons.alarm,
-          color: Colors.white,
-        ),
-        barBlur: 20,
-        isDismissible: true,
-        duration: const Duration(seconds: 5),
-      );
-    } else if (orderStatus['orderStatus'] == "Received") {
-      Get.snackbar(
-        'Reminder',
-        'This order have been already delivered',
-        backgroundColor: AppColors.mainColor,
-        colorText: Colors.white,
-        icon: const Icon(
-          Icons.alarm,
-          color: Colors.white,
-        ),
-        barBlur: 20,
-        isDismissible: true,
-        duration: const Duration(seconds: 5),
-      );
-    } else if (orderStatus['orderStatus'] == "Pending") {
-      var uid = response.data() as Map;
-      firestore
-          .collection('Users')
-          .doc(orderBy)
+  Future<void> confirmPendingToRunning(
+      BuildContext context, String mOrderId) async {
+    try {
+      await firestore
           .collection('Orders')
           .doc(mOrderId)
-          .update({'orderStatus': "Delivering"});
-
-      firestore
-          .collection('Orders')
-          .doc(mOrderId)
-          .update({'orderStatus': "Delivering"});
-
+          .update({'orderStatus': "Running"}).then((_) async {
+        firestore
+            .collection('Users')
+            .doc(orderBy)
+            .collection('Orders')
+            .doc(mOrderId)
+            .update({'orderStatus': "Running"});
+      });
       getOrderId = "";
 
-      Get.toNamed(RouteHelper.getPharmacistOrderScreen());
+      Get.toNamed(RouteHelper.getAdminOrderMainScreen());
       Get.snackbar(
         'Confirmation',
-        'Order has been Sent successfully',
+        'State changed successfully',
         backgroundColor: AppColors.mainColor,
         colorText: Colors.white,
         icon: const Icon(
@@ -303,15 +268,19 @@ class PharmacistOrderDetails extends StatelessWidget {
         barBlur: 20,
         isDismissible: true,
         duration: const Duration(seconds: 5),
+      );
+    } catch (e) {
+      showCustomSnackBar(
+        e.toString(),
+        title: "Pending to Running",
       );
     }
   }
 }
 
-class PharmacyShippingDetails extends StatelessWidget {
+class AdminShippingDetails extends StatelessWidget {
   final AddressModel model;
-  const PharmacyShippingDetails({Key? key, required this.model})
-      : super(key: key);
+  const AdminShippingDetails({Key? key, required this.model}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

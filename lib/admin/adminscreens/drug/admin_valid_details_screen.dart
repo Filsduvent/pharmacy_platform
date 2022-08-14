@@ -43,8 +43,8 @@ class _AdminValidDetailsScreenState extends State<AdminValidDetailsScreen> {
               .where('visibility', isEqualTo: false)
               .snapshots(),
           builder: (c, snapshot) {
-            var drugList = snapshot.data?.docs.map((category) {
-              return Drug.fromSnap(category);
+            var drugList = snapshot.data?.docs.map((drug) {
+              return Drug.fromSnap(drug);
             }).toList();
             //  var drug = drugList![widget.pageId];
             return snapshot.hasData

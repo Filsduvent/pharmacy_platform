@@ -2,6 +2,8 @@
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_drug_main_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/home/admin_home_screen.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_details_screen.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_main_screen.dart';
 import 'package:pharmacy_plateform/admin/category/post_category.dart';
 import 'package:pharmacy_plateform/admin/category/update_category.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
@@ -56,6 +58,8 @@ class RouteHelper {
   static const String updateCategoryScreen = "/update-category-screen";
   static const String adminDrugMainScreen = "/admin-drug-main-screen";
   static const String adminValidDetailsScreen = "/admin-valid-details-screen";
+  static const String adminOrderMainScreen = "/admin-order-main-screen";
+  static const String adminOrderDetailsScreen = "/admin-order-details-screen";
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -99,6 +103,10 @@ class RouteHelper {
   static String getAdminValidDetailsScreen(
           int pageId, String page, String drugId) =>
       '$adminValidDetailsScreen?pageId=$pageId&page=$page&drugId=$drugId';
+  static String getAdminOrderMainScreen() => '$adminOrderMainScreen';
+  static String getAdminOrderDetailsScreen(
+          String orderID, String orderBy, String addressId) =>
+      '$adminOrderDetailsScreen?orderID=$orderID&orderBy=$orderBy&addressId=$addressId';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -310,5 +318,23 @@ class RouteHelper {
           );
         },
         transition: Transition.fadeIn),
+
+    GetPage(
+        name: adminOrderMainScreen,
+        page: () {
+          return AdminOrderMainScreen();
+        },
+        transition: Transition.zoom),
+
+    GetPage(
+        name: adminOrderDetailsScreen,
+        page: () {
+          var orderID = Get.parameters['orderID'];
+          var orderBy = Get.parameters['orderBy'];
+          var addressId = Get.parameters['addressId'];
+          return AdminOrderDetailsScreen(
+              orderID: orderID!, orderBy: orderBy!, addressId: addressId!);
+        },
+        transition: Transition.fade),
   ];
 }

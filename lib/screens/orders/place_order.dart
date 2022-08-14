@@ -175,12 +175,25 @@ class _PlaceOrderState extends State<PlaceOrder> {
           .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
           .get();
 
-      await firestore
-          .collection('Users')
-          .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
-          .collection('Orders')
-          .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
-          .set(data);
+      if (documentSnapshot.exists) {
+      } else {
+        await firestore
+            .collection('Users')
+            .doc(
+                AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+            .collection('Orders')
+            .doc(data['orderTime'] +
+                AppConstants.sharedPreferences!
+                    .getString(AppConstants.userUID)!)
+            .set(data);
+      }
+
+      // await firestore
+      //     .collection('Users')
+      //     .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+      //     .collection('Orders')
+      //     .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
+      //     .set(data);
 
       if (quantity['quantity'] < product.quantity) {
       } else {
