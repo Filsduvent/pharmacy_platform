@@ -4,6 +4,7 @@ import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_s
 import 'package:pharmacy_plateform/admin/adminscreens/home/admin_home_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_details_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_main_screen.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/profile/profile_screen.dart';
 import 'package:pharmacy_plateform/admin/category/post_category.dart';
 import 'package:pharmacy_plateform/admin/category/update_category.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
@@ -62,6 +63,7 @@ class RouteHelper {
   static const String adminOrderMainScreen = "/admin-order-main-screen";
   static const String adminOrderDetailsScreen = "/admin-order-details-screen";
   static const String adminUnitsMainScreen = "/admin-units-main-screen";
+  static const String adminProfileScreen = "/admin-profile-screen";
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -110,6 +112,7 @@ class RouteHelper {
           String orderID, String orderBy, String addressId) =>
       '$adminOrderDetailsScreen?orderID=$orderID&orderBy=$orderBy&addressId=$addressId';
   static String getAdminUnitsMainScreen() => '$adminUnitsMainScreen';
+  static String getAdminProfileScreen() => '$adminProfileScreen';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -346,5 +349,12 @@ class RouteHelper {
           return AdminUnitsMainScreen();
         },
         transition: Transition.zoom),
+
+    GetPage(
+        name: adminProfileScreen,
+        page: () {
+          return ProfileScreen();
+        },
+        transition: Transition.fadeIn),
   ];
 }

@@ -6,6 +6,7 @@ import 'package:pharmacy_plateform/admin/adminmodels/admin_menu_item.dart';
 import 'package:pharmacy_plateform/admin/widgets/navigation_drawer_widget.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 
+import '../../../routes/route_helper.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimensions.dart';
 import '../../../widgets/big_text.dart';
@@ -256,7 +257,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
     switch (item) {
       case MenuItemsListAdmin.itemSettings:
         break;
-      case MenuItemsListAdmin.itemShare:
+      case MenuItemsListAdmin.itemProfile:
+        Get.toNamed(RouteHelper.getAdminProfileScreen());
         break;
       case MenuItemsListAdmin.itemSignOut:
         showDialog(
