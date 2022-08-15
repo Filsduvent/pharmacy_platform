@@ -231,6 +231,10 @@ class _AdminNavigationDrawerWidgetState
       case 3:
         Get.toNamed(RouteHelper.getAdminOrderMainScreen());
         break;
+
+      case 4:
+        Get.toNamed(RouteHelper.getAdminUnitsMainScreen());
+        break;
     }
   }
 }

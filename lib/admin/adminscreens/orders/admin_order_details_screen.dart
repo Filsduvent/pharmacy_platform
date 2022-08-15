@@ -246,12 +246,12 @@ class AdminOrderDetailsScreen extends StatelessWidget {
           .collection('Orders')
           .doc(mOrderId)
           .update({'orderStatus': "Running"}).then((_) async {
-        firestore
+        /* await firestore
             .collection('Users')
             .doc(orderBy)
             .collection('Orders')
             .doc(mOrderId)
-            .update({'orderStatus': "Running"});
+            .update({'orderStatus': "Running"});*/
       });
       getOrderId = "";
 

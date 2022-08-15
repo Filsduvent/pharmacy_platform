@@ -36,6 +36,7 @@ class AppConstants {
   static const String orderTime = "orderTime";
 
   static const String drugId = "id";
+  static const String unitId = "id";
 }
 
 //FireBase
