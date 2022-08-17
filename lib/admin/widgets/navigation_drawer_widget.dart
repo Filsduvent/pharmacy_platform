@@ -235,6 +235,10 @@ class _AdminNavigationDrawerWidgetState
       case 4:
         Get.toNamed(RouteHelper.getAdminUnitsMainScreen());
         break;
+
+      case 5:
+        Get.toNamed(RouteHelper.getAdminPharmacistScreen());
+        break;
     }
   }
 }

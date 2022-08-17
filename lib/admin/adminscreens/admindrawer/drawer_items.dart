@@ -10,6 +10,6 @@ final itemsFirst = [
   DrawerItemAdmin(title: 'Medecines', icon: Icons.medical_services),
   DrawerItemAdmin(title: 'Orders', icon: Icons.reorder),
   DrawerItemAdmin(title: 'Units', icon: Icons.ad_units),
-  DrawerItemAdmin(title: 'Clients', icon: Icons.person),
-  DrawerItemAdmin(title: 'Profile', icon: Icons.person),
+  DrawerItemAdmin(title: 'Pharmacists', icon: Icons.person),
+  DrawerItemAdmin(title: 'Customers', icon: Icons.person),
 ];
