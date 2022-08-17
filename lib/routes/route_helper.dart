@@ -1,6 +1,9 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
+import 'package:pharmacy_plateform/admin/adminscreens/customers/inv_simple_user_details.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/customers/pharmacist_screen.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/customers/simple_customer_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/customers/user_details_screen.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/customers/valid_simple_customer_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_drug_main_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/home/admin_home_screen.dart';
@@ -26,6 +29,7 @@ import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/order_details_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/place_order.dart';
 import '../admin/adminscreens/customers/inv_user_details_screen.dart';
+import '../admin/adminscreens/customers/val_simple_user_details.dart';
 import '../admin/adminscreens/units/admin_units_main_screen.dart';
 import '../admin/category/categories_main_screen.dart';
 import '../admin/category/category_details_screen.dart';
@@ -71,6 +75,11 @@ class RouteHelper {
   static const String adminUserDetailsScreen = "/admin-user-details-screen";
   static const String adminInvalidUserDetailsScreen =
       "/admin-invalid-user-details-screen";
+  static const String validSimpleUserDetailsScreen =
+      "/valid-simple-user-details-screen";
+  static const String invalidSimpleUserDetailsScreen =
+      "/invalid-simple-user-details-screen";
+  static const String simpleCustomerScreen = "/simple-customer-screen";
 
   static String getSplashPage() => '$splashPage';
   static String getInitial() => '$initial';
@@ -127,6 +136,13 @@ class RouteHelper {
   static String getAdminInvalidUserDetailsScreen(
           int pageId, String page, String userId) =>
       '$adminInvalidUserDetailsScreen?pageId=$pageId&page=$page&userId=$userId';
+  static String getValidSimpleUserDetailsScreen(
+          int pageId, String page, String userId) =>
+      '$validSimpleUserDetailsScreen?pageId=$pageId&page=$page&userId=$userId';
+  static String getInvalidSimpleUserDetailsScreen(
+          int pageId, String page, String userId) =>
+      '$invalidSimpleUserDetailsScreen?pageId=$pageId&page=$page&userId=$userId';
+  static String getSimpleCustomerScreen() => '$simpleCustomerScreen';
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
@@ -405,5 +421,38 @@ class RouteHelper {
           );
         },
         transition: Transition.fadeIn),
+
+    GetPage(
+        name: validSimpleUserDetailsScreen,
+        page: () {
+          var pageId = Get.parameters['pageId'];
+          var page = Get.parameters["page"];
+          var userId = Get.parameters["userId"];
+          return ValidSimpleUserDetails(
+            pageId: int.parse(pageId!),
+            page: page!,
+            userId: userId!,
+          );
+        },
+        transition: Transition.fadeIn),
+    GetPage(
+        name: invalidSimpleUserDetailsScreen,
+        page: () {
+          var pageId = Get.parameters['pageId'];
+          var page = Get.parameters["page"];
+          var userId = Get.parameters["userId"];
+          return InvalidSimpleUserDetails(
+            pageId: int.parse(pageId!),
+            page: page!,
+            userId: userId!,
+          );
+        },
+        transition: Transition.fadeIn),
+    GetPage(
+        name: simpleCustomerScreen,
+        page: () {
+          return SimpleCustomerScreen();
+        },
+        transition: Transition.zoom),
   ];
 }
