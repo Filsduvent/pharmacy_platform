@@ -44,7 +44,7 @@ class AdminOrderCard extends StatelessWidget {
               BoxShadow(
                 blurRadius: 1,
                 offset: Offset(0, 2),
-                color: Colors.grey.withOpacity(0.3),
+                color: Colors.grey.withOpacity(0.5),
               )
             ]),
         padding: EdgeInsets.only(

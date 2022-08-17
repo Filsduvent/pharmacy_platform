@@ -41,7 +41,7 @@ class _AdminDrugMainScreenState extends State<AdminDrugMainScreen>
           'Admin Medicine Controller',
           style: TextStyle(color: Colors.black),
         ),
-        elevation: 4,
+        elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {

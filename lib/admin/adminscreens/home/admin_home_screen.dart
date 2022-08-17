@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/adminmodels/admin_menu_item.dart';
@@ -43,7 +44,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       body: Stack(
         children: [
           Container(
-            height: size.height * .45,
+            height: size.height * .53,
             decoration:
                 BoxDecoration(color: AppColors.mainColor /*Color(0xFFf5CEBB)*/),
           ),
@@ -53,23 +54,8 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(29.5),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        icon: Icon(Icons.search),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: Dimensions.height45 * 4,
-                    margin: EdgeInsets.symmetric(vertical: 20),
+                    height: Dimensions.height45 * 8,
+                    margin: EdgeInsets.symmetric(vertical: 5),
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     decoration: BoxDecoration(
                       color: AppColors.secondColor,
@@ -78,116 +64,333 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.all(0.8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BigText(
-                                text: "Medicines in stock : ",
-                                color: Colors.white,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: Dimensions.height10,
-                                    bottom: Dimensions.height10,
-                                    left: Dimensions.width10,
-                                    right: Dimensions.width10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius20),
-                                  color: Colors.white,
-                                ),
+                        StreamBuilder<QuerySnapshot>(
+                            stream:
+                                firestore.collection('Categories').snapshots(),
+                            builder: (c, snapshot) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.0),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
+                                    BigText(
+                                      text: "Categories : ",
+                                      color: Colors.white,
                                     ),
-                                    BigText(text: " 1256"),
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: Dimensions.height10,
+                                          bottom: Dimensions.height10,
+                                          left: Dimensions.width10,
+                                          right: Dimensions.width10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                          BigText(
+                                              text: snapshot.hasData
+                                                  ? snapshot.data!.docs.length
+                                                      .toString()
+                                                  : "0"),
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(0.8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BigText(
-                                text: "orders in process : ",
-                                color: Colors.white,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: Dimensions.height10,
-                                    bottom: Dimensions.height10,
-                                    left: Dimensions.width10,
-                                    right: Dimensions.width10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius20),
-                                  color: Colors.white,
-                                ),
+                              );
+                            }),
+                        StreamBuilder<QuerySnapshot>(
+                            stream:
+                                firestore.collection('Medicines').snapshots(),
+                            builder: (c, snapshot) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.0),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
+                                    BigText(
+                                      text: "Medicines store : ",
+                                      color: Colors.white,
                                     ),
-                                    BigText(text: " 1256"),
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: Dimensions.height10,
+                                          bottom: Dimensions.height10,
+                                          left: Dimensions.width10,
+                                          right: Dimensions.width10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                          BigText(
+                                              text: snapshot.hasData
+                                                  ? snapshot.data!.docs.length
+                                                      .toString()
+                                                  : "0"),
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(0.8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BigText(
-                                text: "Processed orders  : ",
-                                color: Colors.white,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: Dimensions.height10,
-                                    bottom: Dimensions.height10,
-                                    left: Dimensions.width10,
-                                    right: Dimensions.width10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius20),
-                                  color: Colors.white,
-                                ),
+                              );
+                            }),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: firestore
+                                .collection('Orders')
+                                .where('orderStatus', isEqualTo: "Pending")
+                                .snapshots(),
+                            builder: (c, snapshot) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.0),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
+                                    BigText(
+                                      text: "Unprocessed Orders : ",
+                                      color: Colors.white,
                                     ),
-                                    BigText(text: " 1256"),
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: Dimensions.height10,
+                                          bottom: Dimensions.height10,
+                                          left: Dimensions.width10,
+                                          right: Dimensions.width10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                          BigText(
+                                              text: snapshot.hasData
+                                                  ? snapshot.data!.docs.length
+                                                      .toString()
+                                                  : "0"),
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        )
+                              );
+                            }),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: firestore
+                                .collection('Orders')
+                                .where('orderStatus', isNotEqualTo: "Pending")
+                                .snapshots(),
+                            builder: (c, snapshot) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    BigText(
+                                      text: "Processed orders  : ",
+                                      color: Colors.white,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: Dimensions.height10,
+                                          bottom: Dimensions.height10,
+                                          left: Dimensions.width10,
+                                          right: Dimensions.width10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                          BigText(
+                                              text: snapshot.hasData
+                                                  ? snapshot.data!.docs.length
+                                                      .toString()
+                                                  : "0"),
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: firestore.collection('Units').snapshots(),
+                            builder: (context, snapshot) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    BigText(
+                                      text: "Units : ",
+                                      color: Colors.white,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: Dimensions.height10,
+                                          bottom: Dimensions.height10,
+                                          left: Dimensions.width10,
+                                          right: Dimensions.width10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                          BigText(
+                                              text: snapshot.hasData
+                                                  ? snapshot.data!.docs.length
+                                                      .toString()
+                                                  : "0"),
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: firestore
+                                .collection('Users')
+                                .where('role', isEqualTo: "Pharmacy owner")
+                                .snapshots(),
+                            builder: (c, snapshot) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    BigText(
+                                      text: "Pharmacies : ",
+                                      color: Colors.white,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: Dimensions.height10,
+                                          bottom: Dimensions.height10,
+                                          left: Dimensions.width10,
+                                          right: Dimensions.width10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                          BigText(
+                                              text: snapshot.hasData
+                                                  ? snapshot.data!.docs.length
+                                                      .toString()
+                                                  : "0"),
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: firestore
+                                .collection('Users')
+                                .where('role', isEqualTo: "Customer")
+                                .snapshots(),
+                            builder: (c, snapshot) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    BigText(
+                                      text: "Customers : ",
+                                      color: Colors.white,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: Dimensions.height10,
+                                          bottom: Dimensions.height10,
+                                          left: Dimensions.width10,
+                                          right: Dimensions.width10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                          BigText(
+                                              text: snapshot.hasData
+                                                  ? snapshot.data!.docs.length
+                                                      .toString()
+                                                  : "0"),
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: Dimensions.height10,
+                    height: Dimensions.height10 / 2,
                   ),
                   Expanded(
                     child: GridView.count(
@@ -197,32 +400,46 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                       mainAxisSpacing: 20,
                       children: [
                         CategoryCard(
-                          imgSrc: "assets/image/empty_cart.png",
-                          title: "Medicines stock",
-                          press: () {},
+                          imgSrc: "assets/image/category.png",
+                          title: "CATEGORIES",
+                          press: () {
+                            Get.toNamed(RouteHelper.getCategoriesMainScreen());
+                          },
                         ),
                         CategoryCard(
-                            imgSrc: "assets/image/empty_cart.png",
-                            title: "Orders",
-                            press: () {}),
+                            imgSrc: "assets/image/medicine.png",
+                            title: "MEDICINES",
+                            press: () {
+                              Get.toNamed(RouteHelper.getAdminDrugMainScreen());
+                            }),
                         CategoryCard(
-                          imgSrc: "assets/image/empty_cart.png",
-                          title: "Medicines stock",
-                          press: () {},
+                          imgSrc: "assets/image/orders.png",
+                          title: "ORDERS",
+                          press: () {
+                            Get.toNamed(RouteHelper.getAdminOrderMainScreen());
+                          },
                         ),
                         CategoryCard(
-                            imgSrc: "assets/image/empty_cart.png",
-                            title: "Orders",
-                            press: () {}),
+                            imgSrc: "assets/image/units.png",
+                            title: "UNITS",
+                            press: () {
+                              Get.toNamed(
+                                  RouteHelper.getAdminUnitsMainScreen());
+                            }),
                         CategoryCard(
-                          imgSrc: "assets/image/empty_cart.png",
-                          title: "Medicines stock",
-                          press: () {},
+                          imgSrc: "assets/image/pharmacist.png",
+                          title: "Pharmacists",
+                          press: () {
+                            Get.toNamed(RouteHelper.getAdminPharmacistScreen());
+                          },
                         ),
                         CategoryCard(
-                            imgSrc: "assets/image/empty_cart.png",
-                            title: "Orders",
-                            press: () {}),
+                            imgSrc: "assets/image/customer.png",
+                            title: "Customers",
+                            press: () {
+                              Get.toNamed(
+                                  RouteHelper.getSimpleCustomerScreen());
+                            }),
                       ],
                     ),
                   )
@@ -283,7 +500,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                     },
                     child: BigText(
                       text: "Yes",
-                      color: Colors.redAccent,
+                      color: AppColors.yellowColor,
                     )),
                 TextButton(
                     onPressed: () => Get.back(),

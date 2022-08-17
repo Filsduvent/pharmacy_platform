@@ -9,7 +9,7 @@ final itemsFirst = [
   DrawerItemAdmin(title: 'Categories', icon: Icons.category),
   DrawerItemAdmin(title: 'Medecines', icon: Icons.medical_services),
   DrawerItemAdmin(title: 'Orders', icon: Icons.reorder),
-  DrawerItemAdmin(title: 'Units', icon: Icons.ad_units),
-  DrawerItemAdmin(title: 'Pharmacists', icon: Icons.person),
+  DrawerItemAdmin(title: 'Units', icon: Icons.ac_unit_sharp),
+  DrawerItemAdmin(title: 'Pharmacists', icon: Icons.medication),
   DrawerItemAdmin(title: 'Customers', icon: Icons.person),
 ];

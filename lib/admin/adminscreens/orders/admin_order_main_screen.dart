@@ -39,7 +39,7 @@ class _AdminOrderMainScreenState extends State<AdminOrderMainScreen>
           'Admin Orders Management',
           style: TextStyle(color: Colors.black),
         ),
-        elevation: 4,
+        elevation: 0,
         backgroundColor: Colors.white,
         leading: GestureDetector(
           onTap: () {
