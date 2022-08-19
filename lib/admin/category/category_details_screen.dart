@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../base/show_custom_snackbar.dart';
 import '../../models/categories_model.dart';
 import '../../routes/route_helper.dart';
 import '../../utils/app_constants.dart';
@@ -154,6 +155,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                                           onPressed: () {
                                             // postDrugController
                                             //     .deleteByChangeVisibility(widget.catId);
+                                            deleteCategories(widget.catId);
                                           },
                                           child: BigText(
                                             text: "Yes",
@@ -220,5 +222,18 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                     )
                   : Container();
             }));
+  }
+
+  Future deleteCategories(String id) async {
+    try {
+      await firestore.collection('Categories').doc(id).delete().then(
+          (value) => /* Navigator.of(context).pop());*/ Get
+              .toNamed(RouteHelper.getCategoriesMainScreen()));
+    } catch (e) {
+      showCustomSnackBar(
+        e.toString(),
+        title: "Deleting drug category",
+      );
+    }
   }
 }

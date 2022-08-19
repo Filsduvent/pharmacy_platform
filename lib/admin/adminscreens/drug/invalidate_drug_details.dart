@@ -16,12 +16,12 @@ import '../../../widgets/app_icon.dart';
 import '../../../widgets/big_text.dart';
 import '../../../widgets/expandable_text_widget.dart';
 
-class AdminValidDetailsScreen extends StatefulWidget {
+class InvalidDrugDetailsScreen extends StatefulWidget {
   final int pageId;
   final String page;
   // final String drugId;
   final Drug drug;
-  const AdminValidDetailsScreen(
+  const InvalidDrugDetailsScreen(
       {Key? key,
       required this.pageId,
       required this.page,
@@ -30,11 +30,11 @@ class AdminValidDetailsScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<AdminValidDetailsScreen> createState() =>
-      _AdminValidDetailsScreenState();
+  State<InvalidDrugDetailsScreen> createState() =>
+      _InvalidDrugDetailsScreenState();
 }
 
-class _AdminValidDetailsScreenState extends State<AdminValidDetailsScreen> {
+class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
   final Rx<bool> _isLoaded = false.obs;
   bool get isLoaded => _isLoaded.value;
   @override
@@ -44,7 +44,7 @@ class _AdminValidDetailsScreenState extends State<AdminValidDetailsScreen> {
       body: StreamBuilder<QuerySnapshot>(
           stream: firestore
               .collection('Medicines')
-              .where('visibility', isEqualTo: false)
+              .where('visibility', isEqualTo: true)
               .snapshots(),
           builder: (c, snapshot) {
             var drugList = snapshot.data?.docs.map((drug) {
@@ -461,7 +461,7 @@ class _AdminValidDetailsScreenState extends State<AdminValidDetailsScreen> {
                       left: Dimensions.width20,
                       right: Dimensions.width20),
                   child: BigText(
-                    text: 'Validate',
+                    text: 'Invalidate',
                     color: Colors.white,
                   ),
                   decoration: BoxDecoration(
@@ -480,6 +480,6 @@ class _AdminValidDetailsScreenState extends State<AdminValidDetailsScreen> {
     await firestore
         .collection('Medicines')
         .doc(id)
-        .update({"visibility": true}).then((value) => Get.back());
+        .update({"visibility": false}).then((value) => Get.back());
   }
 }

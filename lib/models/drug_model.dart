@@ -41,7 +41,7 @@ class Drug {
       expiringDate: snapshot['expiring_date'].toString(),
       photoUrl: snapshot['photo_url'].toString(),
       categories: snapshot['categories'].toString(),
-      price: snapshot['price'] as int,
+      price: snapshot['price'],
       uid: snapshot['uid'].toString(),
       publishedDate: snapshot['published_date'].toString(),
       status: snapshot['status'].toString(),

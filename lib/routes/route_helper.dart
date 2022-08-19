@@ -12,6 +12,7 @@ import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_main_sc
 import 'package:pharmacy_plateform/admin/adminscreens/profile/profile_screen.dart';
 import 'package:pharmacy_plateform/admin/category/post_category.dart';
 import 'package:pharmacy_plateform/admin/category/update_category.dart';
+import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/update_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
@@ -340,20 +341,21 @@ class RouteHelper {
         },
         transition: Transition.zoom),
 
-    GetPage(
-        name: adminValidDetailsScreen,
-        page: () {
-          var pageId = Get.parameters['pageId'];
-          var page = Get.parameters["page"];
-          var drugId = Get.parameters["drugId"];
+    // GetPage(
+    //     name: adminValidDetailsScreen,
+    //     page: () {
+    //       var pageId = Get.parameters['pageId'];
+    //       var page = Get.parameters["page"];
+    //       var drugId = Get.parameters["drugId"];
 
-          return AdminValidDetailsScreen(
-            pageId: int.parse(pageId!),
-            page: page!,
-            drugId: drugId!,
-          );
-        },
-        transition: Transition.fadeIn),
+    //       return AdminValidDetailsScreen(
+    //         pageId: int.parse(pageId!),
+    //         page: page!,
+    //         drugId: drugId!,
+
+    //       );
+    //     },
+    //     transition: Transition.fadeIn),
 
     GetPage(
         name: adminOrderMainScreen,

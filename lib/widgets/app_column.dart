@@ -24,47 +24,47 @@ class AppColumn extends StatelessWidget {
         SizedBox(
           height: Dimensions.height10,
         ),
-        Row(
-          children: [
-            Wrap(
-              children: List.generate(
-                5,
-                (index) => Icon(
-                  Icons.star,
-                  color: AppColors.mainColor,
-                  size: 15,
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            SmallText(text: "4.5"),
-            SizedBox(width: 10),
-            SmallText(text: '1287'),
-            SizedBox(
-              width: 10,
-            ),
-            SmallText(text: 'Comments'),
-          ],
-        ),
-        SizedBox(
-          height: Dimensions.height20,
-        ),
+        // Row(
+        //   children: [
+        //     Wrap(
+        //       children: List.generate(
+        //         5,
+        //         (index) => Icon(
+        //           Icons.star,
+        //           color: AppColors.mainColor,
+        //           size: 15,
+        //         ),
+        //       ),
+        //     ),
+        //     SizedBox(
+        //       width: 10,
+        //     ),
+        //     SmallText(text: "4.5"),
+        //     SizedBox(width: 10),
+        //     SmallText(text: '1287'),
+        //     SizedBox(
+        //       width: 10,
+        //     ),
+        //     SmallText(text: 'Comments'),
+        //   ],
+        // ),
+        // SizedBox(
+        //   height: Dimensions.height20,
+        // ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             IconAndTextWidget(
-                icon: Icons.circle_sharp,
-                text: 'Normal',
+                icon: Icons.medical_information,
+                text: 'Medicine',
                 iconColor: AppColors.iconColor1),
             IconAndTextWidget(
                 icon: Icons.location_on,
-                text: '1.7km',
+                text: 'Location',
                 iconColor: AppColors.mainColor),
             IconAndTextWidget(
-                icon: Icons.access_time_rounded,
-                text: '32min',
+                icon: Icons.delivery_dining,
+                text: 'Delivery',
                 iconColor: AppColors.iconColor2),
           ],
         ),

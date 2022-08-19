@@ -259,12 +259,9 @@ void checkItemInCart(String title) {
 }
 
 void addItemToCartById(String title) {
-  List tempCartList = AppConstants.sharedPreferences!
-      .getStringList(AppConstants.userCartList) as List;
+  List<String> tempCartList = AppConstants.sharedPreferences!
+      .getStringList(AppConstants.userCartList) as List<String>;
   tempCartList.add(title);
-
-  print(
-      "==================indani muri++++++++++++++++++  ${tempCartList.toString()}");
 
   firestore
       .collection('Users')
@@ -272,5 +269,5 @@ void addItemToCartById(String title) {
       .update({AppConstants.userCartList: tempCartList});
 
   AppConstants.sharedPreferences!
-      .setStringList(AppConstants.userCartList, tempCartList as List<String>);
+      .setStringList(AppConstants.userCartList, tempCartList);
 }

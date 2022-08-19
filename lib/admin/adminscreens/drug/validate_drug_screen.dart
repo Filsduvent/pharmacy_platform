@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:pharmacy_plateform/admin/adminscreens/drug/invalidate_drug_details.dart';
 import '../../../models/drug_model.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';
@@ -145,6 +145,15 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                                                 // Get.toNamed(
                                                 //     RouteHelper.getPharmacyDetailsPage(
                                                 //         index, "home", data.id));
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          InvalidDrugDetailsScreen(
+                                                              pageId: index,
+                                                              page: "valid",
+                                                              drug: drug),
+                                                    ));
                                               },
                                               child: Stack(
                                                 children: [
@@ -153,6 +162,17 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                                                       // Get.toNamed(RouteHelper
                                                       //     .getPharmacyDetailsPage(
                                                       //         index, "home", data.id));
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                InvalidDrugDetailsScreen(
+                                                                    pageId:
+                                                                        index,
+                                                                    page:
+                                                                        "valid",
+                                                                    drug: drug),
+                                                          ));
                                                     },
                                                     child: Container(
                                                       width:

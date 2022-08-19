@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_screen.dart';
 
 import '../../../models/drug_model.dart';
 import '../../../routes/route_helper.dart';
@@ -142,25 +143,47 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                               .map((category) {
                                             return Drug.fromSnap(category);
                                           }).toList();
-                                          var drug = drugList[index];
+                                          Drug drug = drugList[index];
                                           // final data = postDrugController.drugList[index];
                                           return GestureDetector(
                                               onTap: () {
-                                                Get.toNamed(RouteHelper
-                                                    .getAdminValidDetailsScreen(
-                                                        index,
-                                                        "valid",
-                                                        drug.id));
+                                                // Get.toNamed(RouteHelper
+                                                //     .getAdminValidDetailsScreen(
+                                                //         index,
+                                                //         "valid",
+                                                //         drug.id,
+                                                //         ));
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          AdminValidDetailsScreen(
+                                                              pageId: index,
+                                                              page: "valid",
+                                                              drug: drug),
+                                                    ));
                                               },
                                               child: Stack(
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () {
-                                                      Get.toNamed(RouteHelper
-                                                          .getAdminValidDetailsScreen(
-                                                              index,
-                                                              "home",
-                                                              drug.id));
+                                                      // Get.toNamed(RouteHelper
+                                                      //     .getAdminValidDetailsScreen(
+                                                      //   index,
+                                                      //   "home",
+                                                      //   drug.id,
+                                                      // ));
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                AdminValidDetailsScreen(
+                                                                    pageId:
+                                                                        index,
+                                                                    page:
+                                                                        "valid",
+                                                                    drug: drug),
+                                                          ));
                                                     },
                                                     child: Container(
                                                       width:
