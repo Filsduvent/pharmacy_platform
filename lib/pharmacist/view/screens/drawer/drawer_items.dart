@@ -7,9 +7,4 @@ final itemsFirst = [
   DrawerItem(title: 'Home', icon: Icons.home),
   DrawerItem(title: 'Medecines', icon: Icons.medical_services),
   DrawerItem(title: 'Orders', icon: Icons.reorder),
-  DrawerItem(title: 'Profile', icon: Icons.person),
-];
-
-final itemsSecond = [
-  DrawerItem(title: 'Deployment', icon: Icons.cloud_upload),
 ];

@@ -34,6 +34,7 @@ import '../admin/adminscreens/customers/val_simple_user_details.dart';
 import '../admin/adminscreens/units/admin_units_main_screen.dart';
 import '../admin/category/categories_main_screen.dart';
 import '../admin/category/category_details_screen.dart';
+import '../pharmacist/view/profile/profile_screen.dart';
 import '../screens/cart/cart_page.dart';
 import '../screens/drug/recent_drug_detail.dart';
 import '../screens/splash/splash_screen.dart';
@@ -59,6 +60,7 @@ class RouteHelper {
   static const String pharmacistOrderDetails = '/pharmacist-order-details';
   static const String pharmacyShiftOrders = "/pharmacy-shift-orders";
   static const String pharmacyOrderScreen = "/pharmacy-order-screen";
+  static const String pharmacistProfileScreen = "/pharmacist-profile-screen";
 
   //Routes for Admin
   static const String adminHomeScreen = "/admin-home-screen";
@@ -109,6 +111,7 @@ class RouteHelper {
       '$pharmacistOrderDetails?orderID=$orderID&orderBy=$orderBy&addressId=$addressId';
   static String getPharmacyShiftOrders() => '$pharmacyShiftOrders';
   static String getPharmacistOrderScreen() => '$pharmacyOrderScreen';
+  static String getPharmacistProfileScreen() => '$pharmacistProfileScreen';
 
   //Routes for admin
   static String getAdminHomeScreen() => '$adminHomeScreen';
@@ -279,6 +282,12 @@ class RouteHelper {
           return PharmacistOrderScreen();
         },
         transition: Transition.fade),
+    GetPage(
+        name: pharmacistProfileScreen,
+        page: () {
+          return PharmacistProfileScreen();
+        },
+        transition: Transition.fadeIn),
 
     //Routes for admin
     GetPage(

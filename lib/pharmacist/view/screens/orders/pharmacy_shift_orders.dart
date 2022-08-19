@@ -22,7 +22,7 @@ class _PharmacyShiftOrdersState extends State<PharmacyShiftOrders> {
         body: StreamBuilder<QuerySnapshot>(
             stream: firestore
                 .collection('Orders')
-                .where('orderStatus', isNotEqualTo: "Received")
+                .where('orderStatus', isEqualTo: "Pending")
                 .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData

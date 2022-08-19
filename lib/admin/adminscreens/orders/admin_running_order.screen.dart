@@ -173,38 +173,6 @@ class _AdminRunningOrderScreenState extends State<AdminRunningOrderScreen> {
                       ],
                     )
                   : Container();
-
-              /* ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (c, index) {
-                        //var temp = (snapshot.data?.docs[index].data()! as Map<String,dynamic>);
-
-                        return FutureBuilder<QuerySnapshot>(
-                            future: firestore
-                                .collection('Medicines')
-                                .where('title',
-                                    whereIn: (snapshot.data?.docs[index].data()
-                                        as Map<String, dynamic>)['productID'])
-                                .get(),
-                            builder: (c, snap) {
-                              return snap.hasData
-                                  ? AdminOrderCard(
-                                      itemCount: snap.data!.docs.length,
-                                      data: snap.data!.docs,
-                                      orderID: snapshot.data!.docs[index].id,
-                                      orderBy: (snapshot.data?.docs[index]
-                                              .data()
-                                          as Map<String, dynamic>)['orderBy'],
-                                      addressId: (snapshot.data?.docs[index]
-                                              .data()
-                                          as Map<String, dynamic>)['addressId'],
-                                    )
-                                  : const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                            });
-                      })
-                  : CustomLoader();*/
             }),
       ),
     );

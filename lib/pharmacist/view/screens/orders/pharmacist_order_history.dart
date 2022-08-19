@@ -20,7 +20,7 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
         body: StreamBuilder<QuerySnapshot>(
             stream: firestore
                 .collection('Orders')
-                .where('orderStatus', isEqualTo: "Received")
+                .where('orderStatus', isEqualTo: "Running")
                 .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData
@@ -32,6 +32,9 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                         return FutureBuilder<QuerySnapshot>(
                             future: firestore
                                 .collection('Medicines')
+                                .where('uid',
+                                    isEqualTo: AppConstants.sharedPreferences!
+                                        .getString(AppConstants.userUID))
                                 .where('title',
                                     whereIn: (snapshot.data?.docs[index].data()
                                         as Map<String, dynamic>)['productID'])

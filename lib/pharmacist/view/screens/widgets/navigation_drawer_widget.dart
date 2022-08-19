@@ -48,10 +48,10 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               color: Colors.white70,
             ),
             SizedBox(height: 24),
-            buildList(
-                indexOffset: itemsFirst.length,
-                items: itemsSecond,
-                isCollapsed: isCollapsed),
+            // buildList(
+            //     indexOffset: itemsFirst.length,
+            //     items: itemsSecond,
+            //     isCollapsed: isCollapsed),
             Spacer(),
             buildCollapseIcon(context, isCollapsed),
             SizedBox(
@@ -224,10 +224,6 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
 
       case 2:
         Get.toNamed(RouteHelper.getPharmacistOrderScreen());
-        break;
-
-      case 3:
-        Get.toNamed(RouteHelper.getSignInPage());
         break;
     }
   }

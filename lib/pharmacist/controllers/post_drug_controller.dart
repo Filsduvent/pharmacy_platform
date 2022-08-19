@@ -91,27 +91,27 @@ class PostDrugController extends GetxController {
 
 // onReady method
 
-  @override
-  void onReady() {
-    super.onReady();
-    String id = _data['id'];
-    getDrugData(id);
-  }
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   String id = _data['id'];
+  //   getDrugData(id);
+  // }
 
   //Get Drug data from firebase
-  Future<void> getDrugData(String id) async {
-    try {
-      final response = await firestore.collection('Medicines').doc(id).get();
+  // Future<void> getDrugData(String id) async {
+  //   try {
+  //     final response = await firestore.collection('Medicines').doc(id).get();
 
-      if (response.exists) {
-        _data.value = response.data() as Map;
-      }
-    } on FirebaseException catch (e) {
-      print(e);
-    } catch (error) {
-      print(error);
-    }
-  }
+  //     if (response.exists) {
+  //       _data.value = response.data() as Map;
+  //     }
+  //   } on FirebaseException catch (e) {
+  //     print(e);
+  //   } catch (error) {
+  //     print(error);
+  //   }
+  // }
 
 //pick image dialog to Update in storage
 

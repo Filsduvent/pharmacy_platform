@@ -215,8 +215,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                               title:
                                                   const Text('Are you sure?'),
                                               content: BigText(
-                                                text:
-                                                    "You are Quitting the App",
+                                                text: "Exit",
                                                 color: AppColors.mainBlackColor,
                                               ),
                                               actions: [

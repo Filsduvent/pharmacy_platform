@@ -10,6 +10,7 @@ import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_ord
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 
 import '../../../../models/address_model.dart';
+import '../../../../models/user_model.dart';
 import '../../../../screens/address/address_card.dart';
 import '../../../../utils/app_constants.dart';
 import '../../../../utils/colors.dart';
@@ -57,7 +58,7 @@ class PharmacistOrderDetails extends StatelessWidget {
                           ),
                           Container(
                             margin: EdgeInsets.all(Dimensions.width10),
-                            height: Dimensions.height45 * 4.8,
+                            height: Dimensions.height45 * 3,
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(Dimensions.radius30),
@@ -75,33 +76,6 @@ class PharmacistOrderDetails extends StatelessWidget {
                               ),
                               child: Column(
                                 children: [
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: BigText(
-                                        text: getOrderId,
-                                        color: Colors.grey,
-                                      )),
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      BigText(
-                                        text: "Total Amount : ",
-                                        color: Colors.grey,
-                                      ),
-                                      BigText(
-                                        text:
-                                            "BIF ${dataMap['totalAmount'].toString()}",
-                                        color: Colors.redAccent,
-                                      )
-                                    ],
-                                  ),
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
@@ -144,20 +118,35 @@ class PharmacistOrderDetails extends StatelessWidget {
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      BigText(
-                                        text: "By : ",
-                                        color: Colors.grey,
-                                      ),
-                                      BigText(
-                                        text: dataMap['orderBy'],
-                                        color: AppColors.yellowColor,
-                                      )
-                                    ],
-                                  ),
+                                  FutureBuilder<DocumentSnapshot>(
+                                      future: firestore
+                                          .collection('Users')
+                                          .doc(dataMap['orderBy'])
+                                          .get(),
+                                      builder: (context, snaps) {
+                                        Map byMap = {};
+                                        if (snaps.hasData) {
+                                          byMap = snaps.data!.data() as Map;
+                                        }
+                                        return snaps.hasData
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  BigText(
+                                                    text: "By : ",
+                                                    color: Colors.grey,
+                                                  ),
+                                                  BigText(
+                                                    text: byMap['username'],
+                                                    color:
+                                                        AppColors.yellowColor,
+                                                  )
+                                                ],
+                                              )
+                                            : Container();
+                                      }),
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
@@ -168,6 +157,9 @@ class PharmacistOrderDetails extends StatelessWidget {
                           FutureBuilder<QuerySnapshot>(
                               future: firestore
                                   .collection('Medicines')
+                                  .where('uid',
+                                      isEqualTo: AppConstants.sharedPreferences!
+                                          .getString(AppConstants.userUID))
                                   .where('title', whereIn: dataMap['productID'])
                                   .get(),
                               builder: (c, dataSnapshot) {
@@ -203,30 +195,30 @@ class PharmacistOrderDetails extends StatelessWidget {
                           SizedBox(
                             height: Dimensions.height20,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              confirmParcelShifted(context, getOrderId);
-                            },
-                            child: Container(
-                              width: Dimensions.screenWidth,
-                              height: Dimensions.screenHeight / 13,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius30),
-                                  color: AppColors.mainColor),
-                              child: Center(
-                                child: BigText(
-                                  text: "Confirmed || Items Received",
-                                  size:
-                                      Dimensions.font20 + Dimensions.font20 / 2,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: Dimensions.height10,
-                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     confirmParcelShifted(context, getOrderId);
+                          //   },
+                          //   child: Container(
+                          //     width: Dimensions.screenWidth,
+                          //     height: Dimensions.screenHeight / 13,
+                          //     decoration: BoxDecoration(
+                          //         borderRadius: BorderRadius.circular(
+                          //             Dimensions.radius30),
+                          //         color: AppColors.mainColor),
+                          //     child: Center(
+                          //       child: BigText(
+                          //         text: "Confirmed || Items Received",
+                          //         size:
+                          //             Dimensions.font20 + Dimensions.font20 / 2,
+                          //         color: Colors.white,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   height: Dimensions.height10,
+                          // ),
                         ],
                       ),
                     )

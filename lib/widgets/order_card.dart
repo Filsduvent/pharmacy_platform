@@ -126,15 +126,15 @@ Widget sourceOrderInfo(Drug model, BuildContext context) {
                       width: Dimensions.width10 / 10,
                     ),
                     BigText(
-                      text: "Pieces",
+                      text: model.units,
                       color: Colors.black54,
                     ),
                   ],
                 ),
-                Divider(
-                  height: Dimensions.height10 / 2,
-                  color: Colors.black54,
-                ),
+                // Divider(
+                //   height: Dimensions.height10 / 2,
+                //   color: Colors.black54,
+                // ),
               ]),
         )),
       ],

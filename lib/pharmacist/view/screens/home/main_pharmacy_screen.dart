@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/pharmacist/model/menu_item.dart';
@@ -7,9 +8,9 @@ import 'package:pharmacy_plateform/pharmacist/view/screens/drawer/menu_items.dar
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/colors.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
-import 'package:pharmacy_plateform/widgets/app_icon.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
 
+import '../../../../routes/route_helper.dart';
 import '../widgets/navigation_drawer_widget.dart';
 
 class MainPharmacyScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
       body: Stack(
         children: [
           Container(
-            height: size.height * .45,
+            height: size.height * .40,
             decoration:
                 BoxDecoration(color: AppColors.mainColor /*Color(0xFFf5CEBB)*/),
           ),
@@ -68,7 +69,7 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
                     ),
                   ),
                   Container(
-                    height: Dimensions.height45 * 4,
+                    height: Dimensions.height45 * 1.3,
                     margin: EdgeInsets.symmetric(vertical: 20),
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     decoration: BoxDecoration(
@@ -78,116 +79,60 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.all(0.8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BigText(
-                                text: "Medicines in stock : ",
-                                color: Colors.white,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: Dimensions.height10,
-                                    bottom: Dimensions.height10,
-                                    left: Dimensions.width10,
-                                    right: Dimensions.width10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius20),
-                                  color: Colors.white,
-                                ),
+                        StreamBuilder<QuerySnapshot>(
+                            stream: firestore
+                                .collection('Medicines')
+                                .where('uid',
+                                    isEqualTo: AppConstants.sharedPreferences!
+                                        .getString(AppConstants.userUID))
+                                .snapshots(),
+                            builder: (c, snapshot) {
+                              return Padding(
+                                padding: EdgeInsets.all(0.8),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
+                                    BigText(
+                                      text: "Medicine store : ",
+                                      color: Colors.white,
                                     ),
-                                    BigText(text: " 1256"),
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
+                                    Container(
+                                      padding: EdgeInsets.only(
+                                          top: Dimensions.height10,
+                                          bottom: Dimensions.height10,
+                                          left: Dimensions.width10,
+                                          right: Dimensions.width10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius20),
+                                        color: Colors.white,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                          BigText(
+                                              text: snapshot.hasData
+                                                  ? snapshot.data!.docs.length
+                                                      .toString()
+                                                  : "0"),
+                                          SizedBox(
+                                            width: Dimensions.width10 / 2,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(0.8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BigText(
-                                text: "orders in process : ",
-                                color: Colors.white,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: Dimensions.height10,
-                                    bottom: Dimensions.height10,
-                                    left: Dimensions.width10,
-                                    right: Dimensions.width10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius20),
-                                  color: Colors.white,
-                                ),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
-                                    ),
-                                    BigText(text: " 1256"),
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(0.8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BigText(
-                                text: "Processed orders  : ",
-                                color: Colors.white,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(
-                                    top: Dimensions.height10,
-                                    bottom: Dimensions.height10,
-                                    left: Dimensions.width10,
-                                    right: Dimensions.width10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius20),
-                                  color: Colors.white,
-                                ),
-                                child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
-                                    ),
-                                    BigText(text: " 1256"),
-                                    SizedBox(
-                                      width: Dimensions.width10 / 2,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                              );
+                            }),
                       ],
                     ),
                   ),
                   SizedBox(
-                    height: Dimensions.height10,
+                    height: Dimensions.height20 * 4,
                   ),
                   Expanded(
                     child: GridView.count(
@@ -197,32 +142,26 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
                       mainAxisSpacing: 20,
                       children: [
                         CategoryCard(
-                          imgSrc: "assets/image/empty_cart.png",
-                          title: "Medicines stock",
-                          press: () {},
+                          imgSrc: "assets/image/medicine.png",
+                          title: "MEDICINES",
+                          press: () {
+                            Get.toNamed(RouteHelper.getPharmacyMedecinePage());
+                          },
                         ),
                         CategoryCard(
-                            imgSrc: "assets/image/empty_cart.png",
-                            title: "Orders",
-                            press: () {}),
+                            imgSrc: "assets/image/orders.png",
+                            title: "ORDERS",
+                            press: () {
+                              Get.toNamed(
+                                  RouteHelper.getPharmacistOrderScreen());
+                            }),
                         CategoryCard(
-                          imgSrc: "assets/image/empty_cart.png",
-                          title: "Medicines stock",
-                          press: () {},
-                        ),
-                        CategoryCard(
-                            imgSrc: "assets/image/empty_cart.png",
-                            title: "Orders",
-                            press: () {}),
-                        CategoryCard(
-                          imgSrc: "assets/image/empty_cart.png",
-                          title: "Medicines stock",
-                          press: () {},
-                        ),
-                        CategoryCard(
-                            imgSrc: "assets/image/empty_cart.png",
-                            title: "Orders",
-                            press: () {}),
+                            imgSrc: "assets/image/profiles.png",
+                            title: "PROFILE",
+                            press: () {
+                              Get.toNamed(
+                                  RouteHelper.getPharmacistProfileScreen());
+                            }),
                       ],
                     ),
                   )
@@ -257,7 +196,8 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
     switch (item) {
       case MenuItemsList.itemSettings:
         break;
-      case MenuItemsList.itemShare:
+      case MenuItemsList.itemProfile:
+        Get.toNamed(RouteHelper.getPharmacistProfileScreen());
         break;
       case MenuItemsList.itemSignOut:
         showDialog(

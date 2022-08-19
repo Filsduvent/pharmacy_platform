@@ -9,14 +9,15 @@ import '../../../widgets/account_widget.dart';
 import '../../../widgets/app_icon.dart';
 import '../../../widgets/big_text.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class PharmacistProfileScreen extends StatefulWidget {
+  const PharmacistProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<PharmacistProfileScreen> createState() =>
+      _PharmacistProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _PharmacistProfileScreenState extends State<PharmacistProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: BigText(text: "Profile", size: 24, color: Colors.white),
           leading: GestureDetector(
             onTap: () {
-              Get.toNamed(RouteHelper.getAdminHomeScreen());
+              Get.toNamed(RouteHelper.getMainPharmacyPage());
             },
             child: Container(
               child: AppIcon(
