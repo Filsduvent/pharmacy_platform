@@ -35,6 +35,8 @@ class AppConstants {
   static const String userUID = "uid";
   static const String addressId = "addressId";
   static const String orderTime = "orderTime";
+  static const String pharmaIcon = "pharmaIcon";
+  static const String pharmaName = "pharmaName";
 
   static const String drugId = "id";
   static const String unitId = "id";

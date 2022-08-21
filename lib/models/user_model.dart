@@ -12,6 +12,8 @@ class User {
   String profilePhoto;
   String uid;
   List<dynamic> userCart;
+  String pharmaIcon;
+  String pharmaName;
 
   User({
     required this.username,
@@ -24,6 +26,8 @@ class User {
     required this.profilePhoto,
     required this.uid,
     required this.userCart,
+    required this.pharmaIcon,
+    required this.pharmaName,
   });
 
   Map<String, dynamic> toJson() => {
@@ -37,6 +41,8 @@ class User {
         "profilePhoto": profilePhoto,
         "uid": uid,
         "userCart": userCart,
+        "pharmaIcon": pharmaIcon,
+        "pharmaName": pharmaName,
       };
 
   static User fromSnap(DocumentSnapshot snap) {
@@ -52,6 +58,8 @@ class User {
       profilePhoto: snapshot['profilePhoto'],
       uid: snapshot['uid'],
       userCart: snapshot['userCart'] as List<dynamic>,
+      pharmaIcon: snapshot['pharmaIcon'],
+      pharmaName: snapshot['pharmaName'],
     );
   }
 }

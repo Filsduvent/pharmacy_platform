@@ -21,13 +21,20 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
     return SafeArea(
       child: Scaffold(
         body: StreamBuilder<QuerySnapshot>(
-            stream: firestore
+            stream: /* firestore
                 .collection('Users')
                 .doc(AppConstants.sharedPreferences!
                     .getString(AppConstants.userUID))
                 .collection('Orders')
                 .where('orderStatus', isNotEqualTo: "Received")
-                .snapshots(),
+                .snapshots(),*/
+                firestore
+                    .collection('Orders')
+                    .where('orderBy',
+                        isEqualTo: AppConstants.sharedPreferences!
+                            .getString(AppConstants.userUID))
+                    .where('orderStatus', isEqualTo: "Running")
+                    .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData
                   ? ListView.builder(

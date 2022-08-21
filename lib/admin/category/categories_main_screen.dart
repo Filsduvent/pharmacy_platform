@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/admin/category/category_details_screen.dart';
 
 import '../../models/categories_model.dart';
 import '../../routes/route_helper.dart';
@@ -157,18 +158,29 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
                                   itemCount: snapshot.data!.docs.length,
                                   itemBuilder: (context, index) {
                                     var listCategory =
-                                        snapshot.data!.docs.map((category) {
-                                      return CategoriesModel.fromjson(category);
+                                        snapshot.data!.docs.map((cat) {
+                                      return CategoriesModel.fromjson(cat);
                                     }).toList();
+                                    CategoriesModel category =
+                                        listCategory[index];
 
                                     return GestureDetector(
                                       onTap: () {
-                                        Get.toNamed(RouteHelper
-                                            .getCategoryDetailsScreen(
-                                          index,
-                                          "details",
-                                          listCategory[index].id.toString(),
-                                        ));
+                                        // Get.toNamed(RouteHelper
+                                        //     .getCategoryDetailsScreen(
+                                        //   index,
+                                        //   "details",
+                                        //   category.id.toString(),
+                                        // ));
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  CategoryDetailsScreen(
+                                                      pageId: index,
+                                                      page: "catdetails",
+                                                      category: category),
+                                            ));
                                       },
                                       child: Container(
                                         margin: EdgeInsets.only(
@@ -192,10 +204,9 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
                                                 color: Colors.white38,
                                                 image: DecorationImage(
                                                     fit: BoxFit.cover,
-                                                    image: NetworkImage(
-                                                        listCategory[index]
-                                                            .image
-                                                            .toString())),
+                                                    image: NetworkImage(category
+                                                        .image
+                                                        .toString())),
                                               ),
                                             ),
                                             //text container
@@ -231,19 +242,16 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
                                                             .center,
                                                     children: [
                                                       BigText(
-                                                          text: listCategory[
-                                                                  index]
-                                                              .name
+                                                          text: category.name
                                                               .toString()),
                                                       SizedBox(
                                                         height:
                                                             Dimensions.height10,
                                                       ),
                                                       BigText(
-                                                        text:
-                                                            listCategory[index]
-                                                                .description
-                                                                .toString(),
+                                                        text: category
+                                                            .description
+                                                            .toString(),
                                                         color: AppColors
                                                             .secondColor,
                                                         size: Dimensions.font16,

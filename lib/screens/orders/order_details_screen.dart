@@ -31,13 +31,14 @@ class OrderDetailsScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: FutureBuilder<DocumentSnapshot>(
-            future: firestore
+            future: /*firestore
                 .collection('Users')
                 .doc(AppConstants.sharedPreferences!
                     .getString(AppConstants.userUID))
                 .collection('Orders')
                 .doc(orderID)
-                .get(),
+                .get(),*/
+                firestore.collection('Orders').doc(getOrderId).get(),
             builder: (c, snapshot) {
               Map dataMap = {};
               if (snapshot.hasData) {
@@ -55,7 +56,7 @@ class OrderDetailsScreen extends StatelessWidget {
                           ),
                           Container(
                             margin: EdgeInsets.all(Dimensions.width10),
-                            height: Dimensions.height45 * 4,
+                            height: Dimensions.height45 * 3,
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(Dimensions.radius30),
@@ -73,15 +74,6 @@ class OrderDetailsScreen extends StatelessWidget {
                               ),
                               child: Column(
                                 children: [
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: BigText(
-                                        text: getOrderId,
-                                        color: Colors.grey,
-                                      )),
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
@@ -187,27 +179,31 @@ class OrderDetailsScreen extends StatelessWidget {
                           ),
                           //sign up button
 
-                          GestureDetector(
-                            onTap: () {
-                              confirmedUserOrderReceived(context, getOrderId);
-                            },
-                            child: Container(
-                              width: Dimensions.screenWidth,
-                              height: Dimensions.screenHeight / 13,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius30),
-                                  color: AppColors.mainColor),
-                              child: Center(
-                                child: BigText(
-                                  text: "Confirmed || Items Received",
-                                  size:
-                                      Dimensions.font20 + Dimensions.font20 / 2,
-                                  color: Colors.white,
+                          !(dataMap['orderStatus'] == "Running")
+                              ? Container()
+                              : GestureDetector(
+                                  onTap: () async {
+                                    confirmedUserOrderReceived(
+                                        context, getOrderId);
+                                    Get.back();
+                                  },
+                                  child: Container(
+                                    width: Dimensions.screenWidth - 20,
+                                    height: Dimensions.screenHeight / 13,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius30),
+                                        color: AppColors.mainColor),
+                                    child: Center(
+                                      child: BigText(
+                                        text: "Confirm reception",
+                                        size: Dimensions.font20 +
+                                            Dimensions.font20 / 2,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
                           SizedBox(
                             height: Dimensions.height10,
                           ),
@@ -223,60 +219,70 @@ class OrderDetailsScreen extends StatelessWidget {
   }
 
   void confirmedUserOrderReceived(BuildContext context, String mOrderId) async {
-    final response = await firestore
-        .collection('Users')
-        .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+    await firestore
         .collection('Orders')
         .doc(mOrderId)
-        .get();
-    var orderStatus = response.data() as Map;
-    if (orderStatus['orderStatus'] == "Pending") {
-      Get.snackbar(
-        'Waiting',
-        'Please wait your order is in progress',
-        backgroundColor: AppColors.mainColor,
-        colorText: Colors.white,
-        icon: const Icon(
-          Icons.alarm,
-          color: Colors.white,
-        ),
-        barBlur: 20,
-        isDismissible: true,
-        duration: const Duration(seconds: 5),
-      );
-    } else if (orderStatus['orderStatus'] == "Received") {
-      Get.snackbar(
-        'Reminder',
-        'This order have been already received',
-        backgroundColor: AppColors.mainColor,
-        colorText: Colors.white,
-        icon: const Icon(
-          Icons.alarm,
-          color: Colors.white,
-        ),
-        barBlur: 20,
-        isDismissible: true,
-        duration: const Duration(seconds: 5),
-      );
-    } else if (orderStatus['orderStatus'] == "Delivering") {
-      firestore
-          .collection('Users')
-          .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
-          .collection('Orders')
-          .doc(mOrderId)
-          .update({'orderStatus': "Received"});
+        .update({'orderStatus': "Received"});
 
-      await firestore
-          .collection('Orders')
-          .doc(mOrderId)
-          .update({'orderStatus': "Received"});
+    getOrderId = "";
 
-      getOrderId = "";
+    //Get.toNamed(RouteHelper.getOrderDetailsScreen(orderID));
 
-      Get.toNamed(RouteHelper.getOrderDetailsScreen(orderID));
+    Get.snackbar('Confirmation', 'Order has been Received');
+    // final response = await firestore
+    //     .collection('Users')
+    //     .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+    //     .collection('Orders')
+    //     .doc(mOrderId)
+    //     .get();
+    // var orderStatus = response.data() as Map;
+    // if (orderStatus['orderStatus'] == "Pending") {
+    //   Get.snackbar(
+    //     'Waiting',
+    //     'Please wait your order is in progress',
+    //     backgroundColor: AppColors.mainColor,
+    //     colorText: Colors.white,
+    //     icon: const Icon(
+    //       Icons.alarm,
+    //       color: Colors.white,
+    //     ),
+    //     barBlur: 20,
+    //     isDismissible: true,
+    //     duration: const Duration(seconds: 5),
+    //   );
+    // } else if (orderStatus['orderStatus'] == "Received") {
+    //   Get.snackbar(
+    //     'Reminder',
+    //     'This order have been already received',
+    //     backgroundColor: AppColors.mainColor,
+    //     colorText: Colors.white,
+    //     icon: const Icon(
+    //       Icons.alarm,
+    //       color: Colors.white,
+    //     ),
+    //     barBlur: 20,
+    //     isDismissible: true,
+    //     duration: const Duration(seconds: 5),
+    //   );
+    // } else if (orderStatus['orderStatus'] == "Running") {
+    //   // firestore
+    //   //     .collection('Users')
+    //   //     .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+    //   //     .collection('Orders')
+    //   //     .doc(mOrderId)
+    //   //     .update({'orderStatus': "Received"});
 
-      Get.snackbar('Confirmation', 'Order has been Received');
-    }
+    //   await firestore
+    //       .collection('Orders')
+    //       .doc(mOrderId)
+    //       .update({'orderStatus': "Received"});
+
+    //   getOrderId = "";
+
+    //   Get.toNamed(RouteHelper.getOrderDetailsScreen(orderID));
+
+    //   Get.snackbar('Confirmation', 'Order has been Received');
+    // }
   }
 }
 

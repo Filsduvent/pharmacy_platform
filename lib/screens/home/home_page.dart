@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:pharmacy_plateform/screens/orders/my_orders_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/orders_screen.dart';
+import 'package:pharmacy_plateform/screens/pharmacy/pharmacy_screen.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 
 import '../../utils/colors.dart';
@@ -51,6 +52,7 @@ class _HomePageState extends State<HomePage> {
     return [
       MainDrugScreen(),
       OrderScreen(),
+      PharmacyScreen(),
       CartHistory(),
       AccountScreen(),
     ];
@@ -62,25 +64,36 @@ class _HomePageState extends State<HomePage> {
         icon: Icon(CupertinoIcons.home),
         title: ("Home"),
         activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
+        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
+            .secondColor,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.archivebox_fill),
-        title: ("Archive"),
+        title: ("Orders"),
         activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
+        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
+            .secondColor,
+      ),
+      PersistentBottomNavBarItem(
+        icon: Icon(Icons.medical_information),
+        title: ("Pharmacy"),
+        activeColorPrimary: AppColors.mainColor,
+        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
+            .secondColor,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.cart_fill),
         title: ("Cart"),
         activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
+        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
+            .secondColor,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.person),
         title: ("Me"),
         activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
+        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
+            .secondColor,
       ),
     ];
   }

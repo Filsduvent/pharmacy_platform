@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:pharmacy_plateform/admin/adminscreens/customers/inv_simple_user_details.dart';
 import '../../../models/user_model.dart';
 import '../../../routes/route_helper.dart';
 import '../../../utils/app_constants.dart';
@@ -138,15 +138,25 @@ class _InvalidSimpleCustomerScreenState
                                               snapshot.data!.docs.map((user) {
                                             return User.fromSnap(user);
                                           }).toList();
+                                          User customers = customer[index];
 
                                           return GestureDetector(
                                             onTap: () {
-                                              Get.toNamed(RouteHelper
-                                                  .getInvalidSimpleUserDetailsScreen(
-                                                index,
-                                                "details",
-                                                customer[index].uid,
-                                              ));
+                                              // Get.toNamed(RouteHelper
+                                              //     .getInvalidSimpleUserDetailsScreen(
+                                              //   index,
+                                              //   "details",
+                                              //   customer[index].uid,
+                                              // ));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InvalidSimpleUserDetails(
+                                                            pageId: index,
+                                                            page: "details",
+                                                            user: customers),
+                                                  ));
                                             },
                                             child: Container(
                                               margin: EdgeInsets.only(
@@ -170,7 +180,7 @@ class _InvalidSimpleCustomerScreenState
                                                       image: DecorationImage(
                                                           fit: BoxFit.cover,
                                                           image: NetworkImage(
-                                                              customer[index]
+                                                              customers
                                                                   .profilePhoto)),
                                                     ),
                                                   ),
@@ -210,16 +220,14 @@ class _InvalidSimpleCustomerScreenState
                                                                   .center,
                                                           children: [
                                                             BigText(
-                                                                text: customer[
-                                                                        index]
+                                                                text: customers
                                                                     .username),
                                                             SizedBox(
                                                               height: Dimensions
                                                                   .height10,
                                                             ),
                                                             BigText(
-                                                              text: customer[
-                                                                      index]
+                                                              text: customers
                                                                   .email,
                                                               color: AppColors
                                                                   .secondColor,
@@ -234,8 +242,7 @@ class _InvalidSimpleCustomerScreenState
                                                                   .height10,
                                                             ),
                                                             BigText(
-                                                              text: customer[
-                                                                      index]
+                                                              text: customers
                                                                   .phone,
                                                               color: AppColors
                                                                   .secondColor,

@@ -310,7 +310,7 @@ class RouteHelper {
         },
         transition: Transition.zoom),
 
-    GetPage(
+    /* GetPage(
         name: categoryDetailsScreen,
         page: () {
           var pageId = Get.parameters['pageId'];
@@ -342,7 +342,7 @@ class RouteHelper {
             description: description!,
           );
         },
-        transition: Transition.zoom),
+        transition: Transition.zoom),*/
     GetPage(
         name: adminDrugMainScreen,
         page: () {
@@ -404,7 +404,7 @@ class RouteHelper {
           return PharmacistScreen();
         },
         transition: Transition.zoom),
-
+/*
     GetPage(
         name: adminUserDetailsScreen,
         page: () {
@@ -417,9 +417,9 @@ class RouteHelper {
             userId: userId!,
           );
         },
-        transition: Transition.fadeIn),
+        transition: Transition.fadeIn),*/
 
-    GetPage(
+    /* GetPage(
         name: adminInvalidUserDetailsScreen,
         page: () {
           var pageId = Get.parameters['pageId'];
@@ -458,7 +458,7 @@ class RouteHelper {
             userId: userId!,
           );
         },
-        transition: Transition.fadeIn),
+        transition: Transition.fadeIn),*/
     GetPage(
         name: simpleCustomerScreen,
         page: () {

@@ -91,7 +91,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
           duration: const Duration(seconds: 5),
         );
       } else {
-        writeOrderDetailsForUser({
+        /* writeOrderDetailsForUser({
           AppConstants.addressId: widget.addressId,
           "orderBy":
               AppConstants.sharedPreferences!.getString(AppConstants.userUID),
@@ -104,7 +104,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
           "totalAmount": cartControllers.totalAmount,
           "orderStatus": "Pending",
           "id": AppConstants.sharedPreferences!.getString(AppConstants.userUID)!
-        });
+        });*/
         writeOrderDetailsPharmacy({
           AppConstants.addressId: widget.addressId,
           "orderBy":
@@ -159,7 +159,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
     Get.toNamed(RouteHelper.getInitial());
   }
 
-  Future writeOrderDetailsForUser(Map<String, dynamic> data) async {
+  /* Future writeOrderDetailsForUser(Map<String, dynamic> data) async {
     var _cartList = cartControllers.getItems;
     var _tmp = [];
 
@@ -204,6 +204,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
       }
     }
   }
+  */
 
   Future writeOrderDetailsPharmacy(Map<String, dynamic> data) async {
     var _cartList = cartControllers.getItems;

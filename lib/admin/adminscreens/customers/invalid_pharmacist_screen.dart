@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/customers/inv_user_details_screen.dart';
 
 import '../../../models/user_model.dart';
 import '../../../routes/route_helper.dart';
@@ -133,19 +134,30 @@ class _InvalidPharmacistScreenState extends State<InvalidPharmacistScreen> {
                                         shrinkWrap: true,
                                         itemCount: snapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
-                                          List<dynamic> Pharma =
+                                          List<dynamic> pharma =
                                               snapshot.data!.docs.map((user) {
                                             return User.fromSnap(user);
                                           }).toList();
 
+                                          User pharmacist = pharma[index];
+
                                           return GestureDetector(
                                             onTap: () {
-                                              Get.toNamed(RouteHelper
-                                                  .getAdminInvalidUserDetailsScreen(
-                                                index,
-                                                "details",
-                                                Pharma[index].uid,
-                                              ));
+                                              // Get.toNamed(RouteHelper
+                                              //     .getAdminInvalidUserDetailsScreen(
+                                              //   index,
+                                              //   "details",
+                                              //   pharma[index].uid,
+                                              // ));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InvalidUserDetailsScreen(
+                                                            pageId: index,
+                                                            page: "details",
+                                                            user: pharmacist),
+                                                  ));
                                             },
                                             child: Container(
                                               margin: EdgeInsets.only(
@@ -169,7 +181,7 @@ class _InvalidPharmacistScreenState extends State<InvalidPharmacistScreen> {
                                                       image: DecorationImage(
                                                           fit: BoxFit.cover,
                                                           image: NetworkImage(
-                                                              Pharma[index]
+                                                              pharmacist
                                                                   .profilePhoto)),
                                                     ),
                                                   ),
@@ -209,17 +221,15 @@ class _InvalidPharmacistScreenState extends State<InvalidPharmacistScreen> {
                                                                   .center,
                                                           children: [
                                                             BigText(
-                                                                text: Pharma[
-                                                                        index]
+                                                                text: pharmacist
                                                                     .username),
                                                             SizedBox(
                                                               height: Dimensions
                                                                   .height10,
                                                             ),
                                                             BigText(
-                                                              text:
-                                                                  Pharma[index]
-                                                                      .email,
+                                                              text: pharmacist
+                                                                  .email,
                                                               color: AppColors
                                                                   .secondColor,
                                                               size: Dimensions
@@ -233,9 +243,8 @@ class _InvalidPharmacistScreenState extends State<InvalidPharmacistScreen> {
                                                                   .height10,
                                                             ),
                                                             BigText(
-                                                              text:
-                                                                  Pharma[index]
-                                                                      .phone,
+                                                              text: pharmacist
+                                                                  .phone,
                                                               color: AppColors
                                                                   .secondColor,
                                                               size: Dimensions

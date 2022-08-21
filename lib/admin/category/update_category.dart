@@ -13,20 +13,9 @@ import '../../widgets/app_icon.dart';
 import '../../widgets/big_text.dart';
 
 class UpdateCategoryScreen extends StatefulWidget {
-  String catId;
-  int pageId;
-  String image;
-  String name;
-  String description;
+  final CategoriesModel category;
 
-  UpdateCategoryScreen({
-    Key? key,
-    required this.catId,
-    required this.pageId,
-    required this.image,
-    required this.name,
-    required this.description,
-  }) : super(key: key);
+  UpdateCategoryScreen({Key? key, required this.category}) : super(key: key);
 
   @override
   State<UpdateCategoryScreen> createState() => _UpdateCategoryScreenState();
@@ -38,15 +27,14 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
   var descriptionController;
   var image;
 
-  CategoriesModel cat = CategoriesModel();
-
   @override
   void initState() {
     super.initState();
 
-    nameController = TextEditingController(text: widget.name);
-    descriptionController = TextEditingController(text: widget.description);
-    image = widget.image;
+    nameController = TextEditingController(text: widget.category.name);
+    descriptionController =
+        TextEditingController(text: widget.category.description);
+    image = widget.category.image;
     isLoading = false;
   }
 
@@ -87,11 +75,12 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                     children: [
                       GestureDetector(
                           onTap: () {
-                            Get.toNamed(RouteHelper.getCategoryDetailsScreen(
-                              widget.pageId,
-                              "details",
-                              widget.catId,
-                            ));
+                            // Get.toNamed(RouteHelper.getCategoryDetailsScreen(
+                            //   widget.pageId,
+                            //   "details",
+                            //   widget.catId,
+                            // ));
+                            Get.back();
                           },
                           child: AppIcon(
                             icon: Icons.arrow_back_ios,
@@ -191,7 +180,7 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                                       color: AppColors.mainColor),
                                   child: Center(
                                     child: BigText(
-                                      text: "Add",
+                                      text: "Edit",
                                       size: Dimensions.font20 +
                                           Dimensions.font20 / 2,
                                       color: Colors.white,

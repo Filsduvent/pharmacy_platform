@@ -16,12 +16,9 @@ import '../../../widgets/big_text.dart';
 class InvalidSimpleUserDetails extends StatefulWidget {
   final int pageId;
   final String page;
-  final String userId;
+  final User user;
   const InvalidSimpleUserDetails(
-      {Key? key,
-      required this.pageId,
-      required this.page,
-      required this.userId})
+      {Key? key, required this.pageId, required this.page, required this.user})
       : super(key: key);
 
   @override
@@ -59,8 +56,8 @@ class _InvalidSimpleUserDetailsState extends State<InvalidSimpleUserDetails> {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      customer![widget.pageId].profilePhoto))),
+                                  image:
+                                      NetworkImage(widget.user.profilePhoto))),
                         ),
                       ),
 
@@ -117,8 +114,7 @@ class _InvalidSimpleUserDetailsState extends State<InvalidSimpleUserDetails> {
                                           size: Dimensions.height10 * 5,
                                         ),
                                         bigText: BigText(
-                                            text: customer[widget.pageId]
-                                                .username)),
+                                            text: widget.user.username)),
                                     SizedBox(
                                       height: Dimensions.height20,
                                     ),
@@ -132,9 +128,8 @@ class _InvalidSimpleUserDetailsState extends State<InvalidSimpleUserDetails> {
                                           iconSize: Dimensions.height10 * 5 / 2,
                                           size: Dimensions.height10 * 5,
                                         ),
-                                        bigText: BigText(
-                                            text:
-                                                customer[widget.pageId].phone)),
+                                        bigText:
+                                            BigText(text: widget.user.phone)),
                                     SizedBox(
                                       height: Dimensions.height20,
                                     ),
@@ -148,9 +143,8 @@ class _InvalidSimpleUserDetailsState extends State<InvalidSimpleUserDetails> {
                                           iconSize: Dimensions.height10 * 5 / 2,
                                           size: Dimensions.height10 * 5,
                                         ),
-                                        bigText: BigText(
-                                            text:
-                                                customer[widget.pageId].email)),
+                                        bigText:
+                                            BigText(text: widget.user.email)),
                                     SizedBox(
                                       height: Dimensions.height20,
                                     ),
@@ -164,9 +158,8 @@ class _InvalidSimpleUserDetailsState extends State<InvalidSimpleUserDetails> {
                                           iconSize: Dimensions.height10 * 5 / 2,
                                           size: Dimensions.height10 * 5,
                                         ),
-                                        bigText: BigText(
-                                            text: customer[widget.pageId]
-                                                .address)),
+                                        bigText:
+                                            BigText(text: widget.user.address)),
 
                                     SizedBox(
                                       height: Dimensions.height20,
@@ -181,9 +174,8 @@ class _InvalidSimpleUserDetailsState extends State<InvalidSimpleUserDetails> {
                                           iconSize: Dimensions.height10 * 5 / 2,
                                           size: Dimensions.height10 * 5,
                                         ),
-                                        bigText: BigText(
-                                            text:
-                                                customer[widget.pageId].role)),
+                                        bigText:
+                                            BigText(text: widget.user.role)),
 
                                     SizedBox(
                                       height: Dimensions.height20,
@@ -207,14 +199,12 @@ class _InvalidSimpleUserDetailsState extends State<InvalidSimpleUserDetails> {
                                         SizedBox(
                                           width: Dimensions.width20,
                                         ),
-                                        BigText(
-                                            text:
-                                                customer[widget.pageId].status),
+                                        BigText(text: widget.user.status),
                                         SizedBox(
                                           width: Dimensions.width30 * 4,
                                         ),
-                                        buildSwitch(customer[widget.pageId].uid,
-                                            customer[widget.pageId].status),
+                                        buildSwitch(widget.user.uid,
+                                            widget.user.status),
                                       ]),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(

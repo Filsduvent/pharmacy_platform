@@ -135,7 +135,7 @@ class PharmacistOrderDetails extends StatelessWidget {
                                                         .spaceBetween,
                                                 children: [
                                                   BigText(
-                                                    text: "By : ",
+                                                    text: "Ordered by : ",
                                                     color: Colors.grey,
                                                   ),
                                                   BigText(

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/admin/adminscreens/customers/user_details_screen.dart';
 import 'package:pharmacy_plateform/models/user_model.dart';
 
 import '../../../routes/route_helper.dart';
@@ -132,19 +133,29 @@ class _ValidPharmacistScreenState extends State<ValidPharmacistScreen> {
                                         shrinkWrap: true,
                                         itemCount: snapshot.data!.docs.length,
                                         itemBuilder: (context, index) {
-                                          List<dynamic> Pharma =
+                                          List<dynamic> pharma =
                                               snapshot.data!.docs.map((user) {
                                             return User.fromSnap(user);
                                           }).toList();
+                                          User pharmacist = pharma[index];
 
                                           return GestureDetector(
                                             onTap: () {
-                                              Get.toNamed(RouteHelper
-                                                  .getAdminUserDetailsScreen(
-                                                index,
-                                                "details",
-                                                Pharma[index].uid,
-                                              ));
+                                              // Get.toNamed(RouteHelper
+                                              //     .getAdminUserDetailsScreen(
+                                              //   index,
+                                              //   "details",
+                                              //   pharma[index].uid,
+                                              // ));
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        UserDetailsScreen(
+                                                            pageId: index,
+                                                            page: "details",
+                                                            user: pharmacist),
+                                                  ));
                                             },
                                             child: Container(
                                               margin: EdgeInsets.only(
@@ -168,7 +179,7 @@ class _ValidPharmacistScreenState extends State<ValidPharmacistScreen> {
                                                       image: DecorationImage(
                                                           fit: BoxFit.cover,
                                                           image: NetworkImage(
-                                                              Pharma[index]
+                                                              pharmacist
                                                                   .profilePhoto)),
                                                     ),
                                                   ),
@@ -208,17 +219,15 @@ class _ValidPharmacistScreenState extends State<ValidPharmacistScreen> {
                                                                   .center,
                                                           children: [
                                                             BigText(
-                                                                text: Pharma[
-                                                                        index]
+                                                                text: pharmacist
                                                                     .username),
                                                             SizedBox(
                                                               height: Dimensions
                                                                   .height10,
                                                             ),
                                                             BigText(
-                                                              text:
-                                                                  Pharma[index]
-                                                                      .email,
+                                                              text: pharmacist
+                                                                  .email,
                                                               color: AppColors
                                                                   .secondColor,
                                                               size: Dimensions
@@ -232,9 +241,8 @@ class _ValidPharmacistScreenState extends State<ValidPharmacistScreen> {
                                                                   .height10,
                                                             ),
                                                             BigText(
-                                                              text:
-                                                                  Pharma[index]
-                                                                      .phone,
+                                                              text: pharmacist
+                                                                  .phone,
                                                               color: AppColors
                                                                   .secondColor,
                                                               size: Dimensions

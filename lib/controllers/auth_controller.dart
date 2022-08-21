@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/models/user_model.dart' as model;
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
@@ -105,17 +104,19 @@ class AuthController extends GetxController {
         String downloadUrl = await _uploadToStorage(image);
 
         model.User user = model.User(
-          username: username,
-          email: email,
-          phone: phone,
-          address: address,
-          status: "Activated",
-          role: role,
-          password: password,
-          profilePhoto: downloadUrl,
-          uid: cred.user!.uid,
-          userCart: ["garbageValue"],
-        );
+            username: username,
+            email: email,
+            phone: phone,
+            address: address,
+            status: "Activated",
+            role: role,
+            password: password,
+            profilePhoto: downloadUrl,
+            uid: cred.user!.uid,
+            userCart: ["garbageValue"],
+            pharmaIcon:
+                "https://firebasestorage.googleapis.com/v0/b/pharmacyplatform-45bdc.appspot.com/o/pharmacyLogo.jpg?alt=media&token=bb1b3de6-4668-484b-9402-7cbdbd23f251",
+            pharmaName: "Default Name");
         await firestore
             .collection('Users')
             .doc(cred.user!.uid)
@@ -138,6 +139,10 @@ class AuthController extends GetxController {
           await sharedPreferences
               .setStringList(AppConstants.userCartList, ["garbageValue"]);
           await sharedPreferences.setString(AppConstants.userRole, role);
+          await sharedPreferences.setString(AppConstants.pharmaIcon,
+              "https://firebasestorage.googleapis.com/v0/b/pharmacyplatform-45bdc.appspot.com/o/pharmacyLogo.jpg?alt=media&token=bb1b3de6-4668-484b-9402-7cbdbd23f251");
+          await sharedPreferences.setString(
+              AppConstants.pharmaName, "Default Name");
 
           if (cred != null) {
             readData(cred).then((value) async {
@@ -257,6 +262,11 @@ class AuthController extends GetxController {
       List<String> cartList = json[AppConstants.userCartList].Cast<String>();
       await sharedPreferences.setStringList(
           AppConstants.userCartList, cartList);
+
+      await sharedPreferences.setString(
+          AppConstants.pharmaIcon, json[AppConstants.pharmaIcon]);
+      await sharedPreferences.setString(
+          AppConstants.pharmaName, json[AppConstants.pharmaName]);
     });
   }
 
@@ -272,6 +282,8 @@ class AuthController extends GetxController {
     AppConstants.sharedPreferences!.remove(AppConstants.userCartList);
     AppConstants.sharedPreferences!.remove(AppConstants.userRole);
     AppConstants.sharedPreferences!.remove(AppConstants.drugId);
+    AppConstants.sharedPreferences!.remove(AppConstants.pharmaIcon);
+    AppConstants.sharedPreferences!.remove(AppConstants.pharmaName);
     return true;
   }
 }

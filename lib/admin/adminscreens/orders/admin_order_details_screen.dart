@@ -55,7 +55,7 @@ class AdminOrderDetailsScreen extends StatelessWidget {
                           ),
                           Container(
                             margin: EdgeInsets.all(Dimensions.width10),
-                            height: Dimensions.height45 * 4.8,
+                            height: Dimensions.height45 * 3.7,
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(Dimensions.radius30),
@@ -73,15 +73,6 @@ class AdminOrderDetailsScreen extends StatelessWidget {
                               ),
                               child: Column(
                                 children: [
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: BigText(
-                                        text: getOrderId,
-                                        color: Colors.grey,
-                                      )),
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
@@ -142,20 +133,35 @@ class AdminOrderDetailsScreen extends StatelessWidget {
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      BigText(
-                                        text: "By : ",
-                                        color: Colors.grey,
-                                      ),
-                                      BigText(
-                                        text: dataMap['orderBy'],
-                                        color: AppColors.yellowColor,
-                                      )
-                                    ],
-                                  ),
+                                  FutureBuilder<DocumentSnapshot>(
+                                      future: firestore
+                                          .collection('Users')
+                                          .doc(dataMap['orderBy'])
+                                          .get(),
+                                      builder: (context, snaps) {
+                                        Map byMap = {};
+                                        if (snaps.hasData) {
+                                          byMap = snaps.data!.data() as Map;
+                                        }
+                                        return snaps.hasData
+                                            ? Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  BigText(
+                                                    text: "Ordered by : ",
+                                                    color: Colors.grey,
+                                                  ),
+                                                  BigText(
+                                                    text: byMap['username'],
+                                                    color:
+                                                        AppColors.yellowColor,
+                                                  )
+                                                ],
+                                              )
+                                            : Container();
+                                      }),
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
