@@ -183,6 +183,8 @@ class AdminOrderDetailsScreen extends StatelessWidget {
                                         orderID: orderID,
                                         orderBy: orderBy,
                                         addressId: addressId,
+                                        test:
+                                            dataMap['orderedProduct.quantity'],
                                       )
                                     : Center(
                                         child: CircularProgressIndicator(),

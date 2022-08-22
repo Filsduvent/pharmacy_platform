@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/models/user_model.dart';
 import '../../../models/drug_model.dart';
 import '../../../routes/route_helper.dart';
 import '../../../utils/dimensions.dart';
@@ -16,14 +17,16 @@ class AdminOrderCard extends StatelessWidget {
   final String orderID;
   final String addressId;
   final String orderBy;
-  const AdminOrderCard(
-      {Key? key,
-      required this.itemCount,
-      required this.data,
-      required this.orderID,
-      required this.addressId,
-      required this.orderBy})
-      : super(key: key);
+  final int test;
+  const AdminOrderCard({
+    Key? key,
+    required this.itemCount,
+    required this.data,
+    required this.orderID,
+    required this.addressId,
+    required this.orderBy,
+    required this.test,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,14 +63,15 @@ class AdminOrderCard extends StatelessWidget {
             itemBuilder: (c, index) {
               Drug model =
                   Drug.fromMaps(data[index].data() as Map<String, dynamic>);
-              return sourceOrderInfo(model, context);
+
+              return sourceOrderInfo(model, test, context);
             }),
       ),
     );
   }
 }
 
-Widget sourceOrderInfo(Drug model, BuildContext context) {
+Widget sourceOrderInfo(Drug model, int test, BuildContext context) {
   MediaQuery.of(context).size.width;
 
   return Container(
@@ -124,7 +128,7 @@ Widget sourceOrderInfo(Drug model, BuildContext context) {
                 Row(
                   children: [
                     BigText(
-                      text: "5",
+                      text: test.toString(),
                       color: Colors.black54,
                     ),
                     SizedBox(

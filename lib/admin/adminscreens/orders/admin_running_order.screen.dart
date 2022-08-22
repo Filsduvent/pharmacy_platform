@@ -160,6 +160,12 @@ class _AdminRunningOrderScreenState extends State<AdminRunningOrderScreen> {
                                                                 as Map<String,
                                                                     dynamic>)[
                                                             'addressId'],
+                                                    test: (snapshot.data?.docs[index]
+                                                                    .data()
+                                                                as Map<String,
+                                                                    dynamic>)[
+                                                            'orderedProduct'][0]
+                                                        ['quantity'],
                                                   )
                                                 : const Center(
                                                     child:

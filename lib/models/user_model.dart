@@ -62,4 +62,21 @@ class User {
       pharmaName: snapshot['pharmaName'],
     );
   }
+
+  static User fromMaps(Map<String, dynamic> data) {
+    return User(
+      username: data['username'],
+      email: data['email'],
+      phone: data['phone'],
+      address: data['address'],
+      status: data['status'],
+      role: data['role'],
+      password: data['password'],
+      profilePhoto: data['profilePhoto'],
+      uid: data['uid'],
+      userCart: data['userCart'] as List<dynamic>,
+      pharmaIcon: data['pharmaIcon'],
+      pharmaName: data['pharmaName'],
+    );
+  }
 }

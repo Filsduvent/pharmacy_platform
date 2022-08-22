@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_screen.dart';
 
 import '../../../models/drug_model.dart';
+import '../../../models/user_model.dart';
 import '../../../routes/route_helper.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';
@@ -144,7 +145,7 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                             return Drug.fromSnap(category);
                                           }).toList();
                                           Drug drug = drugList[index];
-                                          // final data = postDrugController.drugList[index];
+
                                           return GestureDetector(
                                               onTap: () {
                                                 // Get.toNamed(RouteHelper
@@ -158,9 +159,10 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                                     MaterialPageRoute(
                                                       builder: (context) =>
                                                           AdminValidDetailsScreen(
-                                                              pageId: index,
-                                                              page: "valid",
-                                                              drug: drug),
+                                                        pageId: index,
+                                                        page: "valid",
+                                                        drug: drug,
+                                                      ),
                                                     ));
                                               },
                                               child: Stack(
@@ -178,11 +180,10 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                                           MaterialPageRoute(
                                                             builder: (context) =>
                                                                 AdminValidDetailsScreen(
-                                                                    pageId:
-                                                                        index,
-                                                                    page:
-                                                                        "valid",
-                                                                    drug: drug),
+                                                              pageId: index,
+                                                              page: "valid",
+                                                              drug: drug,
+                                                            ),
                                                           ));
                                                     },
                                                     child: Container(

@@ -280,7 +280,8 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                                                                       .spaceBetween,
                                                               children: [
                                                                 SmallText(
-                                                                  text: /*"\$${data.price}"*/ "${drug.price.toString()}Fbu",
+                                                                  text:
+                                                                      "${drug.price.toString()}Fbu",
                                                                   size: Dimensions
                                                                       .font20,
                                                                   color: Colors
