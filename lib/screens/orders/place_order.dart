@@ -205,6 +205,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
     }
   }
   */
+  //
 
   Future writeOrderDetailsPharmacy(Map<String, dynamic> data) async {
     var _cartList = cartControllers.getItems;
@@ -217,23 +218,6 @@ class _PlaceOrderState extends State<PlaceOrder> {
           await firestore.collection('Medicines').doc(product.id).get();
       var quantity = response.data() as Map;
 
-      DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await firestore
-          .collection('Orders')
-          .doc(data['orderTime'] +
-              AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
-          .get();
-      // var exist = response.data() as Map;
-
-      if (documentSnapshot.exists) {
-      } else {
-        await firestore
-            .collection('Orders')
-            .doc(data['orderTime'] +
-                AppConstants.sharedPreferences!
-                    .getString(AppConstants.userUID)!)
-            .set(data);
-      }
-
       if (quantity['quantity'] < product.quantity) {
       } else {
         await firestore
@@ -241,6 +225,21 @@ class _PlaceOrderState extends State<PlaceOrder> {
             .doc(product.id)
             .update({"quantity": quantity['quantity'] - product.quantity});
       }
+    }
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await firestore
+        .collection('Orders')
+        .doc(data['orderTime'] +
+            AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
+        .get();
+    // var exist = response.data() as Map;
+
+    if (documentSnapshot.exists) {
+    } else {
+      await firestore
+          .collection('Orders')
+          .doc(data['orderTime'] +
+              AppConstants.sharedPreferences!.getString(AppConstants.userUID)!)
+          .set(data);
     }
   }
 }

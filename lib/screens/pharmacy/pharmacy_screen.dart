@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:pharmacy_plateform/base/no_data_page.dart';
 import 'package:pharmacy_plateform/screens/pharmacy/pharmacy_drug_screen.dart';
 import 'package:pharmacy_plateform/widgets/app_icon.dart';
@@ -56,168 +57,197 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                               }).toList();
                               User user = Pharma[index];
 
-                              return InkWell(
-                                onTap: () {
-                                  // Get.toNamed(RouteHelper.getAdminUserDetailsScreen(
-                                  //   index,
-                                  //   "details",
-                                  //   Pharma[index].uid,
-                                  // ));
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PharmacyDrugScreen(
-                                                pageId: index,
-                                                page: "all",
-                                                user: user),
-                                      ));
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.only(
-                                      left: Dimensions.width10,
-                                      right: Dimensions.width10,
-                                      bottom: Dimensions.height20),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.radius30),
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 1,
-                                          offset: Offset(0, 2),
-                                          color: Colors.grey.withOpacity(0.3),
-                                        )
-                                      ]),
-                                  child: Row(
-                                    children: [
-                                      //image section
-                                      Container(
-                                        width: Dimensions.listViewImgSize * 1.1,
-                                        height:
-                                            Dimensions.listViewImgSize * 1.1,
+                              return user.pharmaName == "Default Name"
+                                  ? Container()
+                                  : InkWell(
+                                      onTap: () {
+                                        // Get.toNamed(RouteHelper.getAdminUserDetailsScreen(
+                                        //   index,
+                                        //   "details",
+                                        //   Pharma[index].uid,
+                                        // ));
+                                        // Navigator.push(
+                                        //     context,
+                                        //     MaterialPageRoute(
+                                        //       builder: (context) =>
+                                        //           PharmacyDrugScreen(
+                                        //               pageId: index,
+                                        //               page: "all",
+                                        //               user: user),
+                                        //     ));
+                                        Get.to(
+                                          PharmacyDrugScreen(
+                                              pageId: index,
+                                              page: "all",
+                                              user: user),
+                                        );
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                            left: Dimensions.width10,
+                                            right: Dimensions.width10,
+                                            bottom: Dimensions.height20),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.radius30),
-                                          color: Colors.white38,
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                  user.pharmaIcon)),
-                                        ),
-                                      ),
-                                      //text container
-                                      Expanded(
-                                        child: Container(
-                                          width:
-                                              (Dimensions.listViewTextContSize +
-                                                      20) *
-                                                  1.1,
-                                          height:
-                                              (Dimensions.listViewTextContSize +
-                                                      20) *
-                                                  1.1,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(
-                                                  Dimensions.radius20),
-                                              bottomRight: Radius.circular(
-                                                  Dimensions.radius20),
-                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radius30),
                                             color: Colors.white,
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.only(
-                                                left: Dimensions.width20,
-                                                right: Dimensions.width10),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                BigText(text: user.pharmaName),
-                                                SizedBox(
-                                                  height: Dimensions.height10,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 1,
+                                                offset: Offset(0, 2),
+                                                color: Colors.grey
+                                                    .withOpacity(0.3),
+                                              )
+                                            ]),
+                                        child: Row(
+                                          children: [
+                                            //image section
+                                            Container(
+                                              width:
+                                                  Dimensions.listViewImgSize *
+                                                      1.1,
+                                              height:
+                                                  Dimensions.listViewImgSize *
+                                                      1.1,
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions.radius30),
+                                                color: Colors.white38,
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        user.pharmaIcon)),
+                                              ),
+                                            ),
+                                            //text container
+                                            Expanded(
+                                              child: Container(
+                                                width: (Dimensions
+                                                            .listViewTextContSize +
+                                                        20) *
+                                                    1.1,
+                                                height: (Dimensions
+                                                            .listViewTextContSize +
+                                                        20) *
+                                                    1.1,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight: Radius.circular(
+                                                        Dimensions.radius20),
+                                                    bottomRight:
+                                                        Radius.circular(
+                                                            Dimensions
+                                                                .radius20),
+                                                  ),
+                                                  color: Colors.white,
                                                 ),
-                                                BigText(
-                                                  text: user.email,
-                                                  color: AppColors.secondColor,
-                                                  size: Dimensions.font16,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(
+                                                      left: Dimensions.width20,
+                                                      right:
+                                                          Dimensions.width10),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      BigText(
+                                                          text:
+                                                              user.pharmaName),
+                                                      SizedBox(
+                                                        height:
+                                                            Dimensions.height10,
+                                                      ),
+                                                      BigText(
+                                                        text: user.email,
+                                                        color: AppColors
+                                                            .secondColor,
+                                                        size: Dimensions.font16,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      SizedBox(
+                                                        height:
+                                                            Dimensions.height10,
+                                                      ),
+                                                      BigText(
+                                                        text: user.phone,
+                                                        color: AppColors
+                                                            .secondColor,
+                                                        size: Dimensions.font16,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      SizedBox(
+                                                        height:
+                                                            Dimensions.height10,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          IconAndTextWidget(
+                                                              icon: Icons.email,
+                                                              text: 'mail',
+                                                              iconColor: AppColors
+                                                                  .iconColor1),
+                                                          IconAndTextWidget(
+                                                              icon: Icons
+                                                                  .location_on,
+                                                              text: 'location',
+                                                              iconColor: AppColors
+                                                                  .mainColor),
+                                                          IconAndTextWidget(
+                                                              icon: Icons
+                                                                  .medical_information,
+                                                              text: 'drug',
+                                                              iconColor: AppColors
+                                                                  .iconColor2),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
-                                                SizedBox(
-                                                  height: Dimensions.height10,
-                                                ),
-                                                BigText(
-                                                  text: user.phone,
-                                                  color: AppColors.secondColor,
-                                                  size: Dimensions.font16,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                                SizedBox(
-                                                  height: Dimensions.height10,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
+                                              ),
+                                            ),
+
+                                            InkWell(
+                                              onTap: () {
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          PharmacyDrugScreen(
+                                                              pageId: index,
+                                                              page: "all",
+                                                              user: user),
+                                                    ));
+                                              },
+                                              child: Container(
+                                                width: Dimensions.width20,
+                                                child: Row(
                                                   children: [
-                                                    IconAndTextWidget(
-                                                        icon: Icons.email,
-                                                        text: 'mail',
-                                                        iconColor: AppColors
-                                                            .iconColor1),
-                                                    IconAndTextWidget(
-                                                        icon: Icons.location_on,
-                                                        text: 'location',
-                                                        iconColor: AppColors
-                                                            .mainColor),
-                                                    IconAndTextWidget(
-                                                        icon: Icons
-                                                            .medical_information,
-                                                        text: 'drug',
-                                                        iconColor: AppColors
-                                                            .iconColor2),
+                                                    Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      color:
+                                                          AppColors.mainColor,
+                                                      size:
+                                                          Dimensions.iconSize16,
+                                                    ),
                                                   ],
                                                 ),
-                                              ],
-                                            ),
-                                          ),
+                                              ),
+                                            )
+                                          ],
                                         ),
                                       ),
-
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    PharmacyDrugScreen(
-                                                        pageId: index,
-                                                        page: "all",
-                                                        user: user),
-                                              ));
-                                        },
-                                        child: Container(
-                                          width: Dimensions.width20,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.arrow_forward_ios,
-                                                color: AppColors.mainColor,
-                                                size: Dimensions.iconSize16,
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              );
+                                    );
                             }),
                       ),
                     )

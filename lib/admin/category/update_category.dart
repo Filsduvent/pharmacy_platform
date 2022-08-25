@@ -1,12 +1,16 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pharmacy_plateform/models/categories_model.dart';
 
 import '../../base/custom_loader.dart';
+import '../../base/show_custom_snackbar.dart';
 import '../../pharmacist/view/screens/widgets/Pharmacy_app_text_field.dart';
 import '../../routes/route_helper.dart';
+import '../../utils/app_constants.dart';
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/app_icon.dart';
@@ -26,6 +30,8 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
   var nameController;
   var descriptionController;
   var image;
+  Rx<File?>? _file;
+  File? get catPhoto => _file?.value;
 
   @override
   void initState() {
@@ -95,8 +101,9 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                   top: Dimensions.height45 * 4.5,
                   left: Dimensions.width45 * 8,
                   child: GestureDetector(
-                    onTap:
-                        () {}, // => //postDrugController.pickImageUpdate(context),
+                    onTap: () {
+                      pickImage(context);
+                    }, // => //postDrugController.pickImageUpdate(context),
                     child: AppIcon(
                       icon: Icons.add_a_photo,
                       backgroundColor: Colors.white,
@@ -165,11 +172,25 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
 
                               GestureDetector(
                                 onTap: () {
-                                  /* uploadCategoryItem(
-                                    nameController.text,
-                                    categoryController.drugPhoto,
-                                    descriptionController.text,
-                                  );*/
+                                  final catChangedPhotoUrl =
+                                      widget.category.image != catPhoto;
+                                  final catChangedname = widget.category.name !=
+                                      nameController.text;
+                                  final catChangeddesc =
+                                      widget.category.description !=
+                                          descriptionController.text;
+
+                                  final catUpdate = catChangedPhotoUrl ||
+                                      catChangedname ||
+                                      catChangeddesc;
+
+                                  if (catUpdate) {
+                                    uploadCategoryItem(
+                                      nameController.text,
+                                      _file?.value as File,
+                                      descriptionController.text,
+                                    );
+                                  }
                                 },
                                 child: Container(
                                   width: Dimensions.screenWidth / 2,
@@ -203,5 +224,148 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
             )
           : CustomLoader(),
     );
+  }
+
+  //pick image dialog to Update in storage
+
+  pickImage(mContext) {
+    return showDialog(
+        context: mContext,
+        builder: (con) {
+          return SimpleDialog(
+            title: BigText(
+              text: "Select an Image",
+              color: AppColors.mainBlackColor,
+              size: Dimensions.font20,
+            ),
+            children: [
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    Icon(Icons.camera_alt),
+                    Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Camera",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: capturePhotoWithCamera,
+              ),
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    Icon(Icons.image),
+                    Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Gallery",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: pickPhotoFromGallery,
+              ),
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    Icon(Icons.cancel),
+                    Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Cancel",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: () => Get.back(),
+              ),
+            ],
+          );
+        });
+  }
+
+//capture to add in storage
+
+  //capture to add in storage
+
+  capturePhotoWithCamera() async {
+    navigator!.pop();
+    final imageFile = (await ImagePicker().pickImage(
+        source: ImageSource.camera, maxHeight: 680.0, maxWidth: 970.0));
+    if (imageFile != null) {
+      Get.snackbar('Category Picture',
+          'You have successfully selected your category picture!');
+      Get.to(UpdateCategoryScreen(
+        category: widget.category,
+      ));
+    } else {
+      Get.snackbar('Category Picture', 'Please try again!');
+    }
+
+    _file = Rx<File?>(File(imageFile!.path));
+  }
+
+// pick from galery to add in storage
+
+  pickPhotoFromGallery() async {
+    navigator!.pop();
+    final imageFile =
+        (await ImagePicker().pickImage(source: ImageSource.gallery));
+    if (imageFile != null) {
+      Get.snackbar('Category Picture',
+          'You have successfully selected your category picture!');
+      Get.toNamed(RouteHelper.getPostCategoryForm());
+    } else {
+      Get.snackbar('Category Picture', 'Please try again!');
+    }
+
+    _file = Rx<File?>(File(imageFile!.path));
+  }
+
+  Future<String> _uploadToStorage(File image, String name) async {
+    Reference ref = firebaseStorage.ref().child('categoryPhoto').child(name);
+
+    UploadTask uploadTask = ref.putFile(image);
+    TaskSnapshot snap = await uploadTask;
+    String downloadUrl = await snap.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  // The update function reo sasa
+  Future uploadCategoryItem(
+    String name,
+    File? photoUrl,
+    String description,
+  ) async {
+    try {
+      if (name.isEmpty) {
+        showCustomSnackBar("Fill the category name please", title: "Name");
+      } else if (description.isEmpty) {
+        showCustomSnackBar("Fill the category description please",
+            title: "Description");
+      } else {
+        // File p = photoUrl as File;
+        String downloadUrl = await _uploadToStorage(photoUrl as File, name);
+
+        CategoriesModel category = CategoriesModel(
+          id: name,
+          name: name,
+          image: downloadUrl,
+          description: description,
+        );
+        firestore.collection('Categories').doc(name).update(
+              category.tojson(),
+            );
+
+        Get.toNamed(RouteHelper.getCategoriesMainScreen());
+      }
+    } catch (e) {
+      showCustomSnackBar(
+        e.toString(),
+        title: "Updating category item",
+      );
+    }
   }
 }

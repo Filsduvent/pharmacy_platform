@@ -69,7 +69,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                         if (page == "cartpage") {
                           Get.toNamed(RouteHelper.getCartPage());
                         } else {
-                          Get.toNamed(RouteHelper.getInitial());
+                          // Get.toNamed(RouteHelper.getInitial());
+                          Get.back();
                         }
                       },
                       child: AppIcon(icon: Icons.arrow_back_ios)),
@@ -224,12 +225,15 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                             Row(
                               children: [
                                 BigText(
-                                  text: drug.price.toString(),
-                                  color: AppColors.mainColor,
+                                  text: 'BIF',
+                                  color: Colors.redAccent,
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width10 / 2,
                                 ),
                                 BigText(
-                                  text: 'BIF',
-                                  color: AppColors.mainBlackColor,
+                                  text: drug.price.toString(),
+                                  color: AppColors.mainColor,
                                 ),
                               ],
                             ),
