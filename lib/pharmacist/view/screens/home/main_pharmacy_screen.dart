@@ -162,6 +162,13 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
                               Get.toNamed(
                                   RouteHelper.getPharmacistProfileScreen());
                             }),
+                        CategoryCard(
+                            imgSrc: "assets/image/personalize.png",
+                            title: "PERSONALIZE",
+                            press: () {
+                              Get.toNamed(
+                                  RouteHelper.getPersonalizePharmacyScreen());
+                            }),
                       ],
                     ),
                   )
