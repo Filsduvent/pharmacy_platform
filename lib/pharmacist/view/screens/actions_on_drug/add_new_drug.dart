@@ -16,6 +16,7 @@ import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../base/custom_loader.dart';
 import '../../../../base/show_custom_snackbar.dart';
+import '../../../../models/units_model.dart';
 import '../../../../utils/app_constants.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/dimensions.dart';
@@ -396,12 +397,17 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                                     for (int i = 0;
                                         i < snapshot.data!.docs.length;
                                         i++) {
-                                      DocumentSnapshot snap =
-                                          snapshot.data!.docs[i];
+                                      var unitsList =
+                                          snapshot.data!.docs.map((un) {
+                                        return UnitsModel.fromjson(un);
+                                      }).toList();
+                                      UnitsModel snap = unitsList[i];
+                                      // DocumentSnapshot snap =
+                                      //     snapshot.data!.docs[i];
                                       unitsItems.add(DropdownMenuItem(
-                                        value: "${snap.id}",
+                                        value: "${snap.name}",
                                         child: Text(
-                                          snap.id,
+                                          snap.name!,
                                           style: const TextStyle(
                                             color: Colors.black,
                                           ),

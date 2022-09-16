@@ -3,23 +3,19 @@
 import 'package:pharmacy_plateform/admin/adminscreens/customers/pharmacist_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/customers/simple_customer_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_drug_main_screen.dart';
-import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/home/admin_home_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_details_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_main_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/profile/profile_screen.dart';
 import 'package:pharmacy_plateform/admin/category/post_category.dart';
-import 'package:pharmacy_plateform/admin/category/update_category.dart';
-import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/add_new_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
-import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/update_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
-import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_drug_details.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_medecines_screen.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_details.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_screen.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacy_shift_orders.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/personalize_pharmacy/personalize_pharmacy_screen.dart';
 import 'package:pharmacy_plateform/screens/address/add_address_screen.dart';
 import 'package:pharmacy_plateform/screens/address/address_screen.dart';
 import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
@@ -28,11 +24,8 @@ import 'package:pharmacy_plateform/screens/home/home_page.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/order_details_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/place_order.dart';
-import '../admin/adminscreens/customers/inv_user_details_screen.dart';
-import '../admin/adminscreens/customers/val_simple_user_details.dart';
 import '../admin/adminscreens/units/admin_units_main_screen.dart';
 import '../admin/category/categories_main_screen.dart';
-import '../admin/category/category_details_screen.dart';
 import '../pharmacist/view/profile/profile_screen.dart';
 import '../screens/cart/cart_page.dart';
 import '../screens/drug/recent_drug_detail.dart';
@@ -61,6 +54,8 @@ class RouteHelper {
   static const String pharmacyOrderScreen = "/pharmacy-order-screen";
   static const String pharmacistProfileScreen = "/pharmacist-profile-screen";
   static const String pharmacyAddNewDrug = '/pharmacy-add-new-drug';
+  static const String personalizePharmacyScreen =
+      '/personalize-pharmacy-screen';
 
   //Routes for Admin
   static const String adminHomeScreen = "/admin-home-screen";
@@ -113,6 +108,7 @@ class RouteHelper {
   static String getPharmacistOrderScreen() => '$pharmacyOrderScreen';
   static String getPharmacistProfileScreen() => '$pharmacistProfileScreen';
   static String getPharmacyAddNewDrug() => '$pharmacyAddNewDrug';
+  static String getPersonalizePharmacyScreen() => '$personalizePharmacyScreen';
 
   //Routes for admin
   static String getAdminHomeScreen() => '$adminHomeScreen';
@@ -225,6 +221,13 @@ class RouteHelper {
         name: pharmacyMedecinePage,
         page: () {
           return PharmacyMedicinesScreen();
+        },
+        transition: Transition.fade),
+
+    GetPage(
+        name: personalizePharmacyScreen,
+        page: () {
+          return PersonalizePharmacyScreen();
         },
         transition: Transition.fade),
 

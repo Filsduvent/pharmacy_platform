@@ -12,7 +12,7 @@ import '../../../../utils/colors.dart';
 import '../../../../widgets/big_text.dart';
 
 class NavigationDrawerWidget extends StatefulWidget {
-  NavigationDrawerWidget({Key? key}) : super(key: key);
+  const NavigationDrawerWidget({Key? key}) : super(key: key);
 
   @override
   State<NavigationDrawerWidget> createState() => _NavigationDrawerWidgetState();
@@ -44,9 +44,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             SizedBox(
               height: 24,
             ),
-            Divider(
-              color: Colors.white70,
-            ),
+            // Divider(
+            //   color: Colors.white70,
+            // ),
             SizedBox(height: 24),
             // buildList(
             //     indexOffset: itemsFirst.length,
@@ -224,6 +224,9 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
 
       case 2:
         Get.toNamed(RouteHelper.getPharmacistOrderScreen());
+        break;
+      case 3:
+        Get.toNamed(RouteHelper.getPersonalizePharmacyScreen());
         break;
     }
   }

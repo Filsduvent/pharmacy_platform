@@ -3,7 +3,6 @@
 
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -13,10 +12,8 @@ import 'package:pharmacy_plateform/base/custom_loader.dart';
 import '../../../../base/show_custom_snackbar.dart';
 import '../../../../models/drug_model.dart';
 import '../../../../routes/route_helper.dart';
-import '../../../../utils/app_constants.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/dimensions.dart';
-import '../../../../utils/styles.dart';
 import '../../../../widgets/app_icon.dart';
 import '../../../../widgets/big_text.dart';
 import '../widgets/Pharmacy_app_text_field _Date.dart';
@@ -44,11 +41,6 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
   var _date;
   var _mandate;
 
-  var selectedType;
-  var selectedUnits;
-  List<String> _accountType = ['Pills', 'Injectables', 'Sirop', 'Gellule'];
-  var category;
-  var unit;
   DateTime _dateTime = DateTime.now();
   List<DropdownMenuItem> categoriesItems = [];
   File? imagexFile;
@@ -65,8 +57,7 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
         TextEditingController(text: widget.drug.quantity.toString());
     _date = TextEditingController(text: widget.drug.expiringDate);
     _mandate = TextEditingController(text: widget.drug.manufacturingDate);
-    category = widget.drug.categories.toString();
-    unit = widget.drug.units.toString();
+
     super.initState();
   }
 
@@ -208,62 +199,6 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                 SizedBox(
                                   height: Dimensions.height20,
                                 ),
-                                // Category
-                                Container(
-                                  width: Dimensions.width45 * 10,
-                                  margin: EdgeInsets.only(
-                                      left: Dimensions.height10,
-                                      right: Dimensions.height10),
-                                  padding: EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radius30),
-                                    boxShadow: [
-                                      BoxShadow(
-                                          blurRadius: 1,
-                                          // spreadRadius: 7,
-                                          offset: Offset(0, 2),
-                                          color: Colors.grey.withOpacity(0.3)),
-                                    ],
-                                  ),
-                                  child: Container(
-                                      padding: EdgeInsets.only(
-                                          left: Dimensions.width20,
-                                          right: Dimensions.height20),
-                                      margin: EdgeInsets.only(
-                                          left: Dimensions.height10 / 2,
-                                          right: Dimensions.height10 / 2),
-                                      child: DropdownButton(
-                                        items: _accountType
-                                            .map((value) => DropdownMenuItem(
-                                                  child: Text(
-                                                    value,
-                                                    style: TextStyle(
-                                                        color: Colors.black),
-                                                  ),
-                                                  value: value,
-                                                ))
-                                            .toList(),
-                                        onChanged: (selectedAccountType) {
-                                          setState(() {
-                                            selectedType = selectedAccountType;
-                                            category =
-                                                selectedAccountType.toString();
-                                          });
-                                        },
-                                        value: selectedType,
-                                        isExpanded: false,
-                                        hint: Text(
-                                          category,
-                                          style:
-                                              TextStyle(color: Colors.black87),
-                                        ),
-                                      )),
-                                ),
-                                SizedBox(
-                                  height: Dimensions.height20,
-                                ),
 
                                 //Price
                                 PharmacyAppTextField(
@@ -286,92 +221,7 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                 SizedBox(
                                   height: Dimensions.height20,
                                 ),
-                                //Units
-                                StreamBuilder<QuerySnapshot>(
-                                  stream:
-                                      firestore.collection("Units").snapshots(),
-                                  builder: (context, snapshot) {
-                                    if (!snapshot.hasData) {
-                                      Text("Loading..");
-                                    } else {
-                                      List<DropdownMenuItem> unitsItems = [];
-                                      for (int i = 0;
-                                          i < snapshot.data!.docs.length;
-                                          i++) {
-                                        DocumentSnapshot snap =
-                                            snapshot.data!.docs[i];
-                                        unitsItems.add(DropdownMenuItem(
-                                          child: Text(
-                                            snap.id,
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          value: "${snap.id}",
-                                        ));
-                                      }
-                                      return Container(
-                                        clipBehavior: Clip.none,
-                                        margin: EdgeInsets.only(
-                                            left: Dimensions.height10,
-                                            right: Dimensions.height10),
-                                        padding: EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.radius30),
-                                          boxShadow: [
-                                            BoxShadow(
-                                                blurRadius: 1,
-                                                // spreadRadius: 7,
-                                                offset: Offset(0, 2),
-                                                color: Colors.grey
-                                                    .withOpacity(0.3)),
-                                          ],
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                                width: Dimensions.width30 - 7),
-                                            DropdownButton<dynamic>(
-                                              items: unitsItems,
-                                              onChanged: (unitsValue) {
-                                                final snackBar = SnackBar(
-                                                  content: Text(
-                                                    'Selected Currency value is $unitsValue',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            robotoRegular
-                                                                .toString()),
-                                                  ),
-                                                );
-                                                Scaffold.of(context)
-                                                    // ignore: deprecated_member_use
-                                                    .showSnackBar(snackBar);
-                                                setState(() {
-                                                  selectedUnits = unitsValue;
-                                                  unit = unitsValue.toString();
-                                                });
-                                              },
-                                              value: selectedUnits,
-                                              isExpanded: false,
-                                              hint: Text(unit,
-                                                  style: TextStyle(
-                                                      color: Colors.black87)),
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                    return Container();
-                                  },
-                                ),
-                                SizedBox(
-                                  height: Dimensions.height20,
-                                ),
+
                                 //Description
                                 PharmacyAppTextField(
                                   textController: descriptionController,
@@ -399,18 +249,14 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                         widget.drug.expiringDate != _date.text;
                                     final drugChangedId =
                                         widget.drug.id != widget.drug.id;
-                                    // final drugChangedPhotoUrl =
-                                    //     widget.drug.photoUrl != drugImageUrl;
-                                    final drugChangedCategory =
-                                        widget.drug.categories != category;
+
                                     final drugChangedPrice =
                                         widget.drug.price !=
                                             priceController.text;
                                     final drugChangedQuantity =
                                         widget.drug.quantity !=
                                             quantityController.text;
-                                    final drugChangedUnit =
-                                        widget.drug.units != unit;
+
                                     final drugChangedDesc =
                                         widget.drug.description !=
                                             descriptionController.text;
@@ -419,11 +265,8 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                         drugChangedManDate ||
                                         drugChangedExpDate ||
                                         drugChangedId ||
-                                        //drugChangedPhotoUrl ||
-                                        drugChangedCategory ||
                                         drugChangedPrice ||
                                         drugChangedQuantity ||
-                                        drugChangedUnit ||
                                         drugChangedDesc;
                                     if (drugUpdate) {
                                       try {
@@ -439,10 +282,6 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                           showCustomSnackBar(
                                               "Fill your expiring date please",
                                               title: "exp date");
-                                        } else if (category.isEmpty) {
-                                          showCustomSnackBar(
-                                              "Fill your category please",
-                                              title: "category");
                                         } else if (priceController
                                             .text.isEmpty) {
                                           showCustomSnackBar(
@@ -453,10 +292,6 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                           showCustomSnackBar(
                                               "Fill your quantity please",
                                               title: "quantity");
-                                        } else if (unit.isEmpty) {
-                                          showCustomSnackBar(
-                                              "Fill the unit of the drug please",
-                                              title: "units");
                                         } else if (descriptionController
                                             .text.isEmpty) {
                                           showCustomSnackBar(
@@ -473,12 +308,10 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                             'title': titleController.text,
                                             'manufacturing_date': _mandate.text,
                                             'expiring_date': _date.text,
-                                            'categories': category,
                                             'price':
                                                 int.parse(priceController.text),
                                             'quantity': int.parse(
                                                 quantityController.text),
-                                            ' units': unit,
                                             'description':
                                                 descriptionController.text,
                                           });

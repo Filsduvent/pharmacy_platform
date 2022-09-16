@@ -22,6 +22,7 @@ class AdminUnitsMainScreen extends StatefulWidget {
 
 class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
   var controller = TextEditingController();
+  // ignore: prefer_typing_uninitialized_variables
   var updateController;
 
   // @override
