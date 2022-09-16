@@ -1,9 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_string_interpolations
-import 'package:pharmacy_plateform/admin/adminscreens/customers/inv_simple_user_details.dart';
+
 import 'package:pharmacy_plateform/admin/adminscreens/customers/pharmacist_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/customers/simple_customer_screen.dart';
-import 'package:pharmacy_plateform/admin/adminscreens/customers/user_details_screen.dart';
-import 'package:pharmacy_plateform/admin/adminscreens/customers/valid_simple_customer_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_drug_main_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/home/admin_home_screen.dart';
@@ -13,6 +11,7 @@ import 'package:pharmacy_plateform/admin/adminscreens/profile/profile_screen.dar
 import 'package:pharmacy_plateform/admin/category/post_category.dart';
 import 'package:pharmacy_plateform/admin/category/update_category.dart';
 import 'package:pharmacy_plateform/models/drug_model.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/add_new_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/update_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
@@ -61,6 +60,7 @@ class RouteHelper {
   static const String pharmacyShiftOrders = "/pharmacy-shift-orders";
   static const String pharmacyOrderScreen = "/pharmacy-order-screen";
   static const String pharmacistProfileScreen = "/pharmacist-profile-screen";
+  static const String pharmacyAddNewDrug = '/pharmacy-add-new-drug';
 
   //Routes for Admin
   static const String adminHomeScreen = "/admin-home-screen";
@@ -112,6 +112,7 @@ class RouteHelper {
   static String getPharmacyShiftOrders() => '$pharmacyShiftOrders';
   static String getPharmacistOrderScreen() => '$pharmacyOrderScreen';
   static String getPharmacistProfileScreen() => '$pharmacistProfileScreen';
+  static String getPharmacyAddNewDrug() => '$pharmacyAddNewDrug';
 
   //Routes for admin
   static String getAdminHomeScreen() => '$adminHomeScreen';
@@ -227,19 +228,19 @@ class RouteHelper {
         },
         transition: Transition.fade),
 
-    GetPage(
-        name: pharmacyDetailsPage,
-        page: () {
-          var pageId = Get.parameters['pageId'];
-          var page = Get.parameters["page"];
-          var medId = Get.parameters["medId"];
-          return PharmacyDrugDetails(
-            pageId: int.parse(pageId!),
-            page: page!,
-            medId: medId!,
-          );
-        },
-        transition: Transition.fadeIn),
+    // GetPage(
+    //     name: pharmacyDetailsPage,
+    //     page: () {
+    //       var pageId = Get.parameters['pageId'];
+    //       var page = Get.parameters["page"];
+    //       var medId = Get.parameters["medId"];
+    //       return PharmacyDrugDetails(
+    //         pageId: int.parse(pageId!),
+    //         page: page!,
+    //         medId: medId!,
+    //       );
+    //     },
+    //     transition: Transition.fadeIn),
 
     GetPage(
         name: pharmacyPostDrug,
@@ -248,17 +249,17 @@ class RouteHelper {
         },
         transition: Transition.zoom),
 
-    GetPage(
-        name: pharmacyUpdateDrug,
-        page: () {
-          var medId = Get.parameters["medId"];
-          var pageId = Get.parameters['pageId'];
-          return UpdateDrugScreen(
-            medId: medId!,
-            pageId: int.parse(pageId!),
-          );
-        },
-        transition: Transition.zoom),
+    // GetPage(
+    //     name: pharmacyUpdateDrug,
+    //     page: () {
+    //       var medId = Get.parameters["medId"];
+    //       var pageId = Get.parameters['pageId'];
+    //       return UpdateDrugScreen(
+    //         medId: medId!,
+    //         pageId: int.parse(pageId!),
+    //       );
+    //     },
+    //     transition: Transition.zoom),
 
     GetPage(
         name: pharmacistOrderDetails,
@@ -288,6 +289,12 @@ class RouteHelper {
           return PharmacistProfileScreen();
         },
         transition: Transition.fadeIn),
+    GetPage(
+        name: pharmacyAddNewDrug,
+        page: () {
+          return AddNewDrugScreen();
+        },
+        transition: Transition.zoom),
 
     //Routes for admin
     GetPage(

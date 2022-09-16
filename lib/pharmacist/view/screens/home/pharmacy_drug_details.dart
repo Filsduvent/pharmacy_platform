@@ -1,29 +1,25 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/models/drug_model.dart';
-import 'package:pharmacy_plateform/pharmacist/controllers/post_drug_controller.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/styles.dart';
 import '../../../../base/show_custom_snackbar.dart';
-import '../../../../controllers/cart_controller.dart';
-import '../../../../controllers/slide_drug_controller.dart';
 import '../../../../routes/route_helper.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/dimensions.dart';
 import '../../../../widgets/app_icon.dart';
 import '../../../../widgets/big_text.dart';
 import '../../../../widgets/expandable_text_widget.dart';
-import '../widgets/Pharmacy_app_text_field.dart';
+import '../actions_on_drug/update_drug.dart';
 import '../widgets/add_quantity_field.dart';
 
 class PharmacyDrugDetails extends StatefulWidget {
   final int pageId;
   final String page;
-  final String medId;
+  final Drug drug;
   const PharmacyDrugDetails(
-      {Key? key, required this.pageId, required this.page, required this.medId})
+      {Key? key, required this.pageId, required this.page, required this.drug})
       : super(key: key);
 
   @override
@@ -31,17 +27,15 @@ class PharmacyDrugDetails extends StatefulWidget {
 }
 
 class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
-  final Rx<bool> _isLoaded = false.obs;
-  bool get isLoaded => _isLoaded.value;
   @override
   Widget build(BuildContext context) {
     var quantityController = TextEditingController();
-    var drug = Get.find<SlideDrugController>().slideDrugList[widget.pageId];
-    final SlideDrugController slideDrugController =
-        Get.put(SlideDrugController());
-    Future.delayed(Duration.zero, () {
-      slideDrugController.initData(drug, Get.find<CartController>());
-    });
+    // var drug = Get.find<SlideDrugController>().slideDrugList[widget.pageId];
+    // final SlideDrugController slideDrugController =
+    //     Get.put(SlideDrugController());
+    // Future.delayed(Duration.zero, () {
+    //   slideDrugController.initData(drug, Get.find<CartController>());
+    // });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -65,7 +59,8 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
               preferredSize: Size.fromHeight(20),
               child: Container(
                 child: Center(
-                    child: BigText(size: Dimensions.font26, text: drug.title)),
+                    child: BigText(
+                        size: Dimensions.font26, text: widget.drug.title)),
                 width: double.maxFinite,
                 padding: EdgeInsets.only(top: 5, bottom: 10),
                 decoration: BoxDecoration(
@@ -81,7 +76,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
             expandedHeight: 300,
             flexibleSpace: FlexibleSpaceBar(
               background: Image.network(
-                drug.photoUrl,
+                widget.drug.photoUrl,
                 width: double.maxFinite,
                 fit: BoxFit.cover,
               ),
@@ -89,14 +84,174 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
           ),
           SliverToBoxAdapter(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                     margin: EdgeInsets.only(
                         left: Dimensions.width20, right: Dimensions.width20),
-                    child: ExpandableTextWidget(
-                        text:
-                            "This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've usedThis video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used This video is about flutter GridView builder. How you can use flutter GridView builder to make an infinte list of contents or large list contents. Here I've used firebase to fetch all my data & show up in the list.firebase to fetch all my data & show up in the list.firebase to fetch all my data & show up in the list.firebase to fetch all my data & show up in the list.firebase to fetch all my data & show up in the list. firebase to fetch all my data & show up in the list.firebase to fetch all my data & show up in the list.firebase to fetch all my data & show up in the list." //drug.description!
-                        )),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Category",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.categories,
+                              color: AppColors.mainColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Manufacturing date",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.manufacturingDate,
+                              color: AppColors.yellowColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Expiring date",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.expiringDate,
+                              color: AppColors.mainColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Posted at",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width20,
+                            ),
+                            BigText(
+                              text: widget.drug.publishedDate,
+                              color: AppColors.yellowColor,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Price ",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            Row(
+                              children: [
+                                BigText(
+                                  text: 'BIF',
+                                  color: Colors.redAccent,
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width10 / 2,
+                                ),
+                                BigText(
+                                  text: widget.drug.price.toString(),
+                                  color: AppColors.mainColor,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Quantity",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.quantity.toString(),
+                              color: AppColors.yellowColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Units",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.units,
+                              color: AppColors.mainColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Status",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.status,
+                              color: AppColors.yellowColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Description",
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        ExpandableTextWidget(text: widget.drug.description),
+                      ],
+                    )),
               ],
             ),
           ),
@@ -136,7 +291,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                         TextButton(
                             onPressed: () {
                               postDrugController
-                                  .deleteByChangeVisibility(widget.medId);
+                                  .deleteByChangeVisibility(widget.drug.id);
                             },
                             child: BigText(
                               text: "Yes",
@@ -178,146 +333,142 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                       children: [
                         Expanded(
                           child: SingleChildScrollView(
-                            child: !isLoaded
-                                ? Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.6,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(
-                                                Dimensions.radius20),
-                                            topRight: Radius.circular(
-                                                Dimensions.radius20))),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 400,
-                                          padding: EdgeInsets.only(
-                                              left: Dimensions.width10,
-                                              right: Dimensions.width10,
-                                              top: Dimensions.height45 * 2),
-                                          child: Column(
-                                            children: [
-                                              Container(
-                                                padding: EdgeInsets.only(
-                                                    bottom:
-                                                        Dimensions.height10 /
-                                                            2),
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            Dimensions
-                                                                    .radius20 /
-                                                                4),
-                                                    color: Theme.of(context)
-                                                        .cardColor,
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                          color:
-                                                              Colors.grey[200]!,
-                                                          blurRadius: 5,
-                                                          spreadRadius: 1)
-                                                    ]),
-                                                child: ListTile(
-                                                  leading: Icon(
-                                                    Icons
-                                                        .production_quantity_limits,
-                                                    size: 40,
-                                                    color: Theme.of(context)
-                                                        .disabledColor,
-                                                  ),
-                                                  title: Text(
-                                                      "Add new Quantity of this drug",
-                                                      style:
-                                                          robotoMedium.copyWith(
-                                                              fontSize:
-                                                                  Dimensions
-                                                                      .font20)),
-                                                  subtitle: Text(
-                                                      "the safe way to add a new quantity",
-                                                      maxLines: 1,
-                                                      overflow: TextOverflow
-                                                          .ellipsis,
-                                                      style: robotoRegular
-                                                          .copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .disabledColor,
-                                                              fontSize:
-                                                                  Dimensions
-                                                                      .font16)),
-                                                  trailing: Icon(
-                                                    Icons.check_circle,
-                                                    color: AppColors.mainColor,
-                                                  ),
-                                                ),
-                                              ),
-
-                                              SizedBox(
-                                                height: Dimensions.height30,
-                                              ),
-                                              //Quantity
-                                              PharmacyAddQuantityTextField(
-                                                textController:
-                                                    quantityController,
-                                                textInputType:
-                                                    TextInputType.number,
-                                                textInputAction:
-                                                    TextInputAction.done,
-                                                hintText: "Quantity",
-                                              ),
-                                              SizedBox(
-                                                height: Dimensions.height30,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  uploadDrugQuantity(
-                                                    widget.medId,
-                                                    int.parse(quantityController
-                                                        .text),
-                                                  );
-                                                },
-                                                child: Container(
-                                                  padding: EdgeInsets.only(
-                                                      top: Dimensions.height20,
-                                                      bottom:
-                                                          Dimensions.height20,
-                                                      left: Dimensions.width20 *
-                                                          3,
-                                                      right:
-                                                          Dimensions.width20 *
-                                                              3),
-                                                  child: BigText(
-                                                    text: 'Do it',
-                                                    color: Colors.white,
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius
-                                                          .circular(Dimensions
-                                                                  .radius20 /
-                                                              4),
-                                                      color:
-                                                          AppColors.mainColor,
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                            color: Colors
-                                                                .grey[200]!,
-                                                            blurRadius: 5,
-                                                            spreadRadius: 1)
-                                                      ]),
-                                                ),
-                                              ),
-                                            ],
+                              child: Container(
+                            height: MediaQuery.of(context).size.height * 0.6,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft:
+                                        Radius.circular(Dimensions.radius20),
+                                    topRight:
+                                        Radius.circular(Dimensions.radius20))),
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 400,
+                                  padding: EdgeInsets.only(
+                                      left: Dimensions.width10,
+                                      right: Dimensions.width10,
+                                      top: Dimensions.height45 * 2),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        padding: EdgeInsets.only(
+                                            bottom: Dimensions.height10 / 2),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.radius20 / 4),
+                                            color: Theme.of(context).cardColor,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Colors.grey[200]!,
+                                                  blurRadius: 5,
+                                                  spreadRadius: 1)
+                                            ]),
+                                        child: ListTile(
+                                          leading: Icon(
+                                            Icons.production_quantity_limits,
+                                            size: 40,
+                                            color:
+                                                Theme.of(context).disabledColor,
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  )
-                                : CircularProgressIndicator(
-                                    color: AppColors.mainColor,
+                                          title: Text(
+                                              "Add new Quantity of this drug",
+                                              style: robotoMedium.copyWith(
+                                                  fontSize: Dimensions.font20)),
+                                          subtitle: Text(
+                                              "the safe way to add a new quantity",
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: robotoRegular.copyWith(
+                                                  color: Theme.of(context)
+                                                      .disabledColor,
+                                                  fontSize: Dimensions.font16)),
+                                          trailing: Icon(
+                                            Icons.check_circle,
+                                            color: AppColors.mainColor,
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: Dimensions.height30,
+                                      ),
+                                      //Quantity
+                                      PharmacyAddQuantityTextField(
+                                        textController: quantityController,
+                                        textInputType: TextInputType.number,
+                                        textInputAction: TextInputAction.done,
+                                        hintText: "Quantity",
+                                      ),
+                                      SizedBox(
+                                        height: Dimensions.height30,
+                                      ),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          try {
+                                            if (quantityController
+                                                .text.isEmpty) {
+                                              showCustomSnackBar(
+                                                  "Fill your quantity please",
+                                                  title: "quantity");
+                                            } else {
+                                              final response = await firestore
+                                                  .collection('Medicines')
+                                                  .doc(widget.drug.id)
+                                                  .get();
+                                              var restQuantity =
+                                                  response.data() as Map;
+
+                                              firestore
+                                                  .collection('Medicines')
+                                                  .doc(widget.drug.id)
+                                                  .update({
+                                                "quantity": restQuantity[
+                                                        'quantity'] +
+                                                    int.parse(
+                                                        quantityController.text)
+                                              }).then((value) {
+                                                Get.toNamed(RouteHelper
+                                                    .getPharmacyMedecinePage());
+                                              });
+                                            }
+                                          } catch (e) {
+                                            showCustomSnackBar(
+                                              e.toString(),
+                                              title: "Add item quantity",
+                                            );
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.only(
+                                              top: Dimensions.height20,
+                                              bottom: Dimensions.height20,
+                                              left: Dimensions.width20 * 3,
+                                              right: Dimensions.width20 * 3),
+                                          child: BigText(
+                                            text: 'Do it',
+                                            color: Colors.white,
+                                          ),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Dimensions.radius20 / 4),
+                                              color: AppColors.mainColor,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                    color: Colors.grey[200]!,
+                                                    blurRadius: 5,
+                                                    spreadRadius: 1)
+                                              ]),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                          ),
+                                )
+                              ],
+                            ),
+                          )),
                         ),
                       ],
                     );
@@ -340,8 +491,11 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
             ),
             GestureDetector(
               onTap: () {
-                Get.toNamed(RouteHelper.getPharmacyUpdateDrugPage(
-                    widget.medId, widget.pageId));
+                // Get.toNamed(RouteHelper.getPharmacyUpdateDrugPage(
+                //     widget.medId, widget.pageId));
+                Get.to(
+                  () => UpdateDrugScreen(drug: widget.drug),
+                );
               },
               child: Container(
                 padding: EdgeInsets.only(
@@ -363,33 +517,5 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
         ),
       ),
     );
-  }
-
-  Future<void> uploadDrugQuantity(
-    String id,
-    int quantity,
-  ) async {
-    _isLoaded.value = true;
-    try {
-      if (quantity == null) {
-        showCustomSnackBar("Fill your quantity please", title: "quantity");
-      } else {
-        final response = await firestore.collection('Medicines').doc(id).get();
-        var restQuantity = response.data() as Map;
-
-        firestore
-            .collection('Medicines')
-            .doc(id)
-            .update({"quantity": restQuantity['quantity'] + quantity}).then(
-                (value) async {});
-        _isLoaded.value = false;
-        Get.back();
-      }
-    } catch (e) {
-      showCustomSnackBar(
-        e.toString(),
-        title: "Charging the drug quantity",
-      );
-    }
   }
 }

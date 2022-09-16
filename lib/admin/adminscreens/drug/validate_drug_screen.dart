@@ -47,9 +47,9 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                         right: Dimensions.width20,
                         child: Container(
                           height: Dimensions.height45 * 1.3,
-                          margin: EdgeInsets.symmetric(vertical: 20),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                          margin: const EdgeInsets.symmetric(vertical: 20),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
                           decoration: BoxDecoration(
                             color: AppColors.secondColor,
                             borderRadius: BorderRadius.circular(29.5),

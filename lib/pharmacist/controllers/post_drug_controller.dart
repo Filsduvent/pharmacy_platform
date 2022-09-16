@@ -245,6 +245,8 @@ class PostDrugController extends GetxController {
             title: "man date");
       } else if (expiringDate.isEmpty) {
         showCustomSnackBar("Fill your expiring date please", title: "exp date");
+      } else if (photoUrl == null) {
+        showCustomSnackBar("Choose an image", title: "Image");
       } else if (categories.isEmpty) {
         showCustomSnackBar("Fill your category please", title: "category");
       } else if (price == null) {
@@ -256,8 +258,6 @@ class PostDrugController extends GetxController {
       } else if (description.isEmpty) {
         showCustomSnackBar("Fill your description please",
             title: "description");
-      } else if (photoUrl == null) {
-        showCustomSnackBar("Choose an image", title: "Image");
       } else {
         String uid = firebaseAuth.currentUser!.uid;
 
