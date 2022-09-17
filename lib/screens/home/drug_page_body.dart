@@ -1,9 +1,12 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:pharmacy_plateform/controllers/categories_controller.dart';
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
+import 'package:pharmacy_plateform/models/categories_model.dart';
 import 'package:pharmacy_plateform/models/drug_model.dart';
+import 'package:pharmacy_plateform/screens/category/category_details_screen.dart';
 import 'package:pharmacy_plateform/utils/colors.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
@@ -11,9 +14,9 @@ import 'package:pharmacy_plateform/widgets/icon_and_text_widget.dart';
 import 'package:pharmacy_plateform/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../controllers/recent_drug_controller.dart';
 import '../../routes/route_helper.dart';
+import '../../utils/app_constants.dart';
 
 class DrugPageBody extends StatefulWidget {
   const DrugPageBody({Key? key}) : super(key: key);
@@ -110,43 +113,67 @@ class _DrugPageBodyState extends State<DrugPageBody> {
           height: Dimensions.height30,
         ),
 
-        GetX<CategoriesController>(builder: (categoryController) {
-          return Container(
-            margin: EdgeInsets.only(
-                left: Dimensions.width20, right: Dimensions.width20),
-            height: Dimensions.height10 * 10,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: categoryController.categoryList.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    Container(
+        StreamBuilder<QuerySnapshot>(
+            stream: firestore.collection('Categories').snapshots(),
+            builder: (c, snapshot) {
+              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
+                  ? Container(
                       margin: EdgeInsets.only(
                           left: Dimensions.width20, right: Dimensions.width20),
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radius30),
-                        color: Colors.grey.shade100,
+                      height: Dimensions.height10 * 10,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          var categoryList = snapshot.data!.docs.map((cat) {
+                            return CategoriesModel.fromjson(cat);
+                          }).toList();
+                          CategoriesModel category = categoryList[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Get.to(
+                                () => CategoryDetailsScreen(
+                                  pageId: index,
+                                  page: "categoryDetails",
+                                  category: category,
+                                ),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      left: Dimensions.width20,
+                                      right: Dimensions.width20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.radius30),
+                                    color: Colors.grey.shade100,
+                                  ),
+                                  height: Dimensions.height30 * 2,
+                                  width: Dimensions.width30 * 2,
+                                  child:
+                                      Image.network(category.image.toString()),
+                                ),
+                                SizedBox(
+                                  height: Dimensions.height15,
+                                ),
+                                BigText(text: category.name.toString()),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: Dimensions.width20,
+                        ),
                       ),
-                      height: Dimensions.height30 * 2,
-                      width: Dimensions.width30 * 2,
-                      child: Image.network(
-                          categoryController.categoryList[index].image!),
-                    ),
-                    SizedBox(
-                      height: Dimensions.height15,
-                    ),
-                    BigText(text: categoryController.categoryList[index].name!),
-                  ],
-                );
-              },
-              separatorBuilder: (context, index) => SizedBox(
-                width: Dimensions.width20,
-              ),
-            ),
-          );
-        }),
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.mainColor,
+                      ),
+                    );
+            }),
 
         SizedBox(
           height: Dimensions.height30,

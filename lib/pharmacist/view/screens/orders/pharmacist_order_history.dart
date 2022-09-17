@@ -40,7 +40,7 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                                         as Map<String, dynamic>)['productID'])
                                 .get(),
                             builder: (c, snap) {
-                              return snap.hasData
+                              return snap.hasData && snap.data!.docs.isNotEmpty
                                   ? PharmacistOrderCard(
                                       itemCount: snap.data!.docs.length,
                                       data: snap.data!.docs,

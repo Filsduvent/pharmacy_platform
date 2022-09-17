@@ -252,7 +252,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                       ),
                     )
                   : const NoDataPage(
-                      text: "Empy",
+                      text: "No drug available",
                       imgPath: "assets/image/No_data.png",
                     );
             }));

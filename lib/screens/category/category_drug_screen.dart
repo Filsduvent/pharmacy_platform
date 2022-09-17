@@ -1,38 +1,41 @@
-// ignore_for_file: sort_child_properties_last, avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, sort_child_properties_last
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pharmacy_plateform/base/no_data_page.dart';
-import 'package:pharmacy_plateform/screens/pharmacy/pharmacy_drug_details.dart';
-import 'package:pharmacy_plateform/utils/colors.dart';
-import 'package:pharmacy_plateform/utils/dimensions.dart';
+import 'package:pharmacy_plateform/screens/category/category_drug_details.dart';
 
+import '../../base/no_data_page.dart';
+import '../../models/categories_model.dart';
 import '../../models/drug_model.dart';
-import '../../models/user_model.dart';
 import '../../utils/app_constants.dart';
+import '../../utils/colors.dart';
+import '../../utils/dimensions.dart';
 import '../../widgets/app_icon.dart';
 import '../../widgets/big_text.dart';
 
-class PharmacyDrugScreen extends StatefulWidget {
+class CategoryDrugScreen extends StatefulWidget {
   final int pageId;
   final String page;
-  final User user;
-  const PharmacyDrugScreen(
-      {Key? key, required this.pageId, required this.page, required this.user})
+  final CategoriesModel category;
+  const CategoryDrugScreen(
+      {Key? key,
+      required this.pageId,
+      required this.page,
+      required this.category})
       : super(key: key);
 
   @override
-  State<PharmacyDrugScreen> createState() => _PharmacyDrugScreenState();
+  State<CategoryDrugScreen> createState() => _CategoryDrugScreenState();
 }
 
-class _PharmacyDrugScreenState extends State<PharmacyDrugScreen> {
+class _CategoryDrugScreenState extends State<CategoryDrugScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'All drugs from ${widget.user.pharmaName}',
+            'All drugs from ${widget.category.name}',
             style: const TextStyle(color: Colors.white),
           ),
           elevation: 0,
@@ -54,15 +57,13 @@ class _PharmacyDrugScreenState extends State<PharmacyDrugScreen> {
         body: StreamBuilder<QuerySnapshot>(
             stream: firestore
                 .collection('Medicines')
-                .where('uid', isEqualTo: widget.user.uid)
+                .where('categories', isEqualTo: widget.category.name)
                 .where('visibility', isEqualTo: true)
                 .snapshots(),
             builder: (c, snapshot) {
-              return snapshot.hasData
+              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
                   ? SingleChildScrollView(
                       child: Container(
-                        // margin: EdgeInsets.only(
-                        //     top: Dimensions.height20, bottom: Dimensions.height20),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: GridView.builder(
@@ -80,17 +81,12 @@ class _PharmacyDrugScreenState extends State<PharmacyDrugScreen> {
                                   return Drug.fromSnap(drug);
                                 }).toList();
                                 Drug drug = drugList[index];
-                                return InkWell(
+                                return GestureDetector(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PharmacyDrugDetailsScreen(
-                                                  pageId: index,
-                                                  page: "details",
-                                                  drug: drug,
-                                                  user: widget.user),
+                                    Get.to(() => CategoryDrugDetailsScreen(
+                                          pageId: index,
+                                          page: "Details",
+                                          drug: drug,
                                         ));
                                   },
                                   child: Container(
@@ -150,18 +146,11 @@ class _PharmacyDrugScreenState extends State<PharmacyDrugScreen> {
                                                   ),
                                                   GestureDetector(
                                                     onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                PharmacyDrugDetailsScreen(
-                                                                    pageId:
-                                                                        index,
-                                                                    page:
-                                                                        "details",
-                                                                    drug: drug,
-                                                                    user: widget
-                                                                        .user),
+                                                      Get.to(() =>
+                                                          CategoryDrugDetailsScreen(
+                                                            pageId: index,
+                                                            page: "Details",
+                                                            drug: drug,
                                                           ));
                                                     },
                                                     child: Container(
@@ -205,7 +194,7 @@ class _PharmacyDrugScreenState extends State<PharmacyDrugScreen> {
                       ),
                     )
                   : const NoDataPage(
-                      text: "Pharmacy Empty",
+                      text: "No drug found in this category",
                       imgPath: "assets/image/No_data.png",
                     );
             }));
