@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_new, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_new, prefer_const_constructors, sized_box_for_whitespace
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +14,13 @@ class OrderCard extends StatelessWidget {
   final int itemCount;
   final List<DocumentSnapshot> data;
   final String orderID;
+  final int quantity;
   const OrderCard(
       {Key? key,
       required this.itemCount,
       required this.data,
-      required this.orderID})
+      required this.orderID,
+      required this.quantity})
       : super(key: key);
 
   @override
@@ -55,14 +57,14 @@ class OrderCard extends StatelessWidget {
             itemBuilder: (c, index) {
               Drug model =
                   Drug.fromMaps(data[index].data() as Map<String, dynamic>);
-              return sourceOrderInfo(model, context);
+              return sourceOrderInfo(model, quantity, context);
             }),
       ),
     );
   }
 }
 
-Widget sourceOrderInfo(Drug model, BuildContext context) {
+Widget sourceOrderInfo(Drug model, int quantity, BuildContext context) {
   MediaQuery.of(context).size.width;
 
   return Container(
@@ -112,14 +114,21 @@ Widget sourceOrderInfo(Drug model, BuildContext context) {
                     ),
                     BigText(
                       text: model.price.toString(),
-                      color: Colors.redAccent,
+                      color: Colors.black54,
+                    ),
+                    SizedBox(
+                      width: Dimensions.width10 / 10,
+                    ),
+                    BigText(
+                      text: "/1",
+                      color: Colors.black54,
                     ),
                   ],
                 ),
                 Row(
                   children: [
                     BigText(
-                      text: "5",
+                      text: quantity.toString(),
                       color: Colors.black54,
                     ),
                     SizedBox(
@@ -131,6 +140,22 @@ Widget sourceOrderInfo(Drug model, BuildContext context) {
                     ),
                   ],
                 ),
+                Row(
+                  children: [
+                    BigText(
+                      text: "BIF",
+                      color: Colors.black54,
+                    ),
+                    SizedBox(
+                      width: Dimensions.width10 / 10,
+                    ),
+                    BigText(
+                      text: (model.price * quantity).toString(),
+                      color: Colors.redAccent,
+                    ),
+                  ],
+                ),
+
                 // Divider(
                 //   height: Dimensions.height10 / 2,
                 //   color: Colors.black54,

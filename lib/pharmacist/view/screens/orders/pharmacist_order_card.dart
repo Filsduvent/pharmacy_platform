@@ -15,13 +15,15 @@ class PharmacistOrderCard extends StatelessWidget {
   final String orderID;
   final String addressId;
   final String orderBy;
+  final int quantity;
   const PharmacistOrderCard(
       {Key? key,
       required this.itemCount,
       required this.data,
       required this.orderID,
       required this.addressId,
-      required this.orderBy})
+      required this.orderBy,
+      required this.quantity})
       : super(key: key);
 
   @override
@@ -60,7 +62,7 @@ class PharmacistOrderCard extends StatelessWidget {
             itemBuilder: (c, index) {
               Drug model =
                   Drug.fromMaps(data[index].data() as Map<String, dynamic>);
-              return sourceOrderInfo(model, context);
+              return sourceOrderInfo(model, quantity, context);
             }),
       ),
     );

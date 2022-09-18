@@ -1,6 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks
-
-import 'dart:async';
+// ignore_for_file: non_constant_identifier_names, prefer_const_literals_to_create_immutables, unrelated_type_equality_checks, prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +10,7 @@ import 'package:pharmacy_plateform/screens/address/address_card.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 
+import '../../base/no_data_page.dart';
 import '../../utils/colors.dart';
 import '../../widgets/big_text.dart';
 
@@ -63,26 +62,25 @@ class _AddressScreenState extends State<AddressScreen> {
                       .collection('Address')
                       .snapshots(),
                   builder: (context, snapshot) {
-                    return !snapshot.hasData
-                        ? const Center(
-                            child: CircularProgressIndicator(),
-                          )
-                        : snapshot.data?.docs == 0
-                            ? noAddressCard()
-                            : ListView.builder(
-                                itemCount: snapshot.data?.docs.length,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return Addresscard(
-                                      model: AddressModel.fromJson(
-                                          snapshot.data?.docs[index].data()
-                                              as Map<String, dynamic>),
-                                      addressId: snapshot.data?.docs[index].id
-                                          as String,
-                                      currentIndex:
-                                          addressChangerController.count,
-                                      value: index);
-                                });
+                    return snapshot.hasData && snapshot.data!.docs.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: snapshot.data?.docs.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return Addresscard(
+                                  model: AddressModel.fromJson(
+                                      snapshot.data?.docs[index].data()
+                                          as Map<String, dynamic>),
+                                  addressId:
+                                      snapshot.data?.docs[index].id as String,
+                                  currentIndex: addressChangerController.count,
+                                  value: index);
+                            })
+                        : NoDataPage(
+                            text: "Empty address",
+                            imgPath: "assets/image/delivery_man_marker.png",
+                          );
+                    ;
                   }),
             );
           })

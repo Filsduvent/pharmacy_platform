@@ -35,7 +35,7 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                                 .where('uid',
                                     isEqualTo: AppConstants.sharedPreferences!
                                         .getString(AppConstants.userUID))
-                                .where('title',
+                                .where('id',
                                     whereIn: (snapshot.data?.docs[index].data()
                                         as Map<String, dynamic>)['productID'])
                                 .get(),
@@ -51,6 +51,9 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                                       addressId: (snapshot.data?.docs[index]
                                               .data()
                                           as Map<String, dynamic>)['addressId'],
+                                      quantity: (snapshot.data?.docs[index]
+                                              .data() as Map<String, dynamic>)[
+                                          'orderedProduct'][0]['quantity'],
                                     )
                                   : const Center(
                                       child: CircularProgressIndicator(),

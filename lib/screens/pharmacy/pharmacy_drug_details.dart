@@ -35,7 +35,7 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
         Get.put(SlideDrugController());
     //final CartController cartController = Get.put(CartController(Get.find()));
     Future.delayed(Duration.zero, () {
-      slideDrugController.initData(drugs, Get.find<CartController>());
+      slideDrugController.initData(drug, Get.find<CartController>());
     });
 
     return Scaffold(
@@ -449,8 +449,24 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    slideDrugController.addItem(drugs);
-                    checkItemInCart(drugs.title);
+                    if (slideDrugController.inCartItems > drug.quantity) {
+                      Get.snackbar(
+                        "Item count",
+                        "Your requested quantity is greater than the available one please check the quantity",
+                        backgroundColor: AppColors.mainColor,
+                        colorText: Colors.white,
+                        icon: const Icon(
+                          Icons.alarm,
+                          color: Colors.white,
+                        ),
+                        barBlur: 20,
+                        isDismissible: true,
+                        duration: const Duration(seconds: 5),
+                      );
+                    } else {
+                      slideDrugController.addItem(drug);
+                      addItemToCartById(drug.id);
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.only(
@@ -459,7 +475,7 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                         left: Dimensions.width20,
                         right: Dimensions.width20),
                     child: BigText(
-                      text: '\$ ${drugs.price} | Add to cart',
+                      text: '\$ ${drug.price} | Add to cart',
                       color: Colors.white,
                     ),
                     decoration: BoxDecoration(
@@ -475,30 +491,18 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
   }
 }
 
-void checkItemInCart(String title) {
+void checkItemInCart(String id) {
   AppConstants.sharedPreferences!
           .getStringList(AppConstants.userCartList)!
-          .contains(title)
-      ? Get.snackbar(
-          "Item existence",
-          "Item already in cart try to increase or decrease the quantity",
-          backgroundColor: AppColors.mainColor,
-          colorText: Colors.white,
-          icon: const Icon(
-            Icons.alarm,
-            color: Colors.white,
-          ),
-          barBlur: 20,
-          isDismissible: true,
-          duration: const Duration(seconds: 5),
-        )
-      : addItemToCartById(title);
+          .contains(id)
+      ? null
+      : addItemToCartById(id);
 }
 
-void addItemToCartById(String title) {
+void addItemToCartById(String id) {
   List<String> tempCartList = AppConstants.sharedPreferences!
       .getStringList(AppConstants.userCartList) as List<String>;
-  tempCartList.add(title);
+  tempCartList.add(id);
 
   firestore
       .collection('Users')

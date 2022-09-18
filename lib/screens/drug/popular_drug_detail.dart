@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmacy_plateform/controllers/cart_controller.dart';
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
@@ -8,20 +9,59 @@ import 'package:pharmacy_plateform/widgets/app_icon.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../models/drug_model.dart';
 import '../../routes/route_helper.dart';
 import '../../utils/colors.dart';
 import '../../widgets/app_column.dart';
 import '../../widgets/expandable_text_widget.dart';
 
-class PopularDrugDetail extends StatelessWidget {
+class PopularDrugDetail extends StatefulWidget {
   final int pageId;
   final String page;
-  const PopularDrugDetail({Key? key, required this.pageId, required this.page})
+  final Drug drug;
+  const PopularDrugDetail(
+      {Key? key, required this.pageId, required this.page, required this.drug})
       : super(key: key);
 
   @override
+  State<PopularDrugDetail> createState() => _PopularDrugDetailState();
+}
+
+class _PopularDrugDetailState extends State<PopularDrugDetail> {
+  String? pharmaName = "";
+  String? email = "";
+  String? phone = "";
+  String? address = "";
+
+  Future _getDataFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(widget.drug.uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          pharmaName = snapshot.data()!["pharmaName"];
+          email = snapshot.data()!["email"];
+          phone = snapshot.data()!["phone"];
+          address = snapshot.data()!["address"];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // ignore: todo
+    // TODO: implement initState
+    super.initState();
+
+    _getDataFromDatabase();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var drug = Get.find<SlideDrugController>().slideDrugList[pageId];
+    var drug = Get.find<SlideDrugController>().slideDrugList[widget.pageId];
     final SlideDrugController slideDrugController =
         Get.put(SlideDrugController());
     //final CartController cartController = Get.put(CartController(Get.find()));
@@ -42,7 +82,8 @@ class PopularDrugDetail extends StatelessWidget {
                 height: Dimensions.popularFoodImgSize,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        fit: BoxFit.cover, image: NetworkImage(drug.photoUrl))),
+                        fit: BoxFit.cover,
+                        image: NetworkImage(widget.drug.photoUrl))),
               ),
             ),
 
@@ -57,7 +98,7 @@ class PopularDrugDetail extends StatelessWidget {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        if (page == "cartpage") {
+                        if (widget.page == "cartpage") {
                           Get.toNamed(RouteHelper.getCartPage());
                         } else {
                           Get.toNamed(RouteHelper.getInitial());
@@ -126,25 +167,252 @@ class PopularDrugDetail extends StatelessWidget {
 
                 // the content of the white background
 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppColumn(
-                      text: drug.title,
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppColumn(text: widget.drug.title),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Category",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.categories,
+                              color: AppColors.mainColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Manufacturing date",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.manufacturingDate,
+                              color: AppColors.yellowColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Expiring date",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.expiringDate,
+                              color: AppColors.mainColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Posted at",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width20,
+                            ),
+                            BigText(
+                              text: widget.drug.publishedDate,
+                              color: AppColors.yellowColor,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Price ",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            Row(
+                              children: [
+                                BigText(
+                                  text: 'BIF',
+                                  color: Colors.redAccent,
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width10 / 2,
+                                ),
+                                BigText(
+                                  text: widget.drug.price.toString(),
+                                  color: AppColors.mainColor,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Quantity",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.quantity.toString(),
+                              color: AppColors.yellowColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Units",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.units,
+                              color: AppColors.mainColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Row(
+                          children: [
+                            BigText(
+                              text: "Status",
+                            ),
+                            SizedBox(
+                              width: Dimensions.width30,
+                            ),
+                            BigText(
+                              text: widget.drug.status,
+                              color: AppColors.yellowColor,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        BigText(
+                          text: "Description",
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        ExpandableTextWidget(text: widget.drug.description),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        BigText(
+                          text: "Pharmacy informations",
+                          color: AppColors.secondColor,
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                BigText(
+                                  text: "Pharmacy Name",
+                                  color: AppColors.yellowColor,
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width30,
+                                ),
+                                BigText(text: pharmaName!),
+                              ],
+                            ),
+                            SizedBox(
+                              height: Dimensions.height20,
+                            ),
+                            Row(
+                              children: [
+                                BigText(
+                                  text: "Email",
+                                  color: AppColors.mainColor,
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width30,
+                                ),
+                                BigText(text: email!),
+                              ],
+                            ),
+                            SizedBox(
+                              height: Dimensions.height20,
+                            ),
+                            Row(
+                              children: [
+                                BigText(
+                                  text: " Phone",
+                                  color: AppColors.yellowColor,
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width30,
+                                ),
+                                BigText(
+                                  text: phone!,
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: Dimensions.height20,
+                            ),
+                            Row(
+                              children: [
+                                BigText(
+                                  text: "Address",
+                                  color: AppColors.mainColor,
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width30,
+                                ),
+                                BigText(text: address!),
+                              ],
+                            ),
+                            SizedBox(
+                              height: Dimensions.height20,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: Dimensions.height20,
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: Dimensions.height20,
-                    ),
-                    BigText(text: 'Description'),
-                    SizedBox(
-                      height: Dimensions.height20,
-                    ),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: ExpandableTextWidget(text: drug.description),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -212,8 +480,25 @@ class PopularDrugDetail extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    slideDrugController.addItem(drug);
-                    checkItemInCart(drug.title);
+                    if (slideDrugController.inCartItems >
+                        widget.drug.quantity) {
+                      Get.snackbar(
+                        "Item count",
+                        "Your requested quantity is greater than the available one please check the quantity",
+                        backgroundColor: AppColors.mainColor,
+                        colorText: Colors.white,
+                        icon: const Icon(
+                          Icons.alarm,
+                          color: Colors.white,
+                        ),
+                        barBlur: 20,
+                        isDismissible: true,
+                        duration: const Duration(seconds: 5),
+                      );
+                    } else {
+                      slideDrugController.addItem(drug);
+                      addItemToCartById(drug.id);
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.only(
@@ -238,30 +523,18 @@ class PopularDrugDetail extends StatelessWidget {
   }
 }
 
-void checkItemInCart(String title) {
+void checkItemInCart(String id) {
   AppConstants.sharedPreferences!
           .getStringList(AppConstants.userCartList)!
-          .contains(title)
-      ? Get.snackbar(
-          "Item existence",
-          "Item already in cart try to increase or decrease the quantity",
-          backgroundColor: AppColors.mainColor,
-          colorText: Colors.white,
-          icon: const Icon(
-            Icons.alarm,
-            color: Colors.white,
-          ),
-          barBlur: 20,
-          isDismissible: true,
-          duration: const Duration(seconds: 5),
-        )
-      : addItemToCartById(title);
+          .contains(id)
+      ? null
+      : addItemToCartById(id);
 }
 
-void addItemToCartById(String title) {
+void addItemToCartById(String id) {
   List<String> tempCartList = AppConstants.sharedPreferences!
       .getStringList(AppConstants.userCartList) as List<String>;
-  tempCartList.add(title);
+  tempCartList.add(id);
 
   firestore
       .collection('Users')

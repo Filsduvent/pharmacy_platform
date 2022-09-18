@@ -171,6 +171,8 @@ class PharmacistOrderDetails extends StatelessWidget {
                                         orderID: orderID,
                                         orderBy: orderBy,
                                         addressId: addressId,
+                                        quantity: dataMap['orderedProduct'][0]
+                                            ['quantity'],
                                       )
                                     : Center(
                                         child: CircularProgressIndicator(),

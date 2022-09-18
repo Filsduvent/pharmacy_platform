@@ -3,6 +3,7 @@ import 'package:pharmacy_plateform/models/address_model.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 
 import '../base/show_custom_snackbar.dart';
+import '../routes/route_helper.dart';
 
 class AddressController extends GetxController {
   static AddressController instance = Get.find();
@@ -22,8 +23,6 @@ class AddressController extends GetxController {
       String quarter,
       String avenue,
       String houseNumber) async {
-    _isLoading.value = true;
-
     try {
       if (name.isEmpty) {
         showCustomSnackBar("Name field can not be empty", title: "Name");
@@ -44,6 +43,7 @@ class AddressController extends GetxController {
         showCustomSnackBar("House Number field can not be empty",
             title: "House Number");
       } else {
+        _isLoading.value = true;
         final model = AddressModel(
                 name: name,
                 phoneNumber: phoneNumber,
@@ -65,6 +65,8 @@ class AddressController extends GetxController {
             .set(model)
             .then((value) {
           Get.snackbar('Uploading address', 'New address added successfully!');
+          Get.toNamed(RouteHelper.getAddressScreen());
+          _isLoading.value = false;
         });
       }
     } catch (e) {

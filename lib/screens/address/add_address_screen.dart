@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 
 import '../../pharmacist/view/screens/widgets/Pharmacy_app_text_field.dart';

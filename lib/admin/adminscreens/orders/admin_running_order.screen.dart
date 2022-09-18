@@ -132,7 +132,7 @@ class _AdminRunningOrderScreenState extends State<AdminRunningOrderScreen> {
                                       return FutureBuilder<QuerySnapshot>(
                                           future: firestore
                                               .collection('Medicines')
-                                              .where('title',
+                                              .where('id',
                                                   whereIn: (snapshot
                                                               .data?.docs[index]
                                                               .data()

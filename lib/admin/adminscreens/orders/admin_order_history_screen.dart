@@ -132,7 +132,7 @@ class _AdminOrderHistoryScreenState extends State<AdminOrderHistoryScreen> {
                                       return FutureBuilder<QuerySnapshot>(
                                           future: firestore
                                               .collection('Medicines')
-                                              .where('title',
+                                              .where('id',
                                                   whereIn: (snapshot
                                                               .data?.docs[index]
                                                               .data()
@@ -173,6 +173,7 @@ class _AdminOrderHistoryScreenState extends State<AdminOrderHistoryScreen> {
                                                   );
                                           });
                                     })
+                                // ignore: prefer_const_constructors
                                 : CustomLoader(),
                           ),
                         ),

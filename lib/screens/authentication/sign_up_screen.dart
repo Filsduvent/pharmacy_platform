@@ -1,13 +1,14 @@
-// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, sort_child_properties_last, prefer_typing_uninitialized_variables, unused_field, prefer_final_fields
+// ignore_for_file: sized_box_for_whitespace, prefer_const_constructors, sort_child_properties_last, prefer_typing_uninitialized_variables, unused_field, prefer_final_fields, avoid_unnecessary_containers
+
+import 'dart:io';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pharmacy_plateform/base/custom_loader.dart';
-import 'package:pharmacy_plateform/base/show_custom_snackbar.dart';
-import 'package:pharmacy_plateform/controllers/auth_controller.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
-
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/app_icon.dart';
@@ -40,6 +41,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     'Provider'
   ];
   var role = "Customer";
+  File? imageFile;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Obx(() {
@@ -53,41 +56,49 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.maxFinite,
                         height: Dimensions.popularFoodImgSize / 1.2,
                         color: Colors.grey.withOpacity(0.1))),
+
                 Positioned(
                   left: Dimensions.height30 * 4,
                   right: Dimensions.height30 * 4,
                   child: Padding(
                     padding: EdgeInsets.only(
-                      top: Dimensions.height30 * 3,
+                      top: Dimensions.height30 * 2,
                     ),
                     child: Center(
-                        child: Stack(
-                      children: [
-                        AppIcon(
-                          icon: Icons.person,
-                          backgroundColor: AppColors.mainColor,
-                          iconColor: Colors.white,
-                          iconSize: Dimensions.height45 + Dimensions.height30,
-                          size: Dimensions.height15 * 10,
-                        ),
-                        // choose photo icon
-                        Positioned(
-                          left: Dimensions.width20 * 4,
-                          child: GestureDetector(
-                            onTap: () => authController.pickImage(),
-                            child: AppIcon(
-                              icon: Icons.add_a_photo,
-                              backgroundColor: Colors.white,
-                              iconColor: AppColors.mainColor,
-                              iconSize: Dimensions.height30,
-                              size: Dimensions.height30 * 2,
-                            ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                          child: CircleAvatar(
+                            radius:
+                                Dimensions.radius30 * 2 + Dimensions.radius15,
+                            backgroundImage: imageFile == null
+                                ? AssetImage(
+                                    "assets/image/user_avatar_image.jpg")
+                                : Image.file(imageFile!).image,
+                            backgroundColor: AppColors.mainColor,
                           ),
-                        )
-                      ],
-                    )),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
+
+                // choose photo icon
+                Positioned(
+                  top: Dimensions.height45 * 4,
+                  left: Dimensions.width45 * 5,
+                  child: GestureDetector(
+                    onTap: () => _showImageDialog(),
+                    child: AppIcon(
+                      icon: Icons.add_a_photo,
+                      backgroundColor: AppColors.mainColor,
+                      iconColor: Colors.white,
+                      iconSize: Dimensions.height30,
+                      size: Dimensions.height30 * 2,
+                    ),
+                  ),
+                ),
+
                 Positioned(
                   left: 0,
                   right: 0,
@@ -427,37 +438,90 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }));
   }
 
-  void _registration() {
-    String username = nameController.text.trim();
-    String email = emailController.text.trim();
-    String phone = phoneController.text.trim();
-    String address = addressController.text.trim();
-    String password = passwordController.text.trim();
-    String confirmPass = confirmController.text.trim();
+  void _showImageDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: BigText(
+              text: "Please select an option",
+              color: AppColors.mainBlackColor,
+              size: Dimensions.font20,
+            ),
+            children: [
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    const Icon(Icons.camera_alt),
+                    const Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Camera",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  _getFromCamera();
+                },
+              ),
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    const Icon(Icons.image),
+                    const Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Gallery",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  _getFromGallery();
+                },
+              ),
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    const Icon(Icons.cancel),
+                    const Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Cancel",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: () => Get.back(),
+              ),
+            ],
+          );
+        });
+  }
 
-    if (username.isEmpty) {
-      showCustomSnackBar("Fill your username please", title: "UserName");
-    } else if (email.isEmpty) {
-      showCustomSnackBar("Fill your email please", title: "Email");
-    } else if (!GetUtils.isEmail(email)) {
-      showCustomSnackBar("Fill a valid  email please", title: "Valid email");
-    } else if (phone.isEmpty) {
-      showCustomSnackBar("Fill your phone number please",
-          title: "Phone number");
-    } else if (address.isEmpty) {
-      showCustomSnackBar("Fill your address please", title: "Address");
-    } else if (password.isEmpty) {
-      showCustomSnackBar("Fill your password please", title: "Password");
-    } else if (password.length < 6) {
-      showCustomSnackBar("Password can't be less than 6 characters",
-          title: "Password valid");
-    } else if (confirmPass.isEmpty) {
-      showCustomSnackBar("Confirm your password  please",
-          title: "Confirm password");
-    } else if (passwordController.text != confirmController.text) {
-      showCustomSnackBar("Password don't match", title: "Verification");
-    } else {
-      showCustomSnackBar("All went well", title: "Perfect");
+  void _getFromCamera() async {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    _cropImage(pickedFile!.path);
+    Get.back();
+  }
+
+  void _getFromGallery() async {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    _cropImage(pickedFile!.path);
+    Get.back();
+  }
+
+  void _cropImage(filePath) async {
+    CroppedFile? croppedImage = await ImageCropper()
+        .cropImage(sourcePath: filePath, maxHeight: 1080, maxWidth: 1080);
+
+    if (croppedImage != null) {
+      setState(() {
+        imageFile = File(croppedImage.path);
+      });
     }
   }
 }

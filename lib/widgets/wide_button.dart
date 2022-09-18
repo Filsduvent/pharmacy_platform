@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pharmacy_plateform/utils/colors.dart';
 
 class WideButton extends StatelessWidget {
   final String message;
@@ -9,13 +10,13 @@ class WideButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
+      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: Center(
         child: InkWell(
           onTap: onPressed,
           child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.pink,
+            decoration: BoxDecoration(
+              color: AppColors.secondColor,
             ),
             width: MediaQuery.of(context).size.width * 0.5,
             height: 50.0,

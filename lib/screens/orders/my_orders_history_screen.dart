@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
+import 'package:pharmacy_plateform/utils/colors.dart';
 import 'package:pharmacy_plateform/widgets/order_card.dart';
 
-import '../../utils/colors.dart';
+import '../../base/no_data_page.dart';
 
 class MyOrdersHistoryScreen extends StatefulWidget {
   const MyOrdersHistoryScreen({Key? key}) : super(key: key);
@@ -35,7 +34,7 @@ class _MyOrdersHistoryScreenState extends State<MyOrdersHistoryScreen> {
                     .where('orderStatus', isEqualTo: "Received")
                     .snapshots(),
             builder: (c, snapshot) {
-              return snapshot.hasData
+              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
                   ? ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (c, index) {
@@ -44,7 +43,7 @@ class _MyOrdersHistoryScreenState extends State<MyOrdersHistoryScreen> {
                         return FutureBuilder<QuerySnapshot>(
                             future: firestore
                                 .collection('Medicines')
-                                .where('title',
+                                .where('id',
                                     whereIn: (snapshot.data?.docs[index].data()
                                         as Map<String, dynamic>)['productID'])
                                 .get(),
@@ -53,13 +52,23 @@ class _MyOrdersHistoryScreenState extends State<MyOrdersHistoryScreen> {
                                   ? OrderCard(
                                       itemCount: snap.data!.docs.length,
                                       data: snap.data!.docs,
-                                      orderID: snapshot.data!.docs[index].id)
-                                  : const Center(
-                                      child: CircularProgressIndicator(),
+                                      orderID: snapshot.data!.docs[index].id,
+                                      quantity: (snapshot.data?.docs[index]
+                                              .data() as Map<String, dynamic>)[
+                                          'orderedProduct'][0]['quantity'],
+                                    )
+                                  : Center(
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.mainColor,
+                                      ),
                                     );
                             });
                       })
-                  : CustomLoader();
+                  // ignore: prefer_const_constructors
+                  : NoDataPage(
+                      text: "Empty",
+                      imgPath: "assets/image/empty_box.png",
+                    );
             }),
       ),
     );

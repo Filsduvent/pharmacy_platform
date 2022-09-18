@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, unused_import, unused_local_variable, no_leading_underscores_for_local_identifiers
 import 'dart:convert';
 
 import 'package:pharmacy_plateform/base/no_data_page.dart';

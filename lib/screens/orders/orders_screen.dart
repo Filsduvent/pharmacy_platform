@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -73,13 +73,14 @@ class _OrderScreenState extends State<OrderScreen>
               ],
             )
           : Container(
+              color: Colors.white,
               child: Center(
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
                     width: double.maxFinite,
-                    height: Dimensions.height20 * 8,
+                    height: Dimensions.height30 * 10,
                     margin: EdgeInsets.only(
                         left: Dimensions.width20, right: Dimensions.width20),
                     decoration: BoxDecoration(
@@ -88,6 +89,9 @@ class _OrderScreenState extends State<OrderScreen>
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: AssetImage("assets/image/account.png"))),
+                  ),
+                  SizedBox(
+                    height: Dimensions.height20,
                   ),
                   GestureDetector(
                     onTap: () {

@@ -1,18 +1,12 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
-
-import 'dart:convert';
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new, deprecated_member_use, no_leading_underscores_for_local_identifiers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/base/custom_loader.dart';
-import 'package:pharmacy_plateform/models/cart_model.dart';
-import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../utils/colors.dart';
 
 class PlaceOrder extends StatefulWidget {
@@ -105,26 +99,25 @@ class _PlaceOrderState extends State<PlaceOrder> {
           "orderStatus": "Pending",
           "id": AppConstants.sharedPreferences!.getString(AppConstants.userUID)!
         });*/
-        writeOrderDetailsPharmacy({
-          AppConstants.addressId: widget.addressId,
-          "orderBy":
-              AppConstants.sharedPreferences!.getString(AppConstants.userUID),
-          "productID": AppConstants.sharedPreferences!
-              .getStringList(AppConstants.userCartList),
-          "orderedProduct": _tmp,
-          "paymentDetails": "Cash on Delivery",
-          AppConstants.orderTime:
-              DateTime.now().millisecondsSinceEpoch.toString(),
-          "isSuccess": true,
-          "totalAmount": cartControllers.totalAmount,
-          "orderStatus": "Pending",
-        }).whenComplete(() => {
-              emptyCartNow(),
-              cartControllers.addToHistory(),
-              _isLoaded.value = false
-            });
       }
     }
+    writeOrderDetailsPharmacy({
+      AppConstants.addressId: widget.addressId,
+      "orderBy":
+          AppConstants.sharedPreferences!.getString(AppConstants.userUID),
+      "productID": AppConstants.sharedPreferences!
+          .getStringList(AppConstants.userCartList),
+      "orderedProduct": _tmp,
+      "paymentDetails": "Cash on Delivery",
+      AppConstants.orderTime: DateTime.now().millisecondsSinceEpoch.toString(),
+      "isSuccess": true,
+      "totalAmount": cartControllers.totalAmount,
+      "orderStatus": "Pending",
+    }).whenComplete(() => {
+          emptyCartNow(),
+          cartControllers.addToHistory(),
+          _isLoaded.value = false
+        });
   }
 
   Future emptyCartNow() async {

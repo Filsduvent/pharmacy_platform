@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pharmacy_plateform/models/user_model.dart' as model;
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
@@ -14,41 +13,13 @@ import '../base/show_custom_snackbar.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
-  // final Rx<List<model.User>> _userList = Rx<List<model.User>>([]);
 
-  // List<model.User> get userList => _userList.value;
   Rx<User?>? _user;
   User? get user => _user?.value;
   Rx<File?>? _pickedImage;
   File? get profilePhoto => _pickedImage?.value;
   final Rx<bool> _isLoading = false.obs;
   bool get isLoading => _isLoading.value;
-/*
-  @override
-  void onInit() {
-    super.onInit();
-    _userList.bindStream(
-        firestore.collection('Users').snapshots().map((QuerySnapshot query) {
-      List<model.User> retVal = [];
-      for (var element in query.docs) {
-        retVal.add(
-          model.User.fromSnap(element),
-        );
-        _isLoading.value = true;
-      }
-      return retVal;
-    }));
-  }
-*/
-  void pickImage() async {
-    final pickedImage =
-        await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      Get.snackbar('Profile Picture',
-          'You have successfully selected your profile picture!');
-    }
-    _pickedImage = Rx<File?>(File(pickedImage!.path));
-  }
 
   // upload to firebase storage
   Future<String> _uploadToStorage(File image) async {

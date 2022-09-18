@@ -1,11 +1,10 @@
-// ignore_for_file: unnecessary_new, prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_interpolation_to_compose_strings
+// ignore_for_file: unnecessary_new, prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_interpolation_to_compose_strings, avoid_unnecessary_containers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pharmacy_plateform/models/address_model.dart';
-import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/screens/address/address_card.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
@@ -100,7 +99,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       BigText(
-                                        text: "Ordered at : ",
+                                        text: " At : ",
                                         color: Colors.grey,
                                       ),
                                       BigText(
@@ -142,7 +141,7 @@ class OrderDetailsScreen extends StatelessWidget {
                           FutureBuilder<QuerySnapshot>(
                               future: firestore
                                   .collection('Medicines')
-                                  .where('title', whereIn: dataMap['productID'])
+                                  .where('id', whereIn: dataMap['productID'])
                                   .get(),
                               builder: (c, dataSnapshot) {
                                 return dataSnapshot.hasData
@@ -150,7 +149,10 @@ class OrderDetailsScreen extends StatelessWidget {
                                         itemCount:
                                             dataSnapshot.data!.docs.length,
                                         data: dataSnapshot.data!.docs,
-                                        orderID: orderID)
+                                        orderID: orderID,
+                                        quantity: dataMap['orderedProduct'][0]
+                                            ['quantity'],
+                                      )
                                     : Center(
                                         child: CircularProgressIndicator(),
                                       );

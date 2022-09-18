@@ -1,8 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls, avoid_print
 
 import 'dart:convert';
-import 'dart:io';
-import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

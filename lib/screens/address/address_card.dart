@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:pharmacy_plateform/models/address_model.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
+import 'package:pharmacy_plateform/utils/colors.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
 
 import '../../utils/dimensions.dart';
@@ -38,7 +39,7 @@ class _AddresscardState extends State<Addresscard> {
         addressChangerController.displayResult(widget.value);
       }),
       child: Card(
-        color: Colors.pinkAccent.withOpacity(0.4),
+        color: AppColors.mainColor,
         child: Column(
           children: [
             Row(
@@ -46,7 +47,7 @@ class _AddresscardState extends State<Addresscard> {
                 Radio(
                   groupValue: widget.currentIndex,
                   value: widget.value,
-                  activeColor: Colors.pink,
+                  activeColor: AppColors.secondColor,
                   onChanged: (val) {
                     addressChangerController.displayResult(val as int);
                   },

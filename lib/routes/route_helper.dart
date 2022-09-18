@@ -20,6 +20,7 @@ import 'package:pharmacy_plateform/screens/address/add_address_screen.dart';
 import 'package:pharmacy_plateform/screens/address/address_screen.dart';
 import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
 import 'package:pharmacy_plateform/screens/drug/popular_drug_detail.dart';
+import 'package:pharmacy_plateform/screens/drug/view_all_screen.dart';
 import 'package:pharmacy_plateform/screens/home/home_page.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/order_details_screen.dart';
@@ -42,6 +43,7 @@ class RouteHelper {
   static const String addAddressScreen = "/add-address";
   static const String placeOrder = "/place-order";
   static const String orderDetailsScreen = "/order-details-screen";
+  static const String viewAllScreen = "/view-all-screen";
 
 //Routers for pharmacist
   static const String mainPharmacyPage = "/main-pharmacy-page";
@@ -93,6 +95,7 @@ class RouteHelper {
       '$placeOrder?addressId=$addressId';
   static String getOrderDetailsScreen(String orderID) =>
       '$orderDetailsScreen?orderID=$orderID';
+  static String getViewAllScreen() => '$viewAllScreen';
   //Routers for pharmacist
   static String getMainPharmacyPage() => '$mainPharmacyPage';
   static String getPharmacyMedecinePage() => '$pharmacyMedecinePage';
@@ -154,22 +157,22 @@ class RouteHelper {
           return SignInScreen();
         },
         transition: Transition.fade),
-    GetPage(
-        name: popularDrug,
-        page: () {
-          var pageId = Get.parameters['pageId'];
-          var page = Get.parameters["page"];
-          return PopularDrugDetail(pageId: int.parse(pageId!), page: page!);
-        },
-        transition: Transition.fadeIn),
-    GetPage(
-        name: recentDrug,
-        page: () {
-          var pageId = Get.parameters['pageId'];
-          var page = Get.parameters["page"];
-          return RecentDrugDetail(pageId: int.parse(pageId!), page: page!);
-        },
-        transition: Transition.fadeIn),
+    // GetPage(
+    //     name: popularDrug,
+    //     page: () {
+    //       var pageId = Get.parameters['pageId'];
+    //       var page = Get.parameters["page"];
+    //       return PopularDrugDetail(pageId: int.parse(pageId!), page: page!);
+    //     },
+    //     transition: Transition.fadeIn),
+    // GetPage(
+    //     name: recentDrug,
+    //     page: () {
+    //       var pageId = Get.parameters['pageId'];
+    //       var page = Get.parameters["page"];
+    //       return RecentDrugDetail(pageId: int.parse(pageId!), page: page!);
+    //     },
+    //     transition: Transition.fadeIn),
     GetPage(
         name: cartPage,
         page: () {
@@ -208,6 +211,12 @@ class RouteHelper {
           return OrderDetailsScreen(orderID: orderID!);
         },
         transition: Transition.fadeIn),
+    GetPage(
+        name: viewAllScreen,
+        page: () {
+          return ViewAllScreen();
+        },
+        transition: Transition.fade),
 
     //Routers for the pharmacist
     GetPage(
