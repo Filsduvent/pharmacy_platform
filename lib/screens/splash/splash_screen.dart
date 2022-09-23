@@ -1,11 +1,7 @@
 // ignore_for_file: unnecessary_new, prefer_const_constructors
 import 'dart:async';
-
-import 'package:pharmacy_plateform/controllers/recent_drug_controller.dart';
-import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../routes/route_helper.dart';
 import '../../utils/dimensions.dart';
 

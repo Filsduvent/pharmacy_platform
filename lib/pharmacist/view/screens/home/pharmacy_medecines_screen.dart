@@ -286,11 +286,6 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                                                               color: Colors
                                                                   .redAccent,
                                                             ),
-                                                            SizedBox(
-                                                              width: Dimensions
-                                                                      .width10 /
-                                                                  3,
-                                                            ),
                                                             SmallText(
                                                               text: drug
                                                                   .categories,

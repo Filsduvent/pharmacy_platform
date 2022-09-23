@@ -1,12 +1,10 @@
-// ignore_for_file: sized_box_for_whitespace
+// ignore_for_file: sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/invalidate_drug_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/validate_drug_screen.dart';
 import 'package:pharmacy_plateform/widgets/app_icon.dart';
-
-import '../../../controllers/slide_drug_controller.dart';
 import '../../../routes/route_helper.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';

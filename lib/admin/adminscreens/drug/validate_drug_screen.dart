@@ -58,13 +58,13 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(0.8),
+                                padding: const EdgeInsets.all(0.8),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     BigText(
-                                      text: "Validated Medicines in stock : ",
+                                      text: "Valid drugs in stock : ",
                                       color: Colors.white,
                                     ),
                                     Container(
@@ -123,7 +123,8 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                           // the content of the white background
 
                           // ignore: unnecessary_null_comparison
-                          child: snapshot.hasData
+                          child: snapshot.hasData &&
+                                  snapshot.data!.docs.isNotEmpty
                               ? Stack(
                                   children: [
                                     GridView.builder(
@@ -187,16 +188,17 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                                                           right: Dimensions
                                                               .width10),
                                                       padding:
-                                                          EdgeInsets.all(0.8),
+                                                          const EdgeInsets.all(
+                                                              0.8),
                                                       decoration: BoxDecoration(
                                                           borderRadius:
                                                               BorderRadius.circular(
                                                                   Dimensions
                                                                       .radius30),
                                                           color: index.isEven
-                                                              ? Color(
+                                                              ? const Color(
                                                                   0xFF69c5df)
-                                                              : Color(
+                                                              : const Color(
                                                                   0xFF9294cc),
                                                           image: DecorationImage(
                                                               fit: BoxFit.cover,
@@ -286,11 +288,6 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                                                                       .font20,
                                                                   color: Colors
                                                                       .redAccent,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: Dimensions
-                                                                          .width10 /
-                                                                      3,
                                                                 ),
                                                                 SmallText(
                                                                   text: drug

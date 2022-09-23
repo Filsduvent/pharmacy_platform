@@ -1,12 +1,10 @@
+// ignore_for_file: non_constant_identifier_names, sized_box_for_whitespace
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/base/no_data_page.dart';
 import 'package:pharmacy_plateform/screens/pharmacy/pharmacy_drug_screen.dart';
-import 'package:pharmacy_plateform/widgets/app_icon.dart';
-
 import '../../models/user_model.dart';
 import '../../utils/app_constants.dart';
 import '../../utils/colors.dart';
@@ -47,7 +45,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                             top: Dimensions.height30,
                             bottom: Dimensions.height30),
                         child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
@@ -94,7 +92,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                                             boxShadow: [
                                               BoxShadow(
                                                 blurRadius: 1,
-                                                offset: Offset(0, 2),
+                                                offset: const Offset(0, 2),
                                                 color: Colors.grey
                                                     .withOpacity(0.3),
                                               )

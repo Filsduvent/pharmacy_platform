@@ -1,7 +1,8 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
-
 import '../../models/drug_model.dart';
 
 class DrugController extends GetxController {

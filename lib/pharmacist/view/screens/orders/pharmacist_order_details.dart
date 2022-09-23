@@ -1,22 +1,17 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_const_constructors, avoid_unnecessary_containers
+// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_const_constructors, avoid_unnecessary_containers, unused_local_variable
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
-
 import '../../../../models/address_model.dart';
-import '../../../../models/user_model.dart';
 import '../../../../screens/address/address_card.dart';
 import '../../../../utils/app_constants.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/dimensions.dart';
 import '../../../../widgets/big_text.dart';
-import '../../../../widgets/order_card.dart';
 
 String getOrderId = " ";
 
@@ -84,7 +79,7 @@ class PharmacistOrderDetails extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       BigText(
-                                        text: "Ordered at : ",
+                                        text: "On : ",
                                         color: Colors.grey,
                                       ),
                                       BigText(
@@ -160,7 +155,7 @@ class PharmacistOrderDetails extends StatelessWidget {
                                   .where('uid',
                                       isEqualTo: AppConstants.sharedPreferences!
                                           .getString(AppConstants.userUID))
-                                  .where('title', whereIn: dataMap['productID'])
+                                  .where('id', whereIn: dataMap['productID'])
                                   .get(),
                               builder: (c, dataSnapshot) {
                                 return dataSnapshot.hasData

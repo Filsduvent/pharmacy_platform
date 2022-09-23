@@ -45,7 +45,7 @@ class PharmacistOrderCard extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 blurRadius: 1,
-                offset: Offset(0, 2),
+                offset: const Offset(0, 2),
                 color: Colors.grey.withOpacity(0.3),
               )
             ]),
@@ -58,7 +58,7 @@ class PharmacistOrderCard extends StatelessWidget {
         height: itemCount * 155.0,
         child: ListView.builder(
             itemCount: itemCount,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (c, index) {
               Drug model =
                   Drug.fromMaps(data[index].data() as Map<String, dynamic>);

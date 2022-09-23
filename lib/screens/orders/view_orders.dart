@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_returning_null_for_void
+// ignore_for_file: avoid_returning_null_for_void, unused_local_variable, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -104,7 +104,7 @@ class ViewOrders extends StatelessWidget {
                         }),
                   ));
         } else {
-          return Text("Loading...");
+          return const Text("Loading...");
         }
       }),
     );

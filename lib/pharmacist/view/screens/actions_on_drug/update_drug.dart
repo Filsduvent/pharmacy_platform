@@ -120,7 +120,7 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    top: (Dimensions.popularFoodImgSize) / 1.2,
+                    top: (Dimensions.popularFoodImgSize - 20) / 1.2,
                     child: Container(
                       padding: EdgeInsets.only(
                           left: Dimensions.width20,

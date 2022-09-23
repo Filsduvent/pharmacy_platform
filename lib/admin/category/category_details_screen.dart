@@ -1,6 +1,5 @@
 // ignore_for_file: sort_child_properties_last, prefer_const_constructors
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/category/update_category.dart';
@@ -126,8 +125,6 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                         actions: [
                           TextButton(
                               onPressed: () {
-                                // postDrugController
-                                //     .deleteByChangeVisibility(widget.catId);
                                 deleteCategories(widget.category.id.toString());
                               },
                               child: BigText(
@@ -163,21 +160,11 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  // Get.toNamed(RouteHelper.getUpdateCategoryScreen(
-                  //     widget.catId,
-                  //     widget.pageId,
-                  //     listCategory![widget.pageId].image.toString(),
-                  //     listCategory[widget.pageId].name.toString(),
-                  //     listCategory[widget.pageId]
-                  //         .description
-                  //         .toString()));
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UpdateCategoryScreen(
-                          category: widget.category,
-                        ),
-                      ));
+                  Get.to(
+                      () => UpdateCategoryScreen(
+                            category: widget.category,
+                          ),
+                      transition: Transition.zoom);
                 },
                 child: Container(
                   padding: EdgeInsets.only(
@@ -201,10 +188,13 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
   }
 
   Future deleteCategories(String id) async {
+    Navigator.pop(context);
     try {
-      await firestore.collection('Categories').doc(id).delete().then(
-          (value) => /* Navigator.of(context).pop());*/ Get
-              .toNamed(RouteHelper.getCategoriesMainScreen()));
+      await firestore
+          .collection('Categories')
+          .doc(id)
+          .delete()
+          .then((value) => Get.toNamed(RouteHelper.getCategoriesMainScreen()));
     } catch (e) {
       showCustomSnackBar(
         e.toString(),

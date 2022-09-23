@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_history.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacy_shift_orders.dart';
-import 'package:pharmacy_plateform/screens/orders/my_orders_history_screen.dart';
-import 'package:pharmacy_plateform/screens/orders/my_orders_screen.dart';
 import 'package:pharmacy_plateform/utils/colors.dart';
 
 import '../../../../utils/app_constants.dart';

@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors_in_immutables
 
+import 'package:flutter/material.dart';
 
 class AppIcon extends StatelessWidget {
   final IconData icon;
@@ -12,7 +13,8 @@ class AppIcon extends StatelessWidget {
       required this.icon,
       this.backgroundColor = const Color(0xFFfcf4e4),
       this.iconColor = const Color(0xFF756d54),
-      this.size = 40, this.iconSize = 16})
+      this.size = 40,
+      this.iconSize = 16})
       : super(key: key);
 
   @override
@@ -27,7 +29,7 @@ class AppIcon extends StatelessWidget {
       child: Icon(
         icon,
         color: iconColor,
-        size:iconSize,
+        size: iconSize,
       ),
     );
   }

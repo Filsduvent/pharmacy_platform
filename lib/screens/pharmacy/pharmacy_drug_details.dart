@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers, unused_local_variable
 
 import 'package:pharmacy_plateform/controllers/cart_controller.dart';
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';

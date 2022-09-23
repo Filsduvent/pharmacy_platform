@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers
 
 import 'package:pharmacy_plateform/screens/home/drug_page_body.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';

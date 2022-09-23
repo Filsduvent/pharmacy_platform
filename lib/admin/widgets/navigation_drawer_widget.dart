@@ -1,18 +1,19 @@
 // ignore_for_file: prefer_const_constructors, dead_code, sized_box_for_whitespace, prefer_const_declarations, prefer_const_literals_to_create_immutables, non_constant_identifier_names
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/admindrawer/drawer_items.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
-
 import '../../../../utils/colors.dart';
 import '../../../../widgets/big_text.dart';
 import '../adminmodels/admin_drawer_item.dart';
 
 class AdminNavigationDrawerWidget extends StatefulWidget {
-  AdminNavigationDrawerWidget({Key? key}) : super(key: key);
+  const AdminNavigationDrawerWidget({Key? key}) : super(key: key);
 
   @override
   State<AdminNavigationDrawerWidget> createState() =>
@@ -22,6 +23,35 @@ class AdminNavigationDrawerWidget extends StatefulWidget {
 class _AdminNavigationDrawerWidgetState
     extends State<AdminNavigationDrawerWidget> {
   final padding = EdgeInsets.symmetric(horizontal: 20);
+  String? name = "";
+  String? image = "";
+
+  //Get data from the firebase
+  // ignore: unused_element
+  Future _getDataFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          name = snapshot.data()!["username"];
+          image = snapshot.data()!["profilePhoto"];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // ignore: todo
+    // TODO: implement initState
+
+    super.initState();
+    _getDataFromDatabase();
+  }
+
   @override
   Widget build(BuildContext context) {
     final safeArea =
@@ -40,16 +70,16 @@ class _AdminNavigationDrawerWidgetState
                 color: Colors.white12,
                 child: buildHeader(isCollapsed)),
             SizedBox(
-              height: 24,
+              height: 20,
             ),
             buildList(items: itemsFirst, isCollapsed: isCollapsed),
             SizedBox(
               height: 22,
             ),
-            Divider(
-              color: Colors.white70,
-            ),
-            SizedBox(height: 22),
+            // Divider(
+            //   color: Colors.white70,
+            // ),
+            // SizedBox(height: 20),
             // buildList(
             //     indexOffset: itemsFirst.length,
             //     items: itemsSecond,
@@ -72,11 +102,7 @@ class _AdminNavigationDrawerWidgetState
           width: 70,
           child: CircleAvatar(
             radius: Dimensions.radius30 * 2,
-            backgroundImage: NetworkImage(
-              AppConstants.sharedPreferences!
-                  .getString(AppConstants.userProfilePhoto)
-                  .toString(),
-            ),
+            backgroundImage: NetworkImage(image!),
             backgroundColor: AppColors.mainColor,
           ),
         )
@@ -89,27 +115,23 @@ class _AdminNavigationDrawerWidgetState
               child: CircleAvatar(
                 radius: Dimensions.radius30 * 2,
                 backgroundImage: NetworkImage(
-                  AppConstants.sharedPreferences!
-                      .getString(AppConstants.userProfilePhoto)
-                      .toString(),
+                  image!,
                 ),
                 backgroundColor: AppColors.mainColor,
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 15),
+              padding: EdgeInsets.only(left: 15),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   BigText(
-                      text: AppConstants.sharedPreferences!
-                          .getString(AppConstants.userName)
-                          .toString(),
-                      color: Colors.white,
-                      size: Dimensions.font26
-                      // style: TextStyle(
-                      //     fontSize: Dimensions.font20, color: Colors.white),
-                      ),
+                    text: name!,
+                    color: Colors.white,
+                    size: Dimensions.font26,
+                    // style: TextStyle(
+                    //     fontSize: Dimensions.font20, color: Colors.white),
+                  ),
                   SizedBox(
                     height: Dimensions.height10,
                   ),

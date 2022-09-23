@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last, unnecessary_null_comparison, avoid_print, prefer_const_constructors
+// ignore_for_file: sort_child_properties_last, unnecessary_null_comparison, avoid_print, prefer_const_constructors, prefer_final_fields
 
 import 'dart:io';
 

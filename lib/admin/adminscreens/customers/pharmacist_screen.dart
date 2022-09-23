@@ -1,9 +1,10 @@
+// ignore_for_file: avoid_unnecessary_containers
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/customers/invalid_pharmacist_screen.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/customers/valid_pharmacist_screen.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
-
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimensions.dart';

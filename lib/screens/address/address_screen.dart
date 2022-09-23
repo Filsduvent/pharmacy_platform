@@ -9,7 +9,6 @@ import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/screens/address/address_card.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
-
 import '../../base/no_data_page.dart';
 import '../../utils/colors.dart';
 import '../../widgets/big_text.dart';
@@ -80,7 +79,6 @@ class _AddressScreenState extends State<AddressScreen> {
                             text: "Empty address",
                             imgPath: "assets/image/delivery_man_marker.png",
                           );
-                    ;
                   }),
             );
           })

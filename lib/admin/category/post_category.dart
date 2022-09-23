@@ -1,13 +1,13 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, unused_field, prefer_final_fields, sort_child_properties_last
+// ignore_for_file: prefer_const_constructors, unnecessary_null_comparison, unused_field, prefer_final_fields, sort_child_properties_last, use_build_context_synchronously
 
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pharmacy_plateform/admin/admincontrollers/category_controller.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pharmacy_plateform/models/categories_model.dart';
-
 import '../../base/custom_loader.dart';
 import '../../base/show_custom_snackbar.dart';
 import '../../pharmacist/view/screens/widgets/Pharmacy_app_text_field.dart';
@@ -26,17 +26,15 @@ class PostCategoryForm extends StatefulWidget {
 }
 
 class _PostCategoryFormState extends State<PostCategoryForm> {
-  bool isLoading = false;
-
   var nameController = TextEditingController();
   var descriptionController = TextEditingController();
-
-  CategoryController categoryController = Get.put(CategoryController());
+  File? imageFile;
+  bool _isLoaded = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: !isLoading
+      body: !_isLoaded
           ? Stack(
               children: [
                 Positioned(
@@ -49,8 +47,11 @@ class _PostCategoryFormState extends State<PostCategoryForm> {
                       decoration: BoxDecoration(
                           color: Colors.transparent,
                           image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(categoryController.drugPhoto)))),
+                            fit: BoxFit.cover,
+                            image: imageFile == null
+                                ? const AssetImage("assets/image/category.png")
+                                : Image.file(imageFile!).image,
+                          ))),
                 ),
                 //The back button
 
@@ -70,12 +71,28 @@ class _PostCategoryFormState extends State<PostCategoryForm> {
                   ),
                 ),
 
+                // choose photo icon
+                Positioned(
+                  top: Dimensions.height45 * 4.5,
+                  left: Dimensions.width45 * 7.5,
+                  child: GestureDetector(
+                    onTap: () => _showImageDialog(),
+                    child: AppIcon(
+                      icon: Icons.add_a_photo,
+                      backgroundColor: AppColors.mainColor,
+                      iconColor: Colors.white,
+                      iconSize: Dimensions.height30,
+                      size: Dimensions.height30 * 2,
+                    ),
+                  ),
+                ),
+
                 // The white background
                 Positioned(
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  top: (Dimensions.popularFoodImgSize - 20) / 1.2,
+                  top: (Dimensions.popularFoodImgSize) / 1.2,
                   child: Container(
                     padding: EdgeInsets.only(
                         left: Dimensions.width20,
@@ -127,12 +144,66 @@ class _PostCategoryFormState extends State<PostCategoryForm> {
                               //sign up button
 
                               GestureDetector(
-                                onTap: () {
-                                  uploadCategoryItem(
-                                    nameController.text,
-                                    categoryController.drugPhoto,
-                                    descriptionController.text,
-                                  );
+                                onTap: () async {
+                                  try {
+                                    if (nameController.text.isEmpty) {
+                                      showCustomSnackBar(
+                                          "Fill the category name please",
+                                          title: "Name");
+                                    } else if (descriptionController
+                                        .text.isEmpty) {
+                                      showCustomSnackBar(
+                                          "Fill the category description please",
+                                          title: "Description");
+                                    } else if (imageFile == null) {
+                                      showCustomSnackBar("Choose an image",
+                                          title: "Image");
+                                    } else {
+                                      setState(() {
+                                        _isLoaded = true;
+                                      });
+                                      String downloadUrl =
+                                          await _uploadToStorage(
+                                              imageFile!,
+                                              DateTime.now()
+                                                  .millisecondsSinceEpoch
+                                                  .toString());
+
+                                      CategoriesModel category =
+                                          CategoriesModel(
+                                        id: DateTime.now()
+                                            .millisecondsSinceEpoch
+                                            .toString(),
+                                        name: nameController.text,
+                                        image: downloadUrl,
+                                        description: descriptionController.text,
+                                      );
+                                      firestore
+                                          .collection('Categories')
+                                          .doc(DateTime.now()
+                                              .millisecondsSinceEpoch
+                                              .toString())
+                                          .set(
+                                            category.tojson(),
+                                          );
+
+                                      Get.toNamed(RouteHelper
+                                          .getCategoriesMainScreen());
+                                      setState(() {
+                                        _isLoaded = false;
+                                      });
+                                    }
+                                  } catch (e) {
+                                    showCustomSnackBar(
+                                      e.toString(),
+                                      title: "Create category item",
+                                    );
+                                  }
+                                  // uploadCategoryItem(
+                                  //   nameController.text,
+                                  //   categoryController.drugPhoto,
+                                  //   descriptionController.text,
+                                  // );
                                 },
                                 child: Container(
                                   width: Dimensions.screenWidth / 2,
@@ -170,8 +241,8 @@ class _PostCategoryFormState extends State<PostCategoryForm> {
 
   // upload image to firebase storage
 
-  Future<String> _uploadToStorage(File image, String name) async {
-    Reference ref = firebaseStorage.ref().child('categoryPhoto').child(name);
+  Future<String> _uploadToStorage(File image, String id) async {
+    Reference ref = firebaseStorage.ref().child('categoryPhoto').child(id);
 
     UploadTask uploadTask = ref.putFile(image);
     TaskSnapshot snap = await uploadTask;
@@ -179,42 +250,92 @@ class _PostCategoryFormState extends State<PostCategoryForm> {
     return downloadUrl;
   }
 
-  Future uploadCategoryItem(
-    String name,
-    File? photoUrl,
-    String description,
-  ) async {
-    try {
-      if (name.isEmpty) {
-        showCustomSnackBar("Fill the category name please", title: "Name");
-      } else if (description.isEmpty) {
-        showCustomSnackBar("Fill the category description please",
-            title: "Description");
-      } else if (photoUrl == null) {
-        showCustomSnackBar("Choose an image", title: "Image");
-      } else {
-        isLoading = true;
-        String downloadUrl = await _uploadToStorage(photoUrl, name);
+  // choose photo dialog
 
-        CategoriesModel category = CategoriesModel(
-          id: name,
-          name: name,
-          image: downloadUrl,
-          description: description,
-        );
-        firestore.collection('Categories').doc(name).set(
-              category.tojson(),
-            );
+  void _showImageDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+            title: BigText(
+              text: "Please select an option",
+              color: AppColors.mainBlackColor,
+              size: Dimensions.font20,
+            ),
+            children: [
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    const Icon(Icons.camera_alt),
+                    const Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Camera",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  _getFromCamera();
+                },
+              ),
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    const Icon(Icons.image),
+                    const Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Gallery",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: () {
+                  _getFromGallery();
+                },
+              ),
+              SimpleDialogOption(
+                child: Row(
+                  children: [
+                    const Icon(Icons.cancel),
+                    const Padding(padding: EdgeInsets.all(7.0)),
+                    BigText(
+                      text: " Cancel",
+                      color: AppColors.mainBlackColor,
+                      size: Dimensions.font16,
+                    ),
+                  ],
+                ),
+                onPressed: () => Get.back(),
+              ),
+            ],
+          );
+        });
+  }
 
-        Get.toNamed(RouteHelper.getCategoriesMainScreen());
-      }
-    } catch (e) {
-      showCustomSnackBar(
-        e.toString(),
-        title: "Create category item",
-      );
+  void _getFromCamera() async {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    _cropImage(pickedFile!.path);
+    Navigator.pop(context);
+  }
+
+  void _getFromGallery() async {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    _cropImage(pickedFile!.path);
+    Navigator.pop(context);
+  }
+
+  void _cropImage(filePath) async {
+    CroppedFile? croppedImage = await ImageCropper()
+        .cropImage(sourcePath: filePath, maxHeight: 1080, maxWidth: 1080);
+
+    if (croppedImage != null) {
+      setState(() {
+        imageFile = File(croppedImage.path);
+      });
     }
-
-    isLoading = false;
   }
 }

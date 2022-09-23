@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pharmacy_plateform/controllers/cart_controller.dart';
-
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:pharmacy_plateform/screens/authentication/sign_up_screen.dart';
-import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
-import 'package:pharmacy_plateform/screens/home/main_drug_screen.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'controllers/categories_controller.dart';
 import 'helper/dependencies.dart' as dep;
-
 import 'firebase_options.dart';
 
 void main() async {

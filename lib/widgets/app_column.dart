@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:pharmacy_plateform/widgets/small_text.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/colors.dart';

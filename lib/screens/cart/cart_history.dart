@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_is_empty, prefer_interpolation_to_compose_strings, sized_box_for_whitespace, sort_child_properties_last, no_leading_underscores_for_local_identifiers
+// ignore_for_file: prefer_is_empty, prefer_interpolation_to_compose_strings, sized_box_for_whitespace, sort_child_properties_last, no_leading_underscores_for_local_identifiers, prefer_collection_literals
 
 import 'dart:convert';
 

@@ -50,7 +50,6 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
             stream: firestore
                 .collection('Medicines')
                 .where('visibility', isEqualTo: true)
-                .where('quantity', isGreaterThan: 0)
                 .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData && snapshot.data!.docs.isNotEmpty

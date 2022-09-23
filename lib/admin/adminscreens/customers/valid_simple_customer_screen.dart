@@ -1,9 +1,10 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/customers/val_simple_user_details.dart';
 import 'package:pharmacy_plateform/models/user_model.dart';
-import '../../../routes/route_helper.dart';
+import '../../../base/no_data_page.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimensions.dart';
@@ -125,7 +126,8 @@ class _ValidSimpleCustomerScreenState extends State<ValidSimpleCustomerScreen> {
                               color: Colors.white),
 
                           // the content of the white background
-                          child: snapshot.hasData
+                          child: snapshot.hasData &&
+                                  snapshot.data!.docs.isNotEmpty
                               ? Stack(
                                   children: [
                                     ListView.builder(
@@ -297,33 +299,9 @@ class _ValidSimpleCustomerScreenState extends State<ValidSimpleCustomerScreen> {
                                         })
                                   ],
                                 )
-                              : Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Image.asset(
-                                      "assets/image/No_data.png",
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.22,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.22,
-                                    ),
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.03,
-                                    ),
-                                    Text(
-                                      "No data found",
-                                      style: TextStyle(
-                                          fontSize: Dimensions.font26,
-                                          color:
-                                              Theme.of(context).disabledColor),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                              : NoDataPage(
+                                  text: "No customer found",
+                                  imgPath: "assets/image/customer.png",
                                 ),
                         ),
                       ),

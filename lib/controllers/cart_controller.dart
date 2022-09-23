@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/models/user_model.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
-
 import '../repository/cart_repo.dart';
 import '../utils/colors.dart';
 
@@ -48,6 +47,7 @@ class CartController extends GetxController {
     }));
   }
 
+  @override
   void onReady() {
     super.onReady();
     getCartContentData();

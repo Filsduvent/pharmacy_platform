@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/orders/admin_order_card.dart';
-
+import 'package:pharmacy_plateform/base/custom_loader.dart';
 import '../../../base/show_custom_snackbar.dart';
 import '../../../models/address_model.dart';
 import '../../../routes/route_helper.dart';
@@ -17,7 +17,7 @@ import '../../../widgets/big_text.dart';
 
 String getOrderId = " ";
 
-class AdminOrderDetailsScreen extends StatelessWidget {
+class AdminOrderDetailsScreen extends StatefulWidget {
   final String orderID;
   final String orderBy;
   final String addressId;
@@ -29,8 +29,15 @@ class AdminOrderDetailsScreen extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<AdminOrderDetailsScreen> createState() =>
+      _AdminOrderDetailsScreenState();
+}
+
+class _AdminOrderDetailsScreenState extends State<AdminOrderDetailsScreen> {
+  bool _isLoaded = false;
+  @override
   Widget build(BuildContext context) {
-    String getOrderId = orderID;
+    String getOrderId = widget.orderID;
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -38,229 +45,239 @@ class AdminOrderDetailsScreen extends StatelessWidget {
         backgroundColor: AppColors.mainColor,
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: FutureBuilder<DocumentSnapshot>(
-            future: firestore.collection('Orders').doc(getOrderId).get(),
-            builder: (c, snapshot) {
-              Map dataMap = {};
-              if (snapshot.hasData) {
-                dataMap = snapshot.data?.data() as Map;
-              }
-              return snapshot.hasData
-                  ? Container(
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: Dimensions.height20,
-                          ),
-                          Container(
-                            margin: EdgeInsets.all(Dimensions.width10),
-                            height: Dimensions.height45 * 3.7,
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(Dimensions.radius30),
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 1,
-                                    offset: Offset(0, 2),
-                                    color: Colors.grey.withOpacity(0.3),
-                                  )
-                                ]),
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                Dimensions.width10,
-                              ),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      BigText(
-                                        text: "Total Amount : ",
-                                        color: Colors.grey,
-                                      ),
-                                      BigText(
-                                        text:
-                                            "BIF ${dataMap['totalAmount'].toString()}",
-                                        color: Colors.redAccent,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      BigText(
-                                        text: "Ordered at : ",
-                                        color: Colors.grey,
-                                      ),
-                                      BigText(
-                                        text: DateFormat(
-                                                "dd MMMM, yyyy - hh:mm aa")
-                                            .format(DateTime
-                                                .fromMillisecondsSinceEpoch(
-                                                    int.parse(
-                                                        dataMap['orderTime']))),
-                                        color: AppColors.mainBlackColor,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      BigText(
-                                        text: "Order status : ",
-                                        color: Colors.grey,
-                                      ),
-                                      BigText(
-                                        text: dataMap['orderStatus'],
-                                        color: AppColors.mainColor,
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                  FutureBuilder<DocumentSnapshot>(
-                                      future: firestore
-                                          .collection('Users')
-                                          .doc(dataMap['orderBy'])
-                                          .get(),
-                                      builder: (context, snaps) {
-                                        Map byMap = {};
-                                        if (snaps.hasData) {
-                                          byMap = snaps.data!.data() as Map;
-                                        }
-                                        return snaps.hasData
-                                            ? Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  BigText(
-                                                    text: "Ordered by : ",
-                                                    color: Colors.grey,
-                                                  ),
-                                                  BigText(
-                                                    text: byMap['username'],
-                                                    color:
-                                                        AppColors.yellowColor,
-                                                  )
-                                                ],
-                                              )
-                                            : Container();
-                                      }),
-                                  SizedBox(
-                                    height: Dimensions.height10,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          FutureBuilder<QuerySnapshot>(
-                              future: firestore
-                                  .collection('Medicines')
-                                  .where('title', whereIn: dataMap['productID'])
-                                  .get(),
-                              builder: (c, dataSnapshot) {
-                                return dataSnapshot.hasData
-                                    ? AdminOrderCard(
-                                        itemCount:
-                                            dataSnapshot.data!.docs.length,
-                                        data: dataSnapshot.data!.docs,
-                                        orderID: orderID,
-                                        orderBy: orderBy,
-                                        addressId: addressId,
-                                        test: dataMap['orderedProduct'][0]
-                                            ['quantity'],
-                                      )
-                                    : Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                              }),
-                          FutureBuilder<DocumentSnapshot>(
-                              future: firestore
-                                  .collection('Users')
-                                  .doc(orderBy)
-                                  .collection('Address')
-                                  .doc(addressId)
-                                  .get(),
-                              builder: (c, snap) {
-                                return snap.hasData
-                                    ? AdminShippingDetails(
-                                        model: AddressModel.fromJson(snap.data!
-                                            .data() as Map<String, dynamic>))
-                                    : Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                              }),
-                          SizedBox(
-                            height: Dimensions.height20,
-                          ),
-                          !(dataMap['orderStatus'] == "Pending")
-                              ? Container()
-                              : GestureDetector(
-                                  onTap: () async {
-                                    confirmPendingToRunning(
-                                        context, getOrderId);
-                                  },
-                                  child: Container(
-                                    width: Dimensions.screenWidth - 20,
-                                    height: Dimensions.screenHeight / 13,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.radius30),
-                                        color: AppColors.mainColor),
-                                    child: Center(
-                                      child: BigText(
-                                        text: "Running Order",
-                                        size: Dimensions.font20 +
-                                            Dimensions.font20 / 2,
-                                        color: Colors.white,
-                                      ),
+      body: !_isLoaded
+          ? SingleChildScrollView(
+              child: FutureBuilder<DocumentSnapshot>(
+                  future: firestore.collection('Orders').doc(getOrderId).get(),
+                  builder: (c, snapshot) {
+                    Map dataMap = {};
+                    if (snapshot.hasData) {
+                      dataMap = snapshot.data?.data() as Map;
+                    }
+                    return snapshot.hasData
+                        ? Container(
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: Dimensions.height20,
+                                ),
+                                Container(
+                                  margin: EdgeInsets.all(Dimensions.width10),
+                                  height: Dimensions.height45 * 3.7,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.radius30),
+                                      color: Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 1,
+                                          offset: Offset(0, 2),
+                                          color: Colors.grey.withOpacity(0.3),
+                                        )
+                                      ]),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(
+                                      Dimensions.width10,
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: Dimensions.height10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            BigText(
+                                              text: "Total Amount : ",
+                                              color: Colors.grey,
+                                            ),
+                                            BigText(
+                                              text:
+                                                  "BIF ${dataMap['totalAmount'].toString()}",
+                                              color: Colors.redAccent,
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: Dimensions.height10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            BigText(
+                                              text: "On: ",
+                                              color: Colors.grey,
+                                            ),
+                                            BigText(
+                                              text: DateFormat(
+                                                      "dd MMMM, yyyy - hh:mm aa")
+                                                  .format(DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                          int.parse(dataMap[
+                                                              'orderTime']))),
+                                              color: AppColors.mainBlackColor,
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: Dimensions.height10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            BigText(
+                                              text: "Order status : ",
+                                              color: Colors.grey,
+                                            ),
+                                            BigText(
+                                              text: dataMap['orderStatus'],
+                                              color: AppColors.mainColor,
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: Dimensions.height10,
+                                        ),
+                                        FutureBuilder<DocumentSnapshot>(
+                                            future: firestore
+                                                .collection('Users')
+                                                .doc(dataMap['orderBy'])
+                                                .get(),
+                                            builder: (context, snaps) {
+                                              Map byMap = {};
+                                              if (snaps.hasData) {
+                                                byMap =
+                                                    snaps.data!.data() as Map;
+                                              }
+                                              return snaps.hasData
+                                                  ? Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        BigText(
+                                                          text: "Ordered by : ",
+                                                          color: Colors.grey,
+                                                        ),
+                                                        BigText(
+                                                          text:
+                                                              byMap['username'],
+                                                          color: AppColors
+                                                              .yellowColor,
+                                                        )
+                                                      ],
+                                                    )
+                                                  : Container();
+                                            }),
+                                        SizedBox(
+                                          height: Dimensions.height10,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
-                          SizedBox(
-                            height: Dimensions.height10,
-                          ),
-                        ],
-                      ),
-                    )
-                  : Center(
-                      child: CircularProgressIndicator(),
-                    );
-            }),
-      ),
+                                FutureBuilder<QuerySnapshot>(
+                                    future: firestore
+                                        .collection('Medicines')
+                                        .where('id',
+                                            whereIn: dataMap['productID'])
+                                        .get(),
+                                    builder: (c, dataSnapshot) {
+                                      return dataSnapshot.hasData
+                                          ? AdminOrderCard(
+                                              itemCount: dataSnapshot
+                                                  .data!.docs.length,
+                                              data: dataSnapshot.data!.docs,
+                                              orderID: widget.orderID,
+                                              orderBy: widget.orderBy,
+                                              addressId: widget.addressId,
+                                              quantity:
+                                                  dataMap['orderedProduct'][0]
+                                                      ['quantity'],
+                                            )
+                                          : Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColors.mainColor,
+                                              ),
+                                            );
+                                    }),
+                                FutureBuilder<DocumentSnapshot>(
+                                    future: firestore
+                                        .collection('Users')
+                                        .doc(widget.orderBy)
+                                        .collection('Address')
+                                        .doc(widget.addressId)
+                                        .get(),
+                                    builder: (c, snap) {
+                                      return snap.hasData
+                                          ? AdminShippingDetails(
+                                              model: AddressModel.fromJson(
+                                                  snap.data!.data()
+                                                      as Map<String, dynamic>))
+                                          : Center(
+                                              child: CircularProgressIndicator(
+                                                color: AppColors.mainColor,
+                                              ),
+                                            );
+                                    }),
+                                SizedBox(
+                                  height: Dimensions.height20,
+                                ),
+                                !(dataMap['orderStatus'] == "Pending")
+                                    ? Container()
+                                    : GestureDetector(
+                                        onTap: () async {
+                                          confirmPendingToRunning(
+                                              context, getOrderId);
+                                        },
+                                        child: Container(
+                                          width: Dimensions.screenWidth - 20,
+                                          height: Dimensions.screenHeight / 13,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Dimensions.radius30),
+                                              color: AppColors.mainColor),
+                                          child: Center(
+                                            child: BigText(
+                                              text: "Running Order",
+                                              size: Dimensions.font20 +
+                                                  Dimensions.font20 / 2,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                SizedBox(
+                                  height: Dimensions.height10,
+                                ),
+                              ],
+                            ),
+                          )
+                        : Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.mainColor,
+                            ),
+                          );
+                  }),
+            )
+          : CustomLoader(),
     ));
   }
 
   Future<void> confirmPendingToRunning(
       BuildContext context, String mOrderId) async {
     try {
+      setState(() {
+        _isLoaded = true;
+      });
       await firestore
           .collection('Orders')
           .doc(mOrderId)
-          .update({'orderStatus': "Running"}).then((_) async {
-        /* await firestore
-            .collection('Users')
-            .doc(orderBy)
-            .collection('Orders')
-            .doc(mOrderId)
-            .update({'orderStatus': "Running"});*/
-      });
+          .update({'orderStatus': "Running"}).then((_) async {});
       getOrderId = "";
 
       Get.toNamed(RouteHelper.getAdminOrderMainScreen());
@@ -277,6 +294,9 @@ class AdminOrderDetailsScreen extends StatelessWidget {
         isDismissible: true,
         duration: const Duration(seconds: 5),
       );
+      setState(() {
+        _isLoaded = false;
+      });
     } catch (e) {
       showCustomSnackBar(
         e.toString(),

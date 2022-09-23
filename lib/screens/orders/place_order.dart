@@ -135,21 +135,8 @@ class _PlaceOrderState extends State<PlaceOrder> {
       AppConstants.sharedPreferences!
           .setStringList(AppConstants.userCartList, tempList);
     });
-    Get.snackbar(
-      'Congratulations',
-      'Congratulations, Your Order has been placed successfully!',
-      backgroundColor: AppColors.mainColor,
-      colorText: Colors.white,
-      icon: const Icon(
-        Icons.alarm,
-        color: Colors.white,
-      ),
-      barBlur: 20,
-      isDismissible: true,
-      duration: const Duration(seconds: 5),
-    );
 
-    Get.toNamed(RouteHelper.getInitial());
+    Get.toNamed(RouteHelper.getOrderSuccessScreen());
   }
 
   /* Future writeOrderDetailsForUser(Map<String, dynamic> data) async {

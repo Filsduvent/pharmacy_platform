@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pharmacy_plateform/models/user_model.dart';
 import '../../../models/drug_model.dart';
 import '../../../routes/route_helper.dart';
 import '../../../utils/dimensions.dart';
@@ -17,7 +16,7 @@ class AdminOrderCard extends StatelessWidget {
   final String orderID;
   final String addressId;
   final String orderBy;
-  final int test;
+  final int quantity;
   const AdminOrderCard({
     Key? key,
     required this.itemCount,
@@ -25,7 +24,7 @@ class AdminOrderCard extends StatelessWidget {
     required this.orderID,
     required this.addressId,
     required this.orderBy,
-    required this.test,
+    required this.quantity,
   }) : super(key: key);
 
   @override
@@ -64,14 +63,14 @@ class AdminOrderCard extends StatelessWidget {
               Drug model =
                   Drug.fromMaps(data[index].data() as Map<String, dynamic>);
 
-              return sourceOrderInfo(model, test, context);
+              return sourceOrderInfo(model, quantity, context);
             }),
       ),
     );
   }
 }
 
-Widget sourceOrderInfo(Drug model, int test, BuildContext context) {
+Widget sourceOrderInfo(Drug model, int quantity, BuildContext context) {
   MediaQuery.of(context).size.width;
 
   return Container(
@@ -121,14 +120,21 @@ Widget sourceOrderInfo(Drug model, int test, BuildContext context) {
                     ),
                     BigText(
                       text: model.price.toString(),
-                      color: Colors.redAccent,
+                      color: Colors.black54,
+                    ),
+                    SizedBox(
+                      width: Dimensions.width10 / 10,
+                    ),
+                    BigText(
+                      text: "/1",
+                      color: Colors.black54,
                     ),
                   ],
                 ),
                 Row(
                   children: [
                     BigText(
-                      text: test.toString(),
+                      text: quantity.toString(),
                       color: Colors.black54,
                     ),
                     SizedBox(
@@ -137,6 +143,21 @@ Widget sourceOrderInfo(Drug model, int test, BuildContext context) {
                     BigText(
                       text: model.units,
                       color: Colors.black54,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    BigText(
+                      text: "BIF",
+                      color: Colors.black54,
+                    ),
+                    SizedBox(
+                      width: Dimensions.width10 / 10,
+                    ),
+                    BigText(
+                      text: (model.price * quantity).toString(),
+                      color: Colors.redAccent,
                     ),
                   ],
                 ),

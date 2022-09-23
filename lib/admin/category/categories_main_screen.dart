@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/category/category_details_screen.dart';
-
+import '../../base/no_data_page.dart';
 import '../../models/categories_model.dart';
 import '../../routes/route_helper.dart';
 import '../../utils/app_constants.dart';
@@ -12,10 +12,9 @@ import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/app_icon.dart';
 import '../../widgets/big_text.dart';
-import '../../widgets/small_text.dart';
 
 class CategoriesMainScreen extends StatefulWidget {
-  CategoriesMainScreen({
+  const CategoriesMainScreen({
     Key? key,
   }) : super(key: key);
 
@@ -149,7 +148,7 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
 
                     // the content of the white background
 
-                    child: snapshot.hasData
+                    child: snapshot.hasData && snapshot.data!.docs.isNotEmpty
                         ? Stack(
                             children: [
                               ListView.builder(
@@ -166,21 +165,12 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
 
                                     return GestureDetector(
                                       onTap: () {
-                                        // Get.toNamed(RouteHelper
-                                        //     .getCategoryDetailsScreen(
-                                        //   index,
-                                        //   "details",
-                                        //   category.id.toString(),
-                                        // ));
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  CategoryDetailsScreen(
-                                                      pageId: index,
-                                                      page: "catdetails",
-                                                      category: category),
-                                            ));
+                                        Get.to(
+                                            () => CategoryDetailsScreen(
+                                                pageId: index,
+                                                page: "catdetails",
+                                                category: category),
+                                            transition: Transition.fadeIn);
                                       },
                                       child: Container(
                                         margin: EdgeInsets.only(
@@ -270,8 +260,9 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
                                   })
                             ],
                           )
-                        : const Center(
-                            child: CircularProgressIndicator(),
+                        : NoDataPage(
+                            text: "No category found",
+                            imgPath: "assets/image/category.png",
                           ),
                   ),
                 ),
@@ -289,7 +280,7 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimensions.radius15)),
         onPressed: () {
-          categoryController.pickImage(context);
+          Get.toNamed(RouteHelper.getPostCategoryForm());
         },
       );
 }

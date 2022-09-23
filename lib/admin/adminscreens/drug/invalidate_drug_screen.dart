@@ -2,16 +2,12 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pharmacy_plateform/admin/adminscreens/drug/admin_valid_details_screen.dart';
 
 import '../../../models/drug_model.dart';
-import '../../../models/user_model.dart';
-import '../../../routes/route_helper.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimensions.dart';
-import '../../../widgets/app_icon.dart';
 import '../../../widgets/big_text.dart';
 import '../../../widgets/small_text.dart';
 
@@ -54,9 +50,9 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                         right: Dimensions.width20,
                         child: Container(
                           height: Dimensions.height45 * 1.3,
-                          margin: EdgeInsets.symmetric(vertical: 20),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                          margin: const EdgeInsets.symmetric(vertical: 20),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
                           decoration: BoxDecoration(
                             color: AppColors.secondColor,
                             borderRadius: BorderRadius.circular(29.5),
@@ -65,13 +61,13 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding: EdgeInsets.all(0.8),
+                                padding: const EdgeInsets.all(0.8),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     BigText(
-                                      text: "invalidate Medicines in stock : ",
+                                      text: "invalid drugs in stock : ",
                                       color: Colors.white,
                                     ),
                                     Container(
@@ -129,7 +125,8 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
 
                           // the content of the white background
 
-                          child: snapshot.hasData
+                          child: snapshot.hasData &&
+                                  snapshot.data!.docs.isNotEmpty
                               ? Stack(
                                   children: [
                                     GridView.builder(
@@ -148,12 +145,6 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
 
                                           return GestureDetector(
                                               onTap: () {
-                                                // Get.toNamed(RouteHelper
-                                                //     .getAdminValidDetailsScreen(
-                                                //         index,
-                                                //         "valid",
-                                                //         drug.id,
-                                                //         ));
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
@@ -169,12 +160,6 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                                 children: [
                                                   GestureDetector(
                                                     onTap: () {
-                                                      // Get.toNamed(RouteHelper
-                                                      //     .getAdminValidDetailsScreen(
-                                                      //   index,
-                                                      //   "home",
-                                                      //   drug.id,
-                                                      // ));
                                                       Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
@@ -199,16 +184,17 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                                           right: Dimensions
                                                               .width10),
                                                       padding:
-                                                          EdgeInsets.all(0.8),
+                                                          const EdgeInsets.all(
+                                                              0.8),
                                                       decoration: BoxDecoration(
                                                           borderRadius:
                                                               BorderRadius.circular(
                                                                   Dimensions
                                                                       .radius30),
                                                           color: index.isEven
-                                                              ? Color(
+                                                              ? const Color(
                                                                   0xFF69c5df)
-                                                              : Color(
+                                                              : const Color(
                                                                   0xFF9294cc),
                                                           image: DecorationImage(
                                                               fit: BoxFit.cover,
@@ -296,11 +282,6 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                                                       .font20,
                                                                   color: Colors
                                                                       .redAccent,
-                                                                ),
-                                                                SizedBox(
-                                                                  width: Dimensions
-                                                                          .width10 /
-                                                                      3,
                                                                 ),
                                                                 SmallText(
                                                                   text: drug

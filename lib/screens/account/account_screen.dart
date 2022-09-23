@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pharmacy_plateform/screens/account/update_success_screen.dart';
 import '../../../base/show_custom_snackbar.dart';
 import '../../../routes/route_helper.dart';
 import '../../../utils/app_constants.dart';
@@ -694,7 +695,7 @@ class _AccountScreenState extends State<AccountScreen> {
             .collection("Users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .update({'username': usernameController.text}).then((value) {
-          Get.back();
+          Get.to(UpdateSuccessScreen());
         });
       }
     } catch (e) {
@@ -715,7 +716,7 @@ class _AccountScreenState extends State<AccountScreen> {
             .collection("Users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .update({'phone': phoneController.text}).then((value) {
-          Get.back();
+          Get.to(UpdateSuccessScreen());
         });
       }
     } catch (e) {

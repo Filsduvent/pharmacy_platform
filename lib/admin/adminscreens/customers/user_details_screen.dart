@@ -1,11 +1,8 @@
 // ignore_for_file: sort_child_properties_last
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../models/user_model.dart';
-import '../../../routes/route_helper.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimensions.dart';
@@ -179,7 +176,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                               ),
                               BigText(text: widget.user.status),
                               SizedBox(
-                                width: Dimensions.width30 * 4,
+                                width: Dimensions.width30 * 3,
                               ),
                               buildSwitch(widget.user.uid, widget.user.status),
                             ]),
@@ -190,7 +187,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                 boxShadow: [
                                   BoxShadow(
                                     blurRadius: 1,
-                                    offset: Offset(0, 2),
+                                    offset: const Offset(0, 2),
                                     color: Colors.grey.withOpacity(0.3),
                                   )
                                 ]),

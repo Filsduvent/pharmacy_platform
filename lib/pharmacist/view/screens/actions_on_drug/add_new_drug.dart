@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, prefer_final_fields, prefer_typing_uninitialized_variables, prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:io';
 
@@ -13,7 +13,6 @@ import 'package:intl/intl.dart';
 import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:pharmacy_plateform/pharmacist/controllers/post_drug_controller.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../base/custom_loader.dart';
 import '../../../../base/show_custom_snackbar.dart';
 import '../../../../models/units_model.dart';
@@ -50,7 +49,6 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
   var category = "Pills";
   var units = "";
   String _data = "";
-  DateTime _dateTime = DateTime.now();
   List<DropdownMenuItem> categoriesItems = [];
   PostDrugController postDrugController = Get.put(PostDrugController());
 

@@ -1,16 +1,18 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, unused_field, prefer_const_constructors, use_build_context_synchronously, library_prefixes
+
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fStorage;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharmacy_plateform/models/categories_model.dart';
-
 import '../../base/custom_loader.dart';
 import '../../base/show_custom_snackbar.dart';
 import '../../pharmacist/view/screens/widgets/Pharmacy_app_text_field.dart';
 import '../../routes/route_helper.dart';
-import '../../utils/app_constants.dart';
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/app_icon.dart';
@@ -19,19 +21,19 @@ import '../../widgets/big_text.dart';
 class UpdateCategoryScreen extends StatefulWidget {
   final CategoriesModel category;
 
-  UpdateCategoryScreen({Key? key, required this.category}) : super(key: key);
+  const UpdateCategoryScreen({Key? key, required this.category})
+      : super(key: key);
 
   @override
   State<UpdateCategoryScreen> createState() => _UpdateCategoryScreenState();
 }
 
 class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
-  late bool isLoading;
   var nameController;
   var descriptionController;
-  var image;
-  Rx<File?>? _file;
-  File? get catPhoto => _file?.value;
+  File? imagexFile;
+  bool _isLoaded = false;
+  String? catImageUrl;
 
   @override
   void initState() {
@@ -40,14 +42,12 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
     nameController = TextEditingController(text: widget.category.name);
     descriptionController =
         TextEditingController(text: widget.category.description);
-    image = widget.category.image;
-    isLoading = false;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: !isLoading
+      body: !_isLoaded
           ? Stack(
               children: [
                 Positioned(
@@ -58,16 +58,13 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                       height: Dimensions.popularFoodImgSize / 1.2,
                       //color: Colors.grey.withOpacity(0.1),
                       //color: Colors.transparent,
-                      decoration: (image is String)
-                          ? BoxDecoration(
-                              color: Colors.transparent,
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(image.toString())))
-                          : BoxDecoration(
-                              color: Colors.transparent,
-                              image: DecorationImage(
-                                  fit: BoxFit.cover, image: FileImage(image)))),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: imagexFile == null
+                            ? NetworkImage(widget.category.image!)
+                            : Image.file(imagexFile!).image,
+                      ))),
                 ),
 
                 //The back button
@@ -81,11 +78,6 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                     children: [
                       GestureDetector(
                           onTap: () {
-                            // Get.toNamed(RouteHelper.getCategoryDetailsScreen(
-                            //   widget.pageId,
-                            //   "details",
-                            //   widget.catId,
-                            // ));
                             Get.back();
                           },
                           child: AppIcon(
@@ -99,11 +91,11 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                 // choose photo icon
                 Positioned(
                   top: Dimensions.height45 * 4.5,
-                  left: Dimensions.width45 * 8,
+                  left: Dimensions.width45 * 7.5,
                   child: GestureDetector(
                     onTap: () {
-                      pickImage(context);
-                    }, // => //postDrugController.pickImageUpdate(context),
+                      _showImageDialog();
+                    },
                     child: AppIcon(
                       icon: Icons.add_a_photo,
                       backgroundColor: Colors.white,
@@ -171,25 +163,54 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                               //sign up button
 
                               GestureDetector(
-                                onTap: () {
-                                  final catChangedPhotoUrl =
-                                      widget.category.image != catPhoto;
+                                onTap: () async {
                                   final catChangedname = widget.category.name !=
                                       nameController.text;
                                   final catChangeddesc =
                                       widget.category.description !=
                                           descriptionController.text;
 
-                                  final catUpdate = catChangedPhotoUrl ||
-                                      catChangedname ||
-                                      catChangeddesc;
+                                  final catUpdate =
+                                      catChangedname || catChangeddesc;
 
                                   if (catUpdate) {
-                                    uploadCategoryItem(
-                                      nameController.text,
-                                      _file?.value as File,
-                                      descriptionController.text,
-                                    );
+                                    try {
+                                      if (nameController.text.isEmpty) {
+                                        showCustomSnackBar(
+                                            "Fill the category name please",
+                                            title: "Name");
+                                      } else if (descriptionController
+                                          .text.isEmpty) {
+                                        showCustomSnackBar(
+                                            "Fill the category description please",
+                                            title: "Description");
+                                      } else {
+                                        setState(() {
+                                          _isLoaded = true;
+                                        });
+                                        await FirebaseFirestore.instance
+                                            .collection("Categories")
+                                            .doc(widget.category.id)
+                                            .update({
+                                          'name': nameController.text,
+                                          'description':
+                                              descriptionController.text,
+                                        }).whenComplete(() {
+                                          updateCategoryNameOnUserExixtingPost();
+
+                                          Get.toNamed(RouteHelper
+                                              .getCategoriesMainScreen());
+                                        });
+                                      }
+                                    } catch (e) {
+                                      showCustomSnackBar(
+                                        e.toString(),
+                                        title: "Editing category item",
+                                      );
+                                      setState(() {
+                                        _isLoaded = false;
+                                      });
+                                    }
                                   }
                                 },
                                 child: Container(
@@ -226,15 +247,13 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
     );
   }
 
-  //pick image dialog to Update in storage
-
-  pickImage(mContext) {
-    return showDialog(
-        context: mContext,
-        builder: (con) {
+  void _showImageDialog() {
+    showDialog(
+        context: context,
+        builder: (context) {
           return SimpleDialog(
             title: BigText(
-              text: "Select an Image",
+              text: "Please select an option",
               color: AppColors.mainBlackColor,
               size: Dimensions.font20,
             ),
@@ -242,8 +261,8 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
               SimpleDialogOption(
                 child: Row(
                   children: [
-                    Icon(Icons.camera_alt),
-                    Padding(padding: EdgeInsets.all(7.0)),
+                    const Icon(Icons.camera_alt),
+                    const Padding(padding: EdgeInsets.all(7.0)),
                     BigText(
                       text: " Camera",
                       color: AppColors.mainBlackColor,
@@ -251,13 +270,15 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                     ),
                   ],
                 ),
-                onPressed: capturePhotoWithCamera,
+                onPressed: () {
+                  _getFromCamera();
+                },
               ),
               SimpleDialogOption(
                 child: Row(
                   children: [
-                    Icon(Icons.image),
-                    Padding(padding: EdgeInsets.all(7.0)),
+                    const Icon(Icons.image),
+                    const Padding(padding: EdgeInsets.all(7.0)),
                     BigText(
                       text: " Gallery",
                       color: AppColors.mainBlackColor,
@@ -265,13 +286,15 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                     ),
                   ],
                 ),
-                onPressed: pickPhotoFromGallery,
+                onPressed: () {
+                  _getFromGallery();
+                },
               ),
               SimpleDialogOption(
                 child: Row(
                   children: [
-                    Icon(Icons.cancel),
-                    Padding(padding: EdgeInsets.all(7.0)),
+                    const Icon(Icons.cancel),
+                    const Padding(padding: EdgeInsets.all(7.0)),
                     BigText(
                       text: " Cancel",
                       color: AppColors.mainBlackColor,
@@ -286,86 +309,68 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
         });
   }
 
-//capture to add in storage
+  void _getFromCamera() async {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    _cropImage(pickedFile!.path);
+    Navigator.pop(context);
+  }
 
-  //capture to add in storage
+  void _getFromGallery() async {
+    XFile? pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    _cropImage(pickedFile!.path);
+    Navigator.pop(context);
+  }
 
-  capturePhotoWithCamera() async {
-    navigator!.pop();
-    final imageFile = (await ImagePicker().pickImage(
-        source: ImageSource.camera, maxHeight: 680.0, maxWidth: 970.0));
-    if (imageFile != null) {
-      Get.snackbar('Category Picture',
-          'You have successfully selected your category picture!');
-      Get.to(UpdateCategoryScreen(
-        category: widget.category,
-      ));
-    } else {
-      Get.snackbar('Category Picture', 'Please try again!');
+  void _cropImage(filePath) async {
+    CroppedFile? croppedImage = await ImageCropper()
+        .cropImage(sourcePath: filePath, maxHeight: 1080, maxWidth: 1080);
+
+    if (croppedImage != null) {
+      setState(() {
+        imagexFile = File(croppedImage.path);
+        _updateImageInFirestore();
+      });
     }
-
-    _file = Rx<File?>(File(imageFile!.path));
   }
 
-// pick from galery to add in storage
+  void _updateImageInFirestore() async {
+    String fileId = widget.category.id!;
+    fStorage.Reference reference = fStorage.FirebaseStorage.instance
+        .ref()
+        .child('categoryPhoto')
+        .child(fileId);
+    fStorage.UploadTask uploadTask = reference.putFile(File(imagexFile!.path));
+    fStorage.TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {});
+    await taskSnapshot.ref.getDownloadURL().then((url) async {
+      catImageUrl = url;
+    });
 
-  pickPhotoFromGallery() async {
-    navigator!.pop();
-    final imageFile =
-        (await ImagePicker().pickImage(source: ImageSource.gallery));
-    if (imageFile != null) {
-      Get.snackbar('Category Picture',
-          'You have successfully selected your category picture!');
-      Get.toNamed(RouteHelper.getPostCategoryForm());
-    } else {
-      Get.snackbar('Category Picture', 'Please try again!');
-    }
-
-    _file = Rx<File?>(File(imageFile!.path));
+    await FirebaseFirestore.instance
+        .collection("Categories")
+        .doc(widget.category.id)
+        .update({'image': catImageUrl});
   }
 
-  Future<String> _uploadToStorage(File image, String name) async {
-    Reference ref = firebaseStorage.ref().child('categoryPhoto').child(name);
+  updateCategoryNameOnUserExixtingPost() async {
+    await FirebaseFirestore.instance
+        .collection('Medicines')
+        .where('categories', isEqualTo: widget.category.name)
+        .get()
+        .then((snapshot) {
+      for (int index = 0; index < snapshot.docs.length; index++) {
+        String categoryNameInPost = snapshot.docs[index]['categories'];
 
-    UploadTask uploadTask = ref.putFile(image);
-    TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
-    return downloadUrl;
-  }
-
-  // The update function reo sasa
-  Future uploadCategoryItem(
-    String name,
-    File? photoUrl,
-    String description,
-  ) async {
-    try {
-      if (name.isEmpty) {
-        showCustomSnackBar("Fill the category name please", title: "Name");
-      } else if (description.isEmpty) {
-        showCustomSnackBar("Fill the category description please",
-            title: "Description");
-      } else {
-        // File p = photoUrl as File;
-        String downloadUrl = await _uploadToStorage(photoUrl as File, name);
-
-        CategoriesModel category = CategoriesModel(
-          id: name,
-          name: name,
-          image: downloadUrl,
-          description: description,
-        );
-        firestore.collection('Categories').doc(name).update(
-              category.tojson(),
-            );
-
-        Get.toNamed(RouteHelper.getCategoriesMainScreen());
+        if (categoryNameInPost != nameController.text) {
+          FirebaseFirestore.instance
+              .collection('Medicines')
+              .doc(snapshot.docs[index].id)
+              .update({
+            'categories': nameController.text,
+          });
+        }
       }
-    } catch (e) {
-      showCustomSnackBar(
-        e.toString(),
-        title: "Updating category item",
-      );
-    }
+    });
   }
 }

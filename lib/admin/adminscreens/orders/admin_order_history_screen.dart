@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../../base/custom_loader.dart';
+import '../../../base/no_data_page.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimensions.dart';
@@ -123,7 +122,8 @@ class _AdminOrderHistoryScreenState extends State<AdminOrderHistoryScreen> {
                             ),
 
                             // the content of the white background
-                            child: snapshot.hasData
+                            child: snapshot.hasData &&
+                                    snapshot.data!.docs.isNotEmpty
                                 ? ListView.builder(
                                     itemCount: snapshot.data!.docs.length,
                                     itemBuilder: (c, index) {
@@ -160,21 +160,28 @@ class _AdminOrderHistoryScreenState extends State<AdminOrderHistoryScreen> {
                                                                 as Map<String,
                                                                     dynamic>)[
                                                             'addressId'],
-                                                    test: (snapshot.data?.docs[index]
+                                                    quantity: (snapshot
+                                                                    .data?.docs[index]
                                                                     .data()
                                                                 as Map<String,
                                                                     dynamic>)[
                                                             'orderedProduct'][0]
                                                         ['quantity'],
                                                   )
-                                                : const Center(
+                                                : Center(
                                                     child:
-                                                        CircularProgressIndicator(),
+                                                        CircularProgressIndicator(
+                                                      color:
+                                                          AppColors.mainColor,
+                                                    ),
                                                   );
                                           });
                                     })
                                 // ignore: prefer_const_constructors
-                                : CustomLoader(),
+                                : NoDataPage(
+                                    text: "Empty",
+                                    imgPath: "assets/image/empty_box.png",
+                                  ),
                           ),
                         ),
                       ],

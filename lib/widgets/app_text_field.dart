@@ -32,7 +32,7 @@ class AppTextField extends StatelessWidget {
           BoxShadow(
               blurRadius: 10,
               spreadRadius: 7,
-              offset: Offset(1, 10),
+              offset: const Offset(1, 10),
               color: Colors.grey.withOpacity(0.2)),
         ],
       ),

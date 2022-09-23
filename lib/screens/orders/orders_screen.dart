@@ -2,10 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
 import 'package:pharmacy_plateform/screens/orders/my_orders_history_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/my_orders_screen.dart';
-import 'package:pharmacy_plateform/screens/orders/view_orders.dart';
 import 'package:pharmacy_plateform/utils/colors.dart';
 
 import '../../routes/route_helper.dart';

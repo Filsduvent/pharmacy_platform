@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/user_model.dart';
-import '../../../routes/route_helper.dart';
 import '../../../utils/app_constants.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimensions.dart';
@@ -162,23 +161,26 @@ class _InvalidUserDetailsScreenState extends State<InvalidUserDetailsScreen> {
                               left: Dimensions.width20,
                               top: Dimensions.width10,
                               bottom: Dimensions.width10),
-                          child: Row(children: [
-                            AppIcon(
-                              icon: Icons.connected_tv,
-                              backgroundColor: AppColors.yellowColor,
-                              iconColor: Colors.white,
-                              iconSize: Dimensions.height10 * 5 / 2,
-                              size: Dimensions.height10 * 5,
-                            ),
-                            SizedBox(
-                              width: Dimensions.width20,
-                            ),
-                            BigText(text: widget.user.status),
-                            SizedBox(
-                              width: Dimensions.width30 * 4,
-                            ),
-                            buildSwitch(widget.user.uid, widget.user.status),
-                          ]),
+                          child: Row(
+                              //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                AppIcon(
+                                  icon: Icons.connected_tv,
+                                  backgroundColor: AppColors.yellowColor,
+                                  iconColor: Colors.white,
+                                  iconSize: Dimensions.height10 * 5 / 2,
+                                  size: Dimensions.height10 * 5,
+                                ),
+                                SizedBox(
+                                  width: Dimensions.width20,
+                                ),
+                                BigText(text: widget.user.status),
+                                SizedBox(
+                                  width: Dimensions.width30 * 3,
+                                ),
+                                buildSwitch(
+                                    widget.user.uid, widget.user.status),
+                              ]),
                           decoration: BoxDecoration(
                               borderRadius:
                                   BorderRadius.circular(Dimensions.radius30),
@@ -186,7 +188,7 @@ class _InvalidUserDetailsScreenState extends State<InvalidUserDetailsScreen> {
                               boxShadow: [
                                 BoxShadow(
                                   blurRadius: 1,
-                                  offset: Offset(0, 2),
+                                  offset: const Offset(0, 2),
                                   color: Colors.grey.withOpacity(0.3),
                                 )
                               ]),

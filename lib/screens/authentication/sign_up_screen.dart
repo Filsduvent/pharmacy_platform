@@ -388,7 +388,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     phoneController.text,
                                     addressController.text,
                                     passwordController.text,
-                                    authController.profilePhoto,
+                                    imageFile,
                                     confirmController.text,
                                     role,
                                   );

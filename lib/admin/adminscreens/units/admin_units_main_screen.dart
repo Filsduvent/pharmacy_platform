@@ -1,10 +1,10 @@
-// ignore_for_file: sort_child_properties_last, prefer_const_constructors
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/models/units_model.dart';
-
+import '../../../base/no_data_page.dart';
 import '../../../base/show_custom_snackbar.dart';
 import '../../../routes/route_helper.dart';
 import '../../../utils/app_constants.dart';
@@ -24,13 +24,6 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
   var controller = TextEditingController();
   // ignore: prefer_typing_uninitialized_variables
   var updateController;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   updateController = TextEditingController();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +151,7 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
 
                     // the content of the white background
 
-                    child: snapshot.hasData
+                    child: snapshot.hasData && snapshot.data!.docs.isNotEmpty
                         ? Stack(
                             children: [
                               ListView.builder(
@@ -184,163 +177,234 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
                                           right: Dimensions.width20,
                                           top: Dimensions.width20,
                                           bottom: Dimensions.width20),
-                                      child: Row(children: [
-                                        SizedBox(
-                                          width: Dimensions.width20,
-                                        ),
-                                        BigText(
-                                            text: listUnits[index]
-                                                .name
-                                                .toString()),
-                                        SizedBox(
-                                          width: Dimensions.width30 * 5,
-                                        ),
-                                        Row(
+                                      child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    updateController =
-                                                        TextEditingController(
-                                                            text: listUnits[
-                                                                    index]
-                                                                .name
-                                                                .toString());
-                                                  });
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        AlertDialog(
-                                                      title: BigText(
-                                                        text: 'Unit type',
-                                                        color: AppColors
-                                                            .secondColor,
-                                                        size: Dimensions.font20,
-                                                      ),
-                                                      content: TextField(
-                                                        autofocus: false,
-                                                        controller:
-                                                            updateController,
-                                                        keyboardType:
-                                                            TextInputType.name,
-                                                        textInputAction:
-                                                            TextInputAction
-                                                                .done,
-                                                        decoration:
-                                                            InputDecoration(
-                                                          hintText:
-                                                              'Enter your unit type',
-                                                        ),
-                                                      ),
-                                                      actions: [
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: BigText(
-                                                            text: "Cancel",
+                                            BigText(
+                                                text: listUnits[index]
+                                                    .name
+                                                    .toString()),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                GestureDetector(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        updateController =
+                                                            TextEditingController(
+                                                                text: listUnits[
+                                                                        index]
+                                                                    .name
+                                                                    .toString());
+                                                      });
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) =>
+                                                            AlertDialog(
+                                                          title: BigText(
+                                                            text: 'Unit type',
                                                             color: AppColors
-                                                                .yellowColor,
+                                                                .secondColor,
                                                             size: Dimensions
                                                                 .font20,
                                                           ),
-                                                        ),
-                                                        TextButton(
-                                                          onPressed: () {
-                                                            updateUnits(
-                                                                listUnits[index]
-                                                                    .id
-                                                                    .toString(),
-                                                                updateController
-                                                                    .text);
-                                                          },
-                                                          child: BigText(
-                                                            text: "Edit",
-                                                            color: AppColors
-                                                                .mainColor,
-                                                            size: Dimensions
-                                                                .font20,
+                                                          content: TextField(
+                                                            autofocus: false,
+                                                            controller:
+                                                                updateController,
+                                                            keyboardType:
+                                                                TextInputType
+                                                                    .name,
+                                                            textInputAction:
+                                                                TextInputAction
+                                                                    .done,
+                                                            decoration:
+                                                                InputDecoration(
+                                                              hintText:
+                                                                  'Enter your unit type',
+                                                            ),
                                                           ),
-                                                        )
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                                child: AppIcon(
-                                                  icon: Icons.edit,
-                                                  iconColor: Colors.white,
-                                                  backgroundColor:
-                                                      AppColors.mainColor,
-                                                )),
-                                            SizedBox(
-                                              width: Dimensions.width30,
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) =>
-                                                      AlertDialog(
-                                                    title: BigText(
-                                                      text:
-                                                          'There\'s no way to retreive deleted elements!',
-                                                      color:
-                                                          AppColors.secondColor,
-                                                      size: Dimensions.font20,
-                                                    ),
-                                                    content: BigText(
-                                                      text:
-                                                          "Are you sure you want to delete this unit type?",
-                                                      color: AppColors
-                                                          .mainBlackColor,
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        },
-                                                        child: BigText(
-                                                          text: "Cancel",
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: BigText(
+                                                                text: "Cancel",
+                                                                color: AppColors
+                                                                    .yellowColor,
+                                                                size: Dimensions
+                                                                    .font20,
+                                                              ),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                try {
+                                                                  if (updateController
+                                                                      .text
+                                                                      .isEmpty) {
+                                                                    showCustomSnackBar(
+                                                                        "Fill the unit type please",
+                                                                        title:
+                                                                            "Name");
+                                                                  } else {
+                                                                    final docUnit = firestore
+                                                                        .collection(
+                                                                            'Units')
+                                                                        .doc(listUnits[index]
+                                                                            .id);
+
+                                                                    UnitsModel
+                                                                        units =
+                                                                        UnitsModel(
+                                                                      id: updateController
+                                                                          .text,
+                                                                      name: updateController
+                                                                          .text,
+                                                                    );
+
+                                                                    docUnit
+                                                                        .update(units
+                                                                            .tojson())
+                                                                        .whenComplete(
+                                                                            () async {
+                                                                      await FirebaseFirestore
+                                                                          .instance
+                                                                          .collection(
+                                                                              'Medicines')
+                                                                          .where(
+                                                                              'units',
+                                                                              isEqualTo: listUnits[index].name)
+                                                                          .get()
+                                                                          .then((snapshot) {
+                                                                        for (int i =
+                                                                                0;
+                                                                            i < snapshot.docs.length;
+                                                                            i++) {
+                                                                          String
+                                                                              unitNameInPost =
+                                                                              snapshot.docs[i]['units'];
+
+                                                                          if (unitNameInPost !=
+                                                                              updateController.text) {
+                                                                            FirebaseFirestore.instance.collection('Medicines').doc(snapshot.docs[index].id).update({
+                                                                              'units': updateController.text,
+                                                                            });
+                                                                          }
+                                                                        }
+                                                                      });
+
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    });
+                                                                  }
+                                                                } catch (e) {
+                                                                  showCustomSnackBar(
+                                                                    e.toString(),
+                                                                    title:
+                                                                        "Editing unit type",
+                                                                  );
+                                                                }
+                                                                // updateUnits(
+                                                                //     listUnits[
+                                                                //             index]
+                                                                //         .id
+                                                                //         .toString(),
+                                                                //     updateController
+                                                                //         .text);
+                                                              },
+                                                              child: BigText(
+                                                                text: "Edit",
+                                                                color: AppColors
+                                                                    .mainColor,
+                                                                size: Dimensions
+                                                                    .font20,
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: AppIcon(
+                                                      icon: Icons.edit,
+                                                      iconColor: Colors.white,
+                                                      backgroundColor:
+                                                          AppColors.mainColor,
+                                                    )),
+                                                SizedBox(
+                                                  width: Dimensions.width30,
+                                                ),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          AlertDialog(
+                                                        title: BigText(
+                                                          text:
+                                                              'There\'s no way to retreive deleted elements!',
                                                           color: AppColors
-                                                              .yellowColor,
+                                                              .secondColor,
                                                           size:
                                                               Dimensions.font20,
                                                         ),
+                                                        content: BigText(
+                                                          text:
+                                                              "Are you sure you want to delete this unit type?",
+                                                          color: AppColors
+                                                              .mainBlackColor,
+                                                        ),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            },
+                                                            child: BigText(
+                                                              text: "Cancel",
+                                                              color: AppColors
+                                                                  .yellowColor,
+                                                              size: Dimensions
+                                                                  .font20,
+                                                            ),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () {
+                                                              deleteUnits(
+                                                                  listUnits[
+                                                                          index]
+                                                                      .id
+                                                                      .toString());
+                                                            },
+                                                            child: BigText(
+                                                              text: "Delete",
+                                                              color: AppColors
+                                                                  .mainColor,
+                                                              size: Dimensions
+                                                                  .font20,
+                                                            ),
+                                                          )
+                                                        ],
                                                       ),
-                                                      TextButton(
-                                                        onPressed: () {
-                                                          deleteUnits(
-                                                              listUnits[index]
-                                                                  .id
-                                                                  .toString());
-                                                        },
-                                                        child: BigText(
-                                                          text: "Delete",
-                                                          color: AppColors
-                                                              .mainColor,
-                                                          size:
-                                                              Dimensions.font20,
-                                                        ),
-                                                      )
-                                                    ],
+                                                    );
+                                                  },
+                                                  child: AppIcon(
+                                                    icon: Icons.delete,
+                                                    iconColor: Colors.white,
+                                                    backgroundColor:
+                                                        AppColors.yellowColor,
                                                   ),
-                                                );
-                                              },
-                                              child: AppIcon(
-                                                icon: Icons.delete,
-                                                iconColor: Colors.white,
-                                                backgroundColor:
-                                                    AppColors.yellowColor,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ]),
+                                                )
+                                              ],
+                                            ),
+                                          ]),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               Dimensions.radius30),
@@ -357,8 +421,9 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
                                   })
                             ],
                           )
-                        : const Center(
-                            child: CircularProgressIndicator(),
+                        : NoDataPage(
+                            text: "No unit type found",
+                            imgPath: "assets/image/units.png",
                           ),
                   ),
                 ),
@@ -435,9 +500,7 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
           name: name,
         );
 
-        await docUnit
-            .set(units.tojson())
-            .then((value) => Navigator.of(context).pop());
+        await docUnit.set(units.tojson()).then((value) => Get.back());
       }
     } catch (e) {
       showCustomSnackBar(
@@ -459,16 +522,38 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
           name: name,
         );
 
-        docUnit
-            .update(units.tojson())
-            .then((value) => Navigator.of(context).pop());
+        docUnit.update(units.tojson()).whenComplete(() {
+          updateUnitsOnMedicineExistingPost(name);
+          Navigator.of(context).pop();
+        });
       }
     } catch (e) {
       showCustomSnackBar(
         e.toString(),
-        title: "Create unit type",
+        title: "Editing unit type",
       );
     }
+  }
+
+  updateUnitsOnMedicineExistingPost(String name) async {
+    await FirebaseFirestore.instance
+        .collection('Medicines')
+        .where('units', isEqualTo: controller.text)
+        .get()
+        .then((snapshot) {
+      for (int index = 0; index < snapshot.docs.length; index++) {
+        String unitNameInPost = snapshot.docs[index]['units'];
+
+        if (unitNameInPost != name) {
+          FirebaseFirestore.instance
+              .collection('Medicines')
+              .doc(snapshot.docs[index].id)
+              .update({
+            'units': name,
+          });
+        }
+      }
+    });
   }
 
   Future deleteUnits(String id) async {

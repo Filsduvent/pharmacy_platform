@@ -19,17 +19,16 @@ import 'package:pharmacy_plateform/pharmacist/view/screens/personalize_pharmacy/
 import 'package:pharmacy_plateform/screens/address/add_address_screen.dart';
 import 'package:pharmacy_plateform/screens/address/address_screen.dart';
 import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
-import 'package:pharmacy_plateform/screens/drug/popular_drug_detail.dart';
 import 'package:pharmacy_plateform/screens/drug/view_all_screen.dart';
 import 'package:pharmacy_plateform/screens/home/home_page.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/order_details_screen.dart';
+import 'package:pharmacy_plateform/screens/orders/order_success_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/place_order.dart';
 import '../admin/adminscreens/units/admin_units_main_screen.dart';
 import '../admin/category/categories_main_screen.dart';
 import '../pharmacist/view/profile/profile_screen.dart';
 import '../screens/cart/cart_page.dart';
-import '../screens/drug/recent_drug_detail.dart';
 import '../screens/splash/splash_screen.dart';
 
 class RouteHelper {
@@ -44,6 +43,7 @@ class RouteHelper {
   static const String placeOrder = "/place-order";
   static const String orderDetailsScreen = "/order-details-screen";
   static const String viewAllScreen = "/view-all-screen";
+  static const String orderSuccessScreen = "/order-success-screen";
 
 //Routers for pharmacist
   static const String mainPharmacyPage = "/main-pharmacy-page";
@@ -96,7 +96,10 @@ class RouteHelper {
   static String getOrderDetailsScreen(String orderID) =>
       '$orderDetailsScreen?orderID=$orderID';
   static String getViewAllScreen() => '$viewAllScreen';
+  static String getOrderSuccessScreen() => '$orderSuccessScreen';
+
   //Routers for pharmacist
+
   static String getMainPharmacyPage() => '$mainPharmacyPage';
   static String getPharmacyMedecinePage() => '$pharmacyMedecinePage';
   static String getPharmacyDetailsPage(int pageId, String page, String medId) =>
@@ -114,6 +117,7 @@ class RouteHelper {
   static String getPersonalizePharmacyScreen() => '$personalizePharmacyScreen';
 
   //Routes for admin
+
   static String getAdminHomeScreen() => '$adminHomeScreen';
   static String getCategoriesMainScreen() => '$categoriesMainScreen';
   static String getPostCategoryForm() => '$postCategoryForm';
@@ -217,6 +221,13 @@ class RouteHelper {
           return ViewAllScreen();
         },
         transition: Transition.fade),
+
+    GetPage(
+        name: orderSuccessScreen,
+        page: () {
+          return OrderSuccessScreen();
+        },
+        transition: Transition.zoom),
 
     //Routers for the pharmacist
     GetPage(

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
 
@@ -31,7 +31,7 @@ class PharmacyAppTextField extends StatelessWidget {
           BoxShadow(
               blurRadius: 1,
               //spreadRadius: 7,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
               color: Colors.grey.withOpacity(0.3)),
         ],
       ),
