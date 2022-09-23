@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:pharmacy_plateform/models/categories_model.dart';
 import 'package:pharmacy_plateform/models/drug_model.dart';
 import 'package:pharmacy_plateform/pharmacist/controllers/post_drug_controller.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
@@ -45,11 +46,10 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
 
   var selectedType;
   var selectedUnits;
-  List<String> _accountType = ['Pills', 'Injectables', 'Sirop', 'Gellule'];
-  var category = "Pills";
+  var category = "";
   var units = "";
   String _data = "";
-  List<DropdownMenuItem> categoriesItems = [];
+  // List<DropdownMenuItem> categoriesItems = [];
   PostDrugController postDrugController = Get.put(PostDrugController());
 
   void _showImageDialog() {
@@ -302,64 +302,146 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                               SizedBox(
                                 height: Dimensions.height20,
                               ),
-                              // Category
-                              Container(
-                                clipBehavior: Clip.none,
-                                margin: EdgeInsets.only(
-                                    left: Dimensions.height10,
-                                    right: Dimensions.height10),
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.radius30),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 1,
-                                        // spreadRadius: 7,
-                                        offset: const Offset(0, 2),
-                                        color: Colors.grey.withOpacity(0.3)),
-                                  ],
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: Dimensions.width30 - 7,
-                                    ),
-                                    DropdownButton(
-                                      items: _accountType
-                                          .map((value) => DropdownMenuItem(
-                                                value: value,
-                                                child: Text(
-                                                  value,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontFamily: robotoRegular
-                                                          .toString()),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      onChanged: (selectedAccountType) {
-                                        setState(() {
-                                          selectedType = selectedAccountType;
-                                          category =
-                                              selectedAccountType.toString();
-                                        });
-                                      },
-                                      value: selectedType,
-                                      isExpanded: false,
-                                      hint: const Text(
-                                        'Choose categegory Type',
-                                        style: TextStyle(color: Colors.black54),
+
+                              //categories from firebase
+                              StreamBuilder<QuerySnapshot>(
+                                stream: firestore
+                                    .collection("Categories")
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    const Text("Loading..");
+                                  } else {
+                                    List<DropdownMenuItem> categoriesItems = [];
+                                    for (int i = 0;
+                                        i < snapshot.data!.docs.length;
+                                        i++) {
+                                      var categoryList =
+                                          snapshot.data!.docs.map((cat) {
+                                        return CategoriesModel.fromjson(cat);
+                                      }).toList();
+                                      CategoriesModel snap = categoryList[i];
+                                      // DocumentSnapshot snap =
+                                      //     snapshot.data!.docs[i];
+                                      categoriesItems.add(DropdownMenuItem(
+                                        value: "${snap.name}",
+                                        child: Text(
+                                          snap.name!,
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ));
+                                    }
+                                    return Container(
+                                      clipBehavior: Clip.none,
+                                      margin: EdgeInsets.only(
+                                          left: Dimensions.height10,
+                                          right: Dimensions.height10),
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.radius30),
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 1,
+                                              // spreadRadius: 7,
+                                              offset: const Offset(0, 2),
+                                              color:
+                                                  Colors.grey.withOpacity(0.3)),
+                                        ],
                                       ),
-                                    )
-                                  ],
-                                ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                              width: Dimensions.width30 - 7),
+                                          DropdownButton<dynamic>(
+                                            items: categoriesItems,
+                                            onChanged: (categoriesValue) {
+                                              setState(() {
+                                                selectedType = categoriesValue;
+                                                category =
+                                                    categoriesValue.toString();
+                                              });
+                                            },
+                                            value: selectedType,
+                                            isExpanded: false,
+                                            hint: const Text(
+                                                'Choose categegory Type',
+                                                style: TextStyle(
+                                                    color: Colors.black54)),
+                                          )
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                  return Container();
+                                },
                               ),
                               SizedBox(
                                 height: Dimensions.height20,
                               ),
+                              // // Category
+                              // Container(
+                              //   clipBehavior: Clip.none,
+                              //   margin: EdgeInsets.only(
+                              //       left: Dimensions.height10,
+                              //       right: Dimensions.height10),
+                              //   padding: const EdgeInsets.all(5),
+                              //   decoration: BoxDecoration(
+                              //     color: Colors.white,
+                              //     borderRadius: BorderRadius.circular(
+                              //         Dimensions.radius30),
+                              //     boxShadow: [
+                              //       BoxShadow(
+                              //           blurRadius: 1,
+                              //           // spreadRadius: 7,
+                              //           offset: const Offset(0, 2),
+                              //           color: Colors.grey.withOpacity(0.3)),
+                              //     ],
+                              //   ),
+                              //   child: Row(
+                              //     mainAxisAlignment: MainAxisAlignment.start,
+                              //     children: [
+                              //       SizedBox(
+                              //         width: Dimensions.width30 - 7,
+                              //       ),
+                              //       DropdownButton(
+                              //         items: _accountType
+                              //             .map((value) => DropdownMenuItem(
+                              //                   value: value,
+                              //                   child: Text(
+                              //                     value,
+                              //                     style: TextStyle(
+                              //                         color: Colors.black,
+                              //                         fontFamily: robotoRegular
+                              //                             .toString()),
+                              //                   ),
+                              //                 ))
+                              //             .toList(),
+                              //         onChanged: (selectedAccountType) {
+                              //           setState(() {
+                              //             selectedType = selectedAccountType;
+                              //             category =
+                              //                 selectedAccountType.toString();
+                              //           });
+                              //         },
+                              //         value: selectedType,
+                              //         isExpanded: false,
+                              //         hint: const Text(
+                              //           'Choose categegory Type',
+                              //           style: TextStyle(color: Colors.black54),
+                              //         ),
+                              //       )
+                              //     ],
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   height: Dimensions.height20,
+                              // ),
 
                               //Price
                               PharmacyAppTextField(
@@ -488,9 +570,6 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
 
                               GestureDetector(
                                 onTap: () async {
-                                  setState(() {
-                                    _isLoaded = true;
-                                  });
                                   try {
                                     if (_data.isEmpty) {
                                       showCustomSnackBar("Fill your id please",
@@ -533,6 +612,9 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                                           "Fill your description please",
                                           title: "description");
                                     } else {
+                                      setState(() {
+                                        _isLoaded = true;
+                                      });
                                       String uid =
                                           firebaseAuth.currentUser!.uid;
 

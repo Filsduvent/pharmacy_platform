@@ -429,6 +429,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                                                     int.parse(
                                                         quantityController.text)
                                               }).then((value) {
+                                                Navigator.pop(context);
                                                 Get.toNamed(RouteHelper
                                                     .getPharmacyMedecinePage());
                                               });

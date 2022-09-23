@@ -262,8 +262,10 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
                                                                     UnitsModel
                                                                         units =
                                                                         UnitsModel(
-                                                                      id: updateController
-                                                                          .text,
+                                                                      id: DateTime
+                                                                              .now()
+                                                                          .millisecondsSinceEpoch
+                                                                          .toString(),
                                                                       name: updateController
                                                                           .text,
                                                                     );
@@ -292,7 +294,7 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
 
                                                                           if (unitNameInPost !=
                                                                               updateController.text) {
-                                                                            FirebaseFirestore.instance.collection('Medicines').doc(snapshot.docs[index].id).update({
+                                                                            FirebaseFirestore.instance.collection('Medicines').doc(snapshot.docs[i].id).update({
                                                                               'units': updateController.text,
                                                                             });
                                                                           }
@@ -493,10 +495,12 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
       if (name.isEmpty) {
         showCustomSnackBar("Fill the unit type please", title: "Name");
       } else {
-        final docUnit = firestore.collection('Units').doc(name);
+        final docUnit = firestore
+            .collection('Units')
+            .doc(DateTime.now().millisecondsSinceEpoch.toString());
 
         UnitsModel units = UnitsModel(
-          id: name,
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
           name: name,
         );
 
@@ -508,52 +512,6 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
         title: "Create unit type",
       );
     }
-  }
-
-  Future updateUnits(String id, String name) async {
-    try {
-      if (name.isEmpty) {
-        showCustomSnackBar("Fill the unit type please", title: "Name");
-      } else {
-        final docUnit = firestore.collection('Units').doc(id);
-
-        UnitsModel units = UnitsModel(
-          id: name,
-          name: name,
-        );
-
-        docUnit.update(units.tojson()).whenComplete(() {
-          updateUnitsOnMedicineExistingPost(name);
-          Navigator.of(context).pop();
-        });
-      }
-    } catch (e) {
-      showCustomSnackBar(
-        e.toString(),
-        title: "Editing unit type",
-      );
-    }
-  }
-
-  updateUnitsOnMedicineExistingPost(String name) async {
-    await FirebaseFirestore.instance
-        .collection('Medicines')
-        .where('units', isEqualTo: controller.text)
-        .get()
-        .then((snapshot) {
-      for (int index = 0; index < snapshot.docs.length; index++) {
-        String unitNameInPost = snapshot.docs[index]['units'];
-
-        if (unitNameInPost != name) {
-          FirebaseFirestore.instance
-              .collection('Medicines')
-              .doc(snapshot.docs[index].id)
-              .update({
-            'units': name,
-          });
-        }
-      }
-    });
   }
 
   Future deleteUnits(String id) async {

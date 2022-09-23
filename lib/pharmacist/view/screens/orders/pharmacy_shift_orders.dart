@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
+import 'package:pharmacy_plateform/utils/colors.dart';
 import '../../../../base/no_data_page.dart';
 import '../../../../utils/app_constants.dart';
 
@@ -24,7 +25,7 @@ class _PharmacyShiftOrdersState extends State<PharmacyShiftOrders> {
                 .where('orderStatus', isEqualTo: "Pending")
                 .snapshots(),
             builder: (c, snapshot) {
-              return snapshot.hasData
+              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
                   ? ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (c, index) {
@@ -41,7 +42,7 @@ class _PharmacyShiftOrdersState extends State<PharmacyShiftOrders> {
                                         as Map<String, dynamic>)['productID'])
                                 .get(),
                             builder: (c, snap) {
-                              return snap.hasData && snap.data!.docs.isNotEmpty
+                              return snap.hasData
                                   ? PharmacistOrderCard(
                                       itemCount: snap.data!.docs.length,
                                       data: snap.data!.docs,
@@ -56,8 +57,10 @@ class _PharmacyShiftOrdersState extends State<PharmacyShiftOrders> {
                                               .data() as Map<String, dynamic>)[
                                           'orderedProduct'][0]['quantity'],
                                     )
-                                  : const Center(
-                                      child: CircularProgressIndicator(),
+                                  : Center(
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.mainColor,
+                                      ),
                                     );
                             });
                       })

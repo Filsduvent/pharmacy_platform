@@ -2,9 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
+import '../../../../base/no_data_page.dart';
+import '../../../../utils/colors.dart';
 
 class PharmacistOrderHistory extends StatefulWidget {
   const PharmacistOrderHistory({Key? key}) : super(key: key);
@@ -24,7 +25,7 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                 .where('orderStatus', isEqualTo: "Running")
                 .snapshots(),
             builder: (c, snapshot) {
-              return snapshot.hasData
+              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
                   ? ListView.builder(
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (c, index) {
@@ -41,7 +42,7 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                                         as Map<String, dynamic>)['productID'])
                                 .get(),
                             builder: (c, snap) {
-                              return snap.hasData && snap.data!.docs.isNotEmpty
+                              return snap.hasData
                                   ? PharmacistOrderCard(
                                       itemCount: snap.data!.docs.length,
                                       data: snap.data!.docs,
@@ -56,12 +57,17 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                                               .data() as Map<String, dynamic>)[
                                           'orderedProduct'][0]['quantity'],
                                     )
-                                  : const Center(
-                                      child: CircularProgressIndicator(),
+                                  : Center(
+                                      child: CircularProgressIndicator(
+                                        color: AppColors.mainColor,
+                                      ),
                                     );
                             });
                       })
-                  : CustomLoader();
+                  : NoDataPage(
+                      text: "Empty Box",
+                      imgPath: "assets/image/empty_box.png",
+                    );
             }),
       ),
     );

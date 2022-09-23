@@ -342,7 +342,7 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                       CrossAxisAlignment.stretch,
                                   children: [
                                     Image.asset(
-                                      "assets/image/No_data.png",
+                                      "assets/image/defauldDrug.png",
                                       height:
                                           MediaQuery.of(context).size.height *
                                               0.22,

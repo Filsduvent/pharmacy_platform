@@ -340,7 +340,7 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                             )
                           : NoDataPage(
                               text: "No drug found",
-                              imgPath: "assets/image/No_data.png",
+                              imgPath: "assets/image/defauldDrug.png",
                             )),
                 ),
               ],
