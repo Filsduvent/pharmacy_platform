@@ -10,6 +10,7 @@ import 'package:pharmacy_plateform/admin/adminscreens/profile/profile_screen.dar
 import 'package:pharmacy_plateform/admin/category/post_category.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/add_new_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/post_drug.dart';
+import 'package:pharmacy_plateform/pharmacist/view/screens/actions_on_drug/search_drug.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/main_pharmacy_screen.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/home/pharmacy_medecines_screen.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_details.dart';
@@ -58,6 +59,7 @@ class RouteHelper {
   static const String pharmacyAddNewDrug = '/pharmacy-add-new-drug';
   static const String personalizePharmacyScreen =
       '/personalize-pharmacy-screen';
+  static const String searchDrugScreen = '/search-drug-screen';
 
   //Routes for Admin
   static const String adminHomeScreen = "/admin-home-screen";
@@ -115,6 +117,7 @@ class RouteHelper {
   static String getPharmacistProfileScreen() => '$pharmacistProfileScreen';
   static String getPharmacyAddNewDrug() => '$pharmacyAddNewDrug';
   static String getPersonalizePharmacyScreen() => '$personalizePharmacyScreen';
+  static String getSearchDrugScreen() => '$searchDrugScreen';
 
   //Routes for admin
 
@@ -316,6 +319,13 @@ class RouteHelper {
         name: pharmacyAddNewDrug,
         page: () {
           return AddNewDrugScreen();
+        },
+        transition: Transition.zoom),
+
+    GetPage(
+        name: searchDrugScreen,
+        page: () {
+          return SearchDrugScreen();
         },
         transition: Transition.zoom),
 

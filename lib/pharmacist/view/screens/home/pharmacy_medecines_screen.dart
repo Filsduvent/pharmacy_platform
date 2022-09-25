@@ -65,7 +65,11 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                             Get.toNamed(RouteHelper.getMainPharmacyPage());
                           },
                           child: AppIcon(icon: Icons.arrow_back_ios)),
-                      AppIcon(icon: Icons.search)
+                      GestureDetector(
+                          onTap: () {
+                            Get.toNamed(RouteHelper.getSearchDrugScreen());
+                          },
+                          child: AppIcon(icon: Icons.search)),
                     ],
                   ),
                 ),
