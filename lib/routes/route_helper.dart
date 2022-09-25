@@ -23,6 +23,7 @@ import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
 import 'package:pharmacy_plateform/screens/drug/view_all_screen.dart';
 import 'package:pharmacy_plateform/screens/home/home_page.dart';
 import 'package:get/get.dart';
+import 'package:pharmacy_plateform/screens/onboarding/on_boarding_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/order_details_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/order_success_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/place_order.dart';
@@ -45,6 +46,7 @@ class RouteHelper {
   static const String orderDetailsScreen = "/order-details-screen";
   static const String viewAllScreen = "/view-all-screen";
   static const String orderSuccessScreen = "/order-success-screen";
+  static const String onBoardingScreen = "/on-boarding-screen";
 
 //Routers for pharmacist
   static const String mainPharmacyPage = "/main-pharmacy-page";
@@ -99,6 +101,7 @@ class RouteHelper {
       '$orderDetailsScreen?orderID=$orderID';
   static String getViewAllScreen() => '$viewAllScreen';
   static String getOrderSuccessScreen() => '$orderSuccessScreen';
+  static String getOnBoardingScreen() => '$onBoardingScreen';
 
   //Routers for pharmacist
 
@@ -157,6 +160,12 @@ class RouteHelper {
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => SplashScreen()),
+    GetPage(
+        name: onBoardingScreen,
+        page: () {
+          return OnBoardingScreen();
+        },
+        transition: Transition.leftToRight),
     GetPage(name: initial, page: () => HomePage()),
     GetPage(
         name: signIn,

@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pharmacy_plateform/utils/app_constants.dart';
 import '../../../../base/no_data_page.dart';
 import '../../../../models/drug_model.dart';
 import '../../../../routes/route_helper.dart';
@@ -21,7 +20,6 @@ class SearchDrugScreen extends StatefulWidget {
 }
 
 class _SearchDrugScreenState extends State<SearchDrugScreen> {
-  Future<QuerySnapshot>? docList;
   Future<QuerySnapshot>? drugDocumentsList;
   String drugTitleText = "";
 
@@ -336,18 +334,5 @@ class _SearchDrugScreenState extends State<SearchDrugScreen> {
                 ],
               );
             }));
-  }
-
-  Future startSearching(String query) async {
-    docList = FirebaseFirestore.instance
-        .collection('Medicines')
-        .where('uid',
-            isEqualTo:
-                AppConstants.sharedPreferences!.getString(AppConstants.userUID))
-        .where('title', isGreaterThanOrEqualTo: query)
-        .get();
-    setState(() {
-      docList;
-    });
   }
 }

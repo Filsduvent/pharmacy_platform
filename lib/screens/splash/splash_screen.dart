@@ -31,8 +31,10 @@ class _SplashScreenState extends State<SplashScreen>
           ..forward();
     animation = CurvedAnimation(parent: controller, curve: Curves.linear);
 
-    Timer(const Duration(seconds: 3),
-        () => Get.offNamed(RouteHelper.getInitial()));
+    Timer(
+        const Duration(seconds: 3),
+        () => /* Get.offNamed(RouteHelper.getInitial())*/ Get
+            .offNamed(RouteHelper.getOnBoardingScreen()));
   }
 
   @override

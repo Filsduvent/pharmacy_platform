@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_declarations
 
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
 class AppColors {
   static final Color textColor = const Color(0xFFccc7c5);
@@ -16,4 +16,7 @@ class AppColors {
   static final Color mainBlackColor = const Color(0xFF332d2b);
   //static final Color yellowColor = const Color(0xFFfa7552);
   static final Color yellowColor = const Color(0xFFffd379);
+  static final tOnBoardingPage1Color = Colors.white;
+  static final tOnBoardingPage2Color = const Color(0xfffddcdf);
+  static final tOnBoardingPage3Color = const Color(0xffffdcbd);
 }
