@@ -95,7 +95,11 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                             //  );
                             Get.back();
                           },
-                          child: AppIcon(icon: Icons.arrow_back_ios)),
+                          child: AppIcon(
+                            icon: Icons.arrow_back_ios,
+                            backgroundColor: AppColors.mainColor,
+                            iconColor: Colors.white,
+                          )),
                     ],
                   ),
                 ),
@@ -139,7 +143,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                 ),
                                 BigText(
                                   text: widget.drug.categories,
-                                  color: AppColors.mainColor,
+                                  color: Color(0xFFccc7c5),
                                 ),
                               ],
                             ),
@@ -156,7 +160,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                 ),
                                 BigText(
                                   text: widget.drug.manufacturingDate,
-                                  color: AppColors.yellowColor,
+                                  color: Color(0xFFccc7c5),
                                 ),
                               ],
                             ),
@@ -173,7 +177,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                 ),
                                 BigText(
                                   text: widget.drug.expiringDate,
-                                  color: AppColors.mainColor,
+                                  color: Color(0xFFccc7c5),
                                 ),
                               ],
                             ),
@@ -190,7 +194,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                 ),
                                 BigText(
                                   text: widget.drug.publishedDate,
-                                  color: AppColors.yellowColor,
+                                  color: Color(0xFFccc7c5),
                                   overflow: TextOverflow.ellipsis,
                                 ),
                               ],
@@ -210,7 +214,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                   children: [
                                     BigText(
                                       text: 'BIF',
-                                      color: Colors.redAccent,
+                                      color: AppColors.mainColor,
                                     ),
                                     SizedBox(
                                       width: Dimensions.width10 / 2,
@@ -236,7 +240,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                 ),
                                 BigText(
                                   text: widget.drug.quantity.toString(),
-                                  color: AppColors.yellowColor,
+                                  color: Color(0xFFccc7c5),
                                 ),
                               ],
                             ),
@@ -253,7 +257,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                 ),
                                 BigText(
                                   text: widget.drug.units,
-                                  color: AppColors.mainColor,
+                                  color: Color(0xFFccc7c5),
                                 ),
                               ],
                             ),
@@ -270,7 +274,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                 ),
                                 BigText(
                                   text: widget.drug.status,
-                                  color: AppColors.yellowColor,
+                                  color: Color(0xFFccc7c5),
                                 ),
                               ],
                             ),
@@ -287,7 +291,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                 ),
                                 BigText(
                                   text: widget.drug.visibility.toString(),
-                                  color: AppColors.mainColor,
+                                  color: Color(0xFFccc7c5),
                                 ),
                               ],
                             ),
@@ -306,7 +310,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                             ),
                             BigText(
                               text: "Pharmacy informations",
-                              color: AppColors.secondColor,
+                              color: AppColors.mainBlackColor,
                             ),
                             SizedBox(
                               height: Dimensions.height20,
@@ -317,12 +321,15 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                   children: [
                                     BigText(
                                       text: "Pharmacy Name",
-                                      color: AppColors.yellowColor,
+                                      color: AppColors.mainBlackColor,
                                     ),
                                     SizedBox(
                                       width: Dimensions.width30,
                                     ),
-                                    BigText(text: pharmaName!),
+                                    BigText(
+                                      text: pharmaName!,
+                                      color: Color(0xFFccc7c5),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(
@@ -332,12 +339,13 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                   children: [
                                     BigText(
                                       text: "Email",
-                                      color: AppColors.mainColor,
+                                      color: AppColors.mainBlackColor,
                                     ),
                                     SizedBox(
                                       width: Dimensions.width30,
                                     ),
-                                    BigText(text: email!),
+                                    BigText(
+                                        text: email!, color: Color(0xFFccc7c5)),
                                   ],
                                 ),
                                 SizedBox(
@@ -347,13 +355,14 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                   children: [
                                     BigText(
                                       text: " Phone",
-                                      color: AppColors.yellowColor,
+                                      color: AppColors.mainBlackColor,
                                     ),
                                     SizedBox(
                                       width: Dimensions.width30,
                                     ),
                                     BigText(
                                       text: phone!,
+                                      color: Color(0xFFccc7c5),
                                     )
                                   ],
                                 ),
@@ -364,12 +373,15 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                                   children: [
                                     BigText(
                                       text: "Address",
-                                      color: AppColors.mainColor,
+                                      color: AppColors.mainBlackColor,
                                     ),
                                     SizedBox(
                                       width: Dimensions.width30,
                                     ),
-                                    BigText(text: address!),
+                                    BigText(
+                                      text: address!,
+                                      color: Color(0xFFccc7c5),
+                                    ),
                                   ],
                                 ),
                                 SizedBox(
@@ -424,7 +436,7 @@ class _InvalidDrugDetailsScreenState extends State<InvalidDrugDetailsScreen> {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.radius20),
-                    color: AppColors.mainColor,
+                    color: AppColors.secondColor,
                   ),
                 )),
           ],

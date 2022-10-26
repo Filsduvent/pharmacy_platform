@@ -33,7 +33,10 @@ class _MyOrdersScreenState extends State<MyOrdersScreen> {
                     .where('orderBy',
                         isEqualTo: AppConstants.sharedPreferences!
                             .getString(AppConstants.userUID))
-                    .where('orderStatus', isEqualTo: "Running")
+                    .where(
+                      'orderStatus',
+                      isEqualTo: "Running",
+                    )
                     .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData && snapshot.data!.docs.isNotEmpty

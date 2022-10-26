@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pharmacy_plateform/controllers/cart_controller.dart';
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
@@ -17,10 +18,10 @@ import '../../widgets/expandable_text_widget.dart';
 
 class PopularDrugDetail extends StatefulWidget {
   final int pageId;
-  final String page;
+  final String pages;
   final Drug drug;
   const PopularDrugDetail(
-      {Key? key, required this.pageId, required this.page, required this.drug})
+      {Key? key, required this.pageId, required this.pages, required this.drug})
       : super(key: key);
 
   @override
@@ -32,6 +33,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
   String? email = "";
   String? phone = "";
   String? address = "";
+  String? status = "";
 
   Future _getDataFromDatabase() async {
     await FirebaseFirestore.instance
@@ -50,6 +52,20 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
     });
   }
 
+  Future _getStatusFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          status = snapshot.data()!["status"];
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     // ignore: todo
@@ -57,6 +73,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
     super.initState();
 
     _getDataFromDatabase();
+    _getStatusFromDatabase();
   }
 
   @override
@@ -64,7 +81,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
     var drug = Get.find<SlideDrugController>().slideDrugList[widget.pageId];
     final SlideDrugController slideDrugController =
         Get.put(SlideDrugController());
-    //final CartController cartController = Get.put(CartController(Get.find()));
+
     Future.delayed(Duration.zero, () {
       slideDrugController.initData(drug, Get.find<CartController>());
     });
@@ -98,13 +115,16 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        if (widget.page == "cartpage") {
+                        if (widget.pages == "cartpage") {
                           Get.toNamed(RouteHelper.getCartPage());
                         } else {
                           Get.toNamed(RouteHelper.getInitial());
                         }
                       },
-                      child: AppIcon(icon: Icons.arrow_back_ios)),
+                      child: AppIcon(
+                        icon: Icons.arrow_back_ios,
+                        iconColor: AppColors.secondColor,
+                      )),
                   GetBuilder<SlideDrugController>(builder: (controller) {
                     return GestureDetector(
                       onTap: () {
@@ -114,7 +134,10 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                       },
                       child: Stack(
                         children: [
-                          AppIcon(icon: Icons.shopping_cart_outlined),
+                          AppIcon(
+                            icon: Icons.shopping_cart_outlined,
+                            iconColor: AppColors.secondColor,
+                          ),
                           controller.totalItems >= 1
                               ? Positioned(
                                   right: 0,
@@ -186,7 +209,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.categories,
-                              color: AppColors.mainColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -203,7 +226,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.manufacturingDate,
-                              color: AppColors.yellowColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -220,7 +243,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.expiringDate,
-                              color: AppColors.mainColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -237,7 +260,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.publishedDate,
-                              color: AppColors.yellowColor,
+                              color: Color(0xFFccc7c5),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -257,7 +280,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                               children: [
                                 BigText(
                                   text: 'BIF',
-                                  color: Colors.redAccent,
+                                  color: AppColors.mainColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width10 / 2,
@@ -283,7 +306,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.quantity.toString(),
-                              color: AppColors.yellowColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -300,7 +323,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.units,
-                              color: AppColors.mainColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -317,7 +340,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.status,
-                              color: AppColors.yellowColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -336,7 +359,7 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                         ),
                         BigText(
                           text: "Pharmacy informations",
-                          color: AppColors.secondColor,
+                          color: AppColors.mainBlackColor,
                         ),
                         SizedBox(
                           height: Dimensions.height20,
@@ -347,12 +370,15 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                               children: [
                                 BigText(
                                   text: "Pharmacy Name",
-                                  color: AppColors.yellowColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: pharmaName!),
+                                BigText(
+                                  text: pharmaName!,
+                                  color: Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -362,12 +388,15 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                               children: [
                                 BigText(
                                   text: "Email",
-                                  color: AppColors.mainColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: email!),
+                                BigText(
+                                  text: email!,
+                                  color: Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -377,13 +406,14 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                               children: [
                                 BigText(
                                   text: " Phone",
-                                  color: AppColors.yellowColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
                                 BigText(
                                   text: phone!,
+                                  color: Color(0xFFccc7c5),
                                 )
                               ],
                             ),
@@ -393,13 +423,15 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                             Row(
                               children: [
                                 BigText(
-                                  text: "Address",
-                                  color: AppColors.mainColor,
-                                ),
+                                    text: "Address",
+                                    color: AppColors.mainBlackColor),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: address!),
+                                BigText(
+                                  text: address!,
+                                  color: Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -480,24 +512,29 @@ class _PopularDrugDetailState extends State<PopularDrugDetail> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (slideDrugController.inCartItems >
-                        widget.drug.quantity) {
-                      Get.snackbar(
-                        "Item count",
-                        "Your requested quantity is greater than the available one please check the quantity",
-                        backgroundColor: AppColors.mainColor,
-                        colorText: Colors.white,
-                        icon: const Icon(
-                          Icons.alarm,
-                          color: Colors.white,
-                        ),
-                        barBlur: 20,
-                        isDismissible: true,
-                        duration: const Duration(seconds: 5),
-                      );
+                    if (firebaseAuth.currentUser != null &&
+                        status == "Activated") {
+                      if (slideDrugController.inCartItems >
+                          widget.drug.quantity) {
+                        Get.snackbar(
+                          "Item count",
+                          "Your requested quantity is greater than the available one please check the quantity",
+                          backgroundColor: AppColors.mainColor,
+                          colorText: Colors.white,
+                          icon: const Icon(
+                            Icons.alarm,
+                            color: Colors.white,
+                          ),
+                          barBlur: 20,
+                          isDismissible: true,
+                          duration: const Duration(seconds: 5),
+                        );
+                      } else {
+                        slideDrugController.addItem(widget.drug);
+                        checkItemInCart(widget.drug.id);
+                      }
                     } else {
-                      slideDrugController.addItem(drug);
-                      addItemToCartById(drug.id);
+                      Get.toNamed(RouteHelper.getSignInPage());
                     }
                   },
                   child: Container(
@@ -527,7 +564,19 @@ void checkItemInCart(String id) {
   AppConstants.sharedPreferences!
           .getStringList(AppConstants.userCartList)!
           .contains(id)
-      ? null
+      ? Get.snackbar(
+          "Existing product control",
+          "This product is already in the cart please try to increase quantity",
+          backgroundColor: AppColors.mainColor,
+          colorText: Colors.white,
+          icon: const Icon(
+            Icons.alarm,
+            color: Colors.white,
+          ),
+          barBlur: 20,
+          isDismissible: true,
+          duration: const Duration(seconds: 5),
+        )
       : addItemToCartById(id);
 }
 

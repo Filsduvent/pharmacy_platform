@@ -47,7 +47,11 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                     onTap: () {
                       Get.toNamed(RouteHelper.getCategoriesMainScreen());
                     },
-                    child: AppIcon(icon: Icons.clear),
+                    child: AppIcon(
+                      icon: Icons.clear,
+                      backgroundColor: AppColors.mainColor,
+                      iconColor: Colors.white,
+                    ),
                   ),
                 ],
               ),
@@ -116,7 +120,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: const Text(
+                        title: Text(
                             'There\'s no way to retreive deleted elements!'),
                         content: BigText(
                           text: "Are you sure you want to delete this drug?",
@@ -129,7 +133,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                               },
                               child: BigText(
                                 text: "Yes",
-                                color: Colors.redAccent,
+                                color: AppColors.yellowColor,
                               )),
                           TextButton(
                               onPressed: () => Get.back(),
@@ -154,7 +158,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.radius20),
-                    color: AppColors.mainColor,
+                    color: AppColors.secondColor,
                   ),
                 ),
               ),
@@ -178,7 +182,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.radius20),
-                    color: AppColors.mainColor,
+                    color: AppColors.secondColor,
                   ),
                 ),
               ),

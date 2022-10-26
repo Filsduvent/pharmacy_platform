@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/pharmacist/model/menu_item.dart';
@@ -9,7 +10,6 @@ import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/colors.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
-
 import '../../../../routes/route_helper.dart';
 import '../widgets/navigation_drawer_widget.dart';
 
@@ -21,6 +21,30 @@ class MainPharmacyScreen extends StatefulWidget {
 }
 
 class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
+  String? status = "";
+  Future _getStatusFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          status = snapshot.data()!["status"];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // ignore: todo
+    // TODO: implement initState
+    super.initState();
+
+    _getStatusFromDatabase();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -53,23 +77,23 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
+                  // Container(
+                  //   margin: EdgeInsets.symmetric(vertical: 10),
+                  //   padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(29.5),
+                  //   ),
+                  //   child: TextField(
+                  //     decoration: InputDecoration(
+                  //       hintText: "Search",
+                  //       icon: Icon(Icons.search),
+                  //       border: InputBorder.none,
+                  //     ),
+                  //   ),
+                  // ),
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(29.5),
-                    ),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Search",
-                        icon: Icon(Icons.search),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    height: Dimensions.height45 * 1.3,
+                    height: Dimensions.height45 * 2,
                     margin: EdgeInsets.symmetric(vertical: 20),
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                     decoration: BoxDecoration(
@@ -77,7 +101,7 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
                       borderRadius: BorderRadius.circular(29.5),
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         StreamBuilder<QuerySnapshot>(
                             stream: firestore
@@ -132,7 +156,7 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: Dimensions.height20 * 4,
+                    height: Dimensions.height20 * 6,
                   ),
                   Expanded(
                     child: GridView.count(
@@ -145,29 +169,66 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
                           imgSrc: "assets/image/medicine.png",
                           title: "MEDICINES",
                           press: () {
-                            Get.toNamed(RouteHelper.getPharmacyMedecinePage());
+                            if (status == "Activated") {
+                              Get.toNamed(
+                                  RouteHelper.getPharmacyMedecinePage());
+                            } else {
+                              if (firebaseAuth.currentUser != null) {
+                                authController.clearShareData();
+                                cartControllers.clear();
+                                cartControllers.clearCartHistory();
+                                authController.logOut();
+                              }
+                            }
                           },
                         ),
                         CategoryCard(
                             imgSrc: "assets/image/orders.png",
                             title: "ORDERS",
                             press: () {
-                              Get.toNamed(
-                                  RouteHelper.getPharmacistOrderScreen());
+                              if (status == "Activated") {
+                                Get.toNamed(
+                                    RouteHelper.getPharmacistOrderScreen());
+                              } else {
+                                if (firebaseAuth.currentUser != null) {
+                                  authController.clearShareData();
+                                  cartControllers.clear();
+                                  cartControllers.clearCartHistory();
+                                  authController.logOut();
+                                }
+                              }
                             }),
                         CategoryCard(
                             imgSrc: "assets/image/profiles.png",
                             title: "PROFILE",
                             press: () {
-                              Get.toNamed(
-                                  RouteHelper.getPharmacistProfileScreen());
+                              if (status == "Activated") {
+                                Get.toNamed(
+                                    RouteHelper.getPharmacistProfileScreen());
+                              } else {
+                                if (firebaseAuth.currentUser != null) {
+                                  authController.clearShareData();
+                                  cartControllers.clear();
+                                  cartControllers.clearCartHistory();
+                                  authController.logOut();
+                                }
+                              }
                             }),
                         CategoryCard(
                             imgSrc: "assets/image/personalize.png",
                             title: "PERSONALIZE",
                             press: () {
-                              Get.toNamed(
-                                  RouteHelper.getPersonalizePharmacyScreen());
+                              if (status == "Activated") {
+                                Get.toNamed(
+                                    RouteHelper.getPersonalizePharmacyScreen());
+                              } else {
+                                if (firebaseAuth.currentUser != null) {
+                                  authController.clearShareData();
+                                  cartControllers.clear();
+                                  cartControllers.clearCartHistory();
+                                  authController.logOut();
+                                }
+                              }
                             }),
                       ],
                     ),
@@ -201,10 +262,17 @@ class _MainPharmacyScreenState extends State<MainPharmacyScreen> {
 
   void onSelected(BuildContext context, MenuItems item) {
     switch (item) {
-      case MenuItemsList.itemSettings:
-        break;
       case MenuItemsList.itemProfile:
-        Get.toNamed(RouteHelper.getPharmacistProfileScreen());
+        if (status == "Activated") {
+          Get.toNamed(RouteHelper.getPharmacistProfileScreen());
+        } else {
+          if (firebaseAuth.currentUser != null) {
+            authController.clearShareData();
+            cartControllers.clear();
+            cartControllers.clearCartHistory();
+            authController.logOut();
+          }
+        }
         break;
       case MenuItemsList.itemSignOut:
         showDialog(

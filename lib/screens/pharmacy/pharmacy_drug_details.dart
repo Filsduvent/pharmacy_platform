@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, sort_child_properties_last, avoid_unnecessary_containers, unused_local_variable
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmacy_plateform/controllers/cart_controller.dart';
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
@@ -15,7 +16,7 @@ import '../../utils/colors.dart';
 import '../../widgets/app_column.dart';
 import '../../widgets/expandable_text_widget.dart';
 
-class PharmacyDrugDetailsScreen extends StatelessWidget {
+class PharmacyDrugDetailsScreen extends StatefulWidget {
   final int pageId;
   final String page;
   final Drug drug;
@@ -29,13 +30,43 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<PharmacyDrugDetailsScreen> createState() =>
+      _PharmacyDrugDetailsScreenState();
+}
+
+class _PharmacyDrugDetailsScreenState extends State<PharmacyDrugDetailsScreen> {
+  String? status = "";
+  Future _getStatusFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          status = snapshot.data()!["status"];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // ignore: todo
+    // TODO: implement initState
+    super.initState();
+
+    _getStatusFromDatabase();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var drugs = Get.find<SlideDrugController>().slideDrugList[pageId];
+    var drugs = Get.find<SlideDrugController>().slideDrugList[widget.pageId];
     final SlideDrugController slideDrugController =
         Get.put(SlideDrugController());
     //final CartController cartController = Get.put(CartController(Get.find()));
     Future.delayed(Duration.zero, () {
-      slideDrugController.initData(drug, Get.find<CartController>());
+      slideDrugController.initData(drugs, Get.find<CartController>());
     });
 
     return Scaffold(
@@ -51,7 +82,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                 height: Dimensions.popularFoodImgSize,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        fit: BoxFit.cover, image: NetworkImage(drug.photoUrl))),
+                        fit: BoxFit.cover,
+                        image: NetworkImage(widget.drug.photoUrl))),
               ),
             ),
 
@@ -66,14 +98,17 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                       onTap: () {
-                        if (page == "cartpage") {
+                        if (widget.page == "cartpage") {
                           Get.toNamed(RouteHelper.getCartPage());
                         } else {
                           // Get.toNamed(RouteHelper.getInitial());
                           Get.back();
                         }
                       },
-                      child: AppIcon(icon: Icons.arrow_back_ios)),
+                      child: AppIcon(
+                        icon: Icons.arrow_back_ios,
+                        iconColor: AppColors.secondColor,
+                      )),
                   GetBuilder<SlideDrugController>(builder: (controller) {
                     return GestureDetector(
                       onTap: () {
@@ -83,7 +118,10 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                       },
                       child: Stack(
                         children: [
-                          AppIcon(icon: Icons.shopping_cart_outlined),
+                          AppIcon(
+                            icon: Icons.shopping_cart_outlined,
+                            iconColor: AppColors.secondColor,
+                          ),
                           controller.totalItems >= 1
                               ? Positioned(
                                   right: 0,
@@ -141,7 +179,7 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        AppColumn(text: drug.title),
+                        AppColumn(text: widget.drug.title),
                         SizedBox(
                           height: Dimensions.height20,
                         ),
@@ -154,8 +192,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               width: Dimensions.width30,
                             ),
                             BigText(
-                              text: drug.categories,
-                              color: AppColors.mainColor,
+                              text: widget.drug.categories,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -171,8 +209,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               width: Dimensions.width30,
                             ),
                             BigText(
-                              text: drug.manufacturingDate,
-                              color: AppColors.yellowColor,
+                              text: widget.drug.manufacturingDate,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -188,8 +226,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               width: Dimensions.width30,
                             ),
                             BigText(
-                              text: drug.expiringDate,
-                              color: AppColors.mainColor,
+                              text: widget.drug.expiringDate,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -205,8 +243,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               width: Dimensions.width20,
                             ),
                             BigText(
-                              text: drug.publishedDate,
-                              color: AppColors.yellowColor,
+                              text: widget.drug.publishedDate,
+                              color: Color(0xFFccc7c5),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -226,13 +264,13 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               children: [
                                 BigText(
                                   text: 'BIF',
-                                  color: Colors.redAccent,
+                                  color: AppColors.mainColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width10 / 2,
                                 ),
                                 BigText(
-                                  text: drug.price.toString(),
+                                  text: widget.drug.price.toString(),
                                   color: AppColors.mainColor,
                                 ),
                               ],
@@ -251,8 +289,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               width: Dimensions.width30,
                             ),
                             BigText(
-                              text: drug.quantity.toString(),
-                              color: AppColors.yellowColor,
+                              text: widget.drug.quantity.toString(),
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -268,8 +306,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               width: Dimensions.width30,
                             ),
                             BigText(
-                              text: drug.units,
-                              color: AppColors.mainColor,
+                              text: widget.drug.units,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -285,8 +323,8 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               width: Dimensions.width30,
                             ),
                             BigText(
-                              text: drug.status,
-                              color: AppColors.yellowColor,
+                              text: widget.drug.status,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -299,13 +337,13 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                         SizedBox(
                           height: Dimensions.height20,
                         ),
-                        ExpandableTextWidget(text: drug.description),
+                        ExpandableTextWidget(text: widget.drug.description),
                         SizedBox(
                           height: Dimensions.height20,
                         ),
                         BigText(
                           text: "Pharmacy informations",
-                          color: AppColors.secondColor,
+                          color: AppColors.mainBlackColor,
                         ),
                         SizedBox(
                           height: Dimensions.height20,
@@ -316,12 +354,15 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               children: [
                                 BigText(
                                   text: "Pharmacy Name",
-                                  color: AppColors.yellowColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: user.pharmaName),
+                                BigText(
+                                  text: widget.user.pharmaName,
+                                  color: Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -331,12 +372,15 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               children: [
                                 BigText(
                                   text: "Email",
-                                  color: AppColors.mainColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: user.email),
+                                BigText(
+                                  text: widget.user.email,
+                                  color: Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -346,13 +390,14 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               children: [
                                 BigText(
                                   text: " Phone",
-                                  color: AppColors.yellowColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
                                 BigText(
-                                  text: user.phone,
+                                  text: widget.user.phone,
+                                  color: Color(0xFFccc7c5),
                                 )
                               ],
                             ),
@@ -363,12 +408,15 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                               children: [
                                 BigText(
                                   text: "Address",
-                                  color: AppColors.mainColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: user.address),
+                                BigText(
+                                  text: widget.user.address,
+                                  color: Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -449,23 +497,29 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    if (slideDrugController.inCartItems > drug.quantity) {
-                      Get.snackbar(
-                        "Item count",
-                        "Your requested quantity is greater than the available one please check the quantity",
-                        backgroundColor: AppColors.mainColor,
-                        colorText: Colors.white,
-                        icon: const Icon(
-                          Icons.alarm,
-                          color: Colors.white,
-                        ),
-                        barBlur: 20,
-                        isDismissible: true,
-                        duration: const Duration(seconds: 5),
-                      );
+                    if (firebaseAuth.currentUser != null &&
+                        status == "Activated") {
+                      if (slideDrugController.inCartItems >
+                          widget.drug.quantity) {
+                        Get.snackbar(
+                          "Item count",
+                          "Your requested quantity is greater than the available one please check the quantity",
+                          backgroundColor: AppColors.mainColor,
+                          colorText: Colors.white,
+                          icon: const Icon(
+                            Icons.alarm,
+                            color: Colors.white,
+                          ),
+                          barBlur: 20,
+                          isDismissible: true,
+                          duration: const Duration(seconds: 5),
+                        );
+                      } else {
+                        slideDrugController.addItem(widget.drug);
+                        addItemToCartById(widget.drug.id);
+                      }
                     } else {
-                      slideDrugController.addItem(drug);
-                      addItemToCartById(drug.id);
+                      Get.toNamed(RouteHelper.getSignInPage());
                     }
                   },
                   child: Container(
@@ -475,7 +529,7 @@ class PharmacyDrugDetailsScreen extends StatelessWidget {
                         left: Dimensions.width20,
                         right: Dimensions.width20),
                     child: BigText(
-                      text: '\$ ${drug.price} | Add to cart',
+                      text: '\$ ${widget.drug.price} | Add to cart',
                       color: Colors.white,
                     ),
                     decoration: BoxDecoration(

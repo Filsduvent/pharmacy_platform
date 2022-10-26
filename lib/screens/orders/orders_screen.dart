@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, sized_box_for_whitespace, prefer_const_literals_to_create_immutables, avoid_unnecessary_containers
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/screens/orders/my_orders_history_screen.dart';
@@ -23,6 +24,22 @@ class _OrderScreenState extends State<OrderScreen>
   late TabController _tabController = TabController(length: 2, vsync: this);
   late bool _isLoggedIn;
 
+  String? status = "";
+
+  Future _getDataFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(AppConstants.sharedPreferences!.getString(AppConstants.userUID))
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          status = snapshot.data()!["status"];
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +49,7 @@ class _OrderScreenState extends State<OrderScreen>
       // Get.find<SlideDrugController>()
       //     .slideDrugList; //function to display all the orders from firebase;
     }
+    _getDataFromDatabase();
   }
 
   @override
@@ -42,7 +60,7 @@ class _OrderScreenState extends State<OrderScreen>
         backgroundColor: AppColors.mainColor,
         centerTitle: true,
       ),
-      body: firebaseAuth.currentUser != null
+      body: firebaseAuth.currentUser != null && status == "Activated"
           ? Column(
               children: [
                 Container(

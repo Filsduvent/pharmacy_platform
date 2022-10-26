@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pharmacy_plateform/screens/account/account_screen.dart';
+import '../../routes/route_helper.dart';
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
 import '../../widgets/big_text.dart';
@@ -44,7 +44,7 @@ class UpdateSuccessScreen extends StatelessWidget {
                 padding: EdgeInsets.all(Dimensions.height10),
                 child: GestureDetector(
                   onTap: () {
-                    Get.to(const AccountScreen());
+                    Get.offAllNamed(RouteHelper.getInitial());
                   },
                   child: Container(
                     width: double.maxFinite,

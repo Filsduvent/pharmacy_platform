@@ -44,6 +44,9 @@ class AuthController extends GetxController {
       _isLoading.value = true;
       if (username.isEmpty) {
         showCustomSnackBar("Fill your username please", title: "UserName");
+      } else if (username.length >= 16) {
+        showCustomSnackBar("The username can't be over 15 characters",
+            title: "UserName");
       } else if (email.isEmpty) {
         showCustomSnackBar("Fill your email please", title: "Email");
       } else if (!GetUtils.isEmail(email)) {
@@ -51,8 +54,16 @@ class AuthController extends GetxController {
       } else if (phone.isEmpty) {
         showCustomSnackBar("Fill your phone number please",
             title: "Phone number");
+      } else if (phone.length != 8) {
+        showCustomSnackBar("Wrong phone number format", title: "Phone number");
+      } else if (int.parse(phone) < 0) {
+        showCustomSnackBar("Phone number can't be negative",
+            title: "Phone number");
       } else if (address.isEmpty) {
         showCustomSnackBar("Fill your address please", title: "Address");
+      } else if (address.length >= 20) {
+        showCustomSnackBar("The address can't be over 20 characters",
+            title: "Address");
       } else if (password.isEmpty) {
         showCustomSnackBar("Fill your password please", title: "Password");
       } else if (password.length < 6) {
@@ -124,13 +135,13 @@ class AuthController extends GetxController {
                   .then((DocumentSnapshot snapshot) {
                 var jsons = snapshot.data() as Map<String, dynamic>;
                 if (jsons['role'] == 'Admin') {
-                  Get.toNamed(RouteHelper.getAdminHomeScreen());
+                  Get.offAllNamed(RouteHelper.getAdminHomeScreen());
                 } else if (jsons['role'] == 'Customer') {
-                  Get.toNamed(RouteHelper.getInitial());
+                  Get.offAllNamed(RouteHelper.getInitial());
                 } else if (jsons['role'] == 'Pharmacy owner') {
-                  Get.toNamed(RouteHelper.getMainPharmacyPage());
+                  Get.offAllNamed(RouteHelper.getMainPharmacyPage());
                 } else if (jsons['role'] == 'Provider') {
-                  Get.toNamed(RouteHelper.getInitial());
+                  Get.offAllNamed(RouteHelper.getInitial());
                 } else {
                   showCustomSnackBar("This kind of role doesn't exist",
                       title: 'Role management');
@@ -142,7 +153,7 @@ class AuthController extends GetxController {
       }
     } catch (e) {
       showCustomSnackBar(
-        'Error Creating Account',
+        'This email already exist',
         title: "Create account",
       );
     }
@@ -165,17 +176,24 @@ class AuthController extends GetxController {
                 .then((DocumentSnapshot snapshot) {
               var jsons = snapshot.data() as Map<String, dynamic>;
               if (jsons['role'] == 'Admin') {
-                Get.toNamed(RouteHelper.getAdminHomeScreen());
-              } else if (jsons['role'] == 'Customer') {
-                Get.toNamed(RouteHelper.getInitial());
-              } else if (jsons['role'] == 'Pharmacy owner') {
-                Get.toNamed(RouteHelper.getMainPharmacyPage());
+                Get.offAllNamed(RouteHelper.getAdminHomeScreen());
+              } else if (jsons['role'] == 'Customer' &&
+                  jsons['status'] == 'Activated') {
+                Get.offAllNamed(RouteHelper.getInitial());
+              } else if (jsons['role'] == 'Pharmacy owner' &&
+                  jsons['status'] == 'Activated') {
+                Get.offAllNamed(RouteHelper.getMainPharmacyPage());
               } else if (jsons['role'] == 'Provider') {
-                Get.toNamed(RouteHelper.getInitial());
+                Get.offAllNamed(RouteHelper.getInitial());
               } else {
-                showCustomSnackBar("This kind of role doesn't exist",
+                showCustomSnackBar("This account might be blocked",
                     title: 'Role management');
               }
+            }).whenComplete(() async {
+              SharedPreferences sharedPreferences =
+                  await SharedPreferences.getInstance();
+              await sharedPreferences
+                  .setStringList(AppConstants.userCartList, ["garbageValue"]);
             });
           });
         }
@@ -198,7 +216,13 @@ class AuthController extends GetxController {
 
   void logOut() async {
     await firebaseAuth.signOut().then((value) {
-      return Get.offNamed(RouteHelper.getSignInPage());
+      return Get.offAllNamed(RouteHelper.getInitial());
+    });
+  }
+
+  void logOutForCustomer() async {
+    await firebaseAuth.signOut().then((value) {
+      return Get.offAllNamed(RouteHelper.getSignInPage());
     });
   }
 

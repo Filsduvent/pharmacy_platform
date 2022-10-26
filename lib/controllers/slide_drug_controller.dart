@@ -32,8 +32,9 @@ class SlideDrugController extends GetxController {
     _slideDrugList.bindStream(FirebaseFirestore.instance
         .collection('Medicines')
         .where('visibility', isEqualTo: true)
-        .where('quantity', isGreaterThan: 0)
-        //.limit(5)
+        .where('status', isEqualTo: "Available")
+        // .where('quantity', isGreaterThan: 0)
+        .limit(15)
         .snapshots()
         .map((QuerySnapshot query) {
       List<Drug> retVal = [];

@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import '../../../../base/no_data_page.dart';
-import '../../../../utils/colors.dart';
 
 class PharmacistOrderHistory extends StatefulWidget {
   const PharmacistOrderHistory({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
         body: StreamBuilder<QuerySnapshot>(
             stream: firestore
                 .collection('Orders')
-                .where('orderStatus', isEqualTo: "Running")
+                .where('orderStatus', isEqualTo: "Received")
                 .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData && snapshot.data!.docs.isNotEmpty
@@ -42,7 +41,7 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                                         as Map<String, dynamic>)['productID'])
                                 .get(),
                             builder: (c, snap) {
-                              return snap.hasData
+                              return snap.hasData && snap.data!.docs.isNotEmpty
                                   ? PharmacistOrderCard(
                                       itemCount: snap.data!.docs.length,
                                       data: snap.data!.docs,
@@ -57,11 +56,7 @@ class _PharmacistOrderHistoryState extends State<PharmacistOrderHistory> {
                                               .data() as Map<String, dynamic>)[
                                           'orderedProduct'][0]['quantity'],
                                     )
-                                  : Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppColors.mainColor,
-                                      ),
-                                    );
+                                  : Container();
                             });
                       })
                   : NoDataPage(

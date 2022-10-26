@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
+import 'package:pharmacy_plateform/utils/colors.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 import '../models/drug_model.dart';
 import 'big_text.dart';
@@ -151,7 +152,7 @@ Widget sourceOrderInfo(Drug model, int quantity, BuildContext context) {
                     ),
                     BigText(
                       text: (model.price * quantity).toString(),
-                      color: Colors.redAccent,
+                      color: AppColors.mainColor,
                     ),
                   ],
                 ),

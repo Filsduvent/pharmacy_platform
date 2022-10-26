@@ -53,7 +53,7 @@ class PharmacistOrderDetails extends StatelessWidget {
                           ),
                           Container(
                             margin: EdgeInsets.all(Dimensions.width10),
-                            height: Dimensions.height45 * 3,
+                            height: Dimensions.height45 * 3.7,
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(Dimensions.radius30),
@@ -145,6 +145,23 @@ class PharmacistOrderDetails extends StatelessWidget {
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      BigText(
+                                        text: "Payment : ",
+                                        color: Colors.grey,
+                                      ),
+                                      BigText(
+                                        text: dataMap['paymentDetails'],
+                                        color: AppColors.mainColor,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: Dimensions.height10,
+                                  ),
                                 ],
                               ),
                             ),
@@ -170,7 +187,9 @@ class PharmacistOrderDetails extends StatelessWidget {
                                             ['quantity'],
                                       )
                                     : Center(
-                                        child: CircularProgressIndicator(),
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.mainColor,
+                                        ),
                                       );
                               }),
                           FutureBuilder<DocumentSnapshot>(
@@ -186,7 +205,9 @@ class PharmacistOrderDetails extends StatelessWidget {
                                         model: AddressModel.fromJson(snap.data!
                                             .data() as Map<String, dynamic>))
                                     : Center(
-                                        child: CircularProgressIndicator(),
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.mainColor,
+                                        ),
                                       );
                               }),
                           SizedBox(
@@ -220,7 +241,9 @@ class PharmacistOrderDetails extends StatelessWidget {
                       ),
                     )
                   : Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: AppColors.mainColor,
+                      ),
                     );
             }),
       ),

@@ -42,7 +42,10 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                   onTap: () {
                     Get.toNamed(RouteHelper.getInitial());
                   },
-                  child: AppIcon(icon: Icons.clear),
+                  child: AppIcon(
+                    icon: Icons.clear,
+                    iconColor: AppColors.secondColor,
+                  ),
                 ),
               ],
             ),
@@ -136,7 +139,7 @@ class _CategoryDetailsScreenState extends State<CategoryDetailsScreen> {
                     right: Dimensions.width20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimensions.radius20),
-                  color: AppColors.mainColor,
+                  color: AppColors.secondColor,
                 ),
                 child: BigText(
                   text: 'Explore',

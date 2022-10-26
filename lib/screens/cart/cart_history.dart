@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pharmacy_plateform/base/no_data_page.dart';
 import 'package:pharmacy_plateform/controllers/cart_controller.dart';
@@ -15,8 +17,38 @@ import 'package:pharmacy_plateform/widgets/small_text.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-class CartHistory extends StatelessWidget {
+class CartHistory extends StatefulWidget {
   const CartHistory({Key? key}) : super(key: key);
+
+  @override
+  State<CartHistory> createState() => _CartHistoryState();
+}
+
+class _CartHistoryState extends State<CartHistory> {
+  String? status = "";
+
+  Future _getDataFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          status = snapshot.data()!["status"];
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    // ignore: todo
+    // TODO: implement initState
+    super.initState();
+
+    _getDataFromDatabase();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +112,8 @@ class CartHistory extends StatelessWidget {
           ),
           //body
           GetBuilder<CartController>(builder: (_cartController) {
-            return _cartController.getCartHistoryList().length > 0
+            return _cartController.getCartHistoryList().length > 0 &&
+                    status == "Activated"
                 ? Expanded(
                     child: Container(
                         margin: EdgeInsets.only(

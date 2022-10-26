@@ -56,9 +56,10 @@ class _PharmacyDrugScreenState extends State<PharmacyDrugScreen> {
                 .collection('Medicines')
                 .where('uid', isEqualTo: widget.user.uid)
                 .where('visibility', isEqualTo: true)
+                .where('status', isEqualTo: "Available")
                 .snapshots(),
             builder: (c, snapshot) {
-              return snapshot.hasData
+              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
                   ? SingleChildScrollView(
                       child: Container(
                         // margin: EdgeInsets.only(
@@ -80,133 +81,148 @@ class _PharmacyDrugScreenState extends State<PharmacyDrugScreen> {
                                   return Drug.fromSnap(drug);
                                 }).toList();
                                 Drug drug = drugList[index];
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              PharmacyDrugDetailsScreen(
-                                                  pageId: index,
-                                                  page: "details",
-                                                  drug: drug,
-                                                  user: widget.user),
-                                        ));
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                        color: Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 1,
-                                            offset: const Offset(0, 2),
-                                            color: Colors.grey.withOpacity(0.3),
-                                          )
-                                        ]),
-                                    child: Column(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(16.0),
-                                              topRight: Radius.circular(16.0)),
-                                          child: Image.network(
-                                            drug.photoUrl,
-                                            height: 170,
-                                            width: double.infinity,
-                                            fit: BoxFit.cover,
+                                return drug.quantity != 0
+                                    ? InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PharmacyDrugDetailsScreen(
+                                                        pageId: index,
+                                                        page: "details",
+                                                        drug: drug,
+                                                        user: widget.user),
+                                              ));
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(16.0),
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 1,
+                                                  offset: const Offset(0, 2),
+                                                  color: Colors.grey
+                                                      .withOpacity(0.3),
+                                                )
+                                              ]),
+                                          child: Column(
+                                            children: [
+                                              ClipRRect(
+                                                borderRadius: const BorderRadius
+                                                        .only(
+                                                    topLeft:
+                                                        Radius.circular(16.0),
+                                                    topRight:
+                                                        Radius.circular(16.0)),
+                                                child: Image.network(
+                                                  drug.photoUrl,
+                                                  height: 170,
+                                                  width: double.infinity,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
+                                              Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(drug.title,
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .subtitle1!
+                                                                .merge(const TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700))),
+                                                        const SizedBox(
+                                                          height: 8.0,
+                                                        ),
+                                                        Text(
+                                                            "BIF${drug.price.toString()}",
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .subtitle2!
+                                                                .merge(TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700,
+                                                                    color: AppColors
+                                                                        .mainColor))),
+                                                        const SizedBox(
+                                                          height: 8.0,
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder: (context) => PharmacyDrugDetailsScreen(
+                                                                      pageId:
+                                                                          index,
+                                                                      page:
+                                                                          "details",
+                                                                      drug:
+                                                                          drug,
+                                                                      user: widget
+                                                                          .user),
+                                                                ));
+                                                          },
+                                                          child: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            padding: EdgeInsets.only(
+                                                                top: Dimensions
+                                                                        .height10 /
+                                                                    2,
+                                                                bottom: Dimensions
+                                                                        .height10 /
+                                                                    2,
+                                                                left: Dimensions
+                                                                        .width20 /
+                                                                    4,
+                                                                right: Dimensions
+                                                                        .width20 /
+                                                                    4),
+                                                            child: Center(
+                                                              child: BigText(
+                                                                text: "Explore",
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                            ),
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          Dimensions.radius20 /
+                                                                              2),
+                                                              color: AppColors
+                                                                  .secondColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ]))
+                                            ],
                                           ),
                                         ),
-                                        Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(drug.title,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .subtitle1!
-                                                          .merge(const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700))),
-                                                  const SizedBox(
-                                                    height: 8.0,
-                                                  ),
-                                                  Text(drug.price.toString(),
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .subtitle2!
-                                                          .merge(const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: Colors
-                                                                  .redAccent))),
-                                                  const SizedBox(
-                                                    height: 8.0,
-                                                  ),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                PharmacyDrugDetailsScreen(
-                                                                    pageId:
-                                                                        index,
-                                                                    page:
-                                                                        "details",
-                                                                    drug: drug,
-                                                                    user: widget
-                                                                        .user),
-                                                          ));
-                                                    },
-                                                    child: Container(
-                                                      width: double.infinity,
-                                                      padding: EdgeInsets.only(
-                                                          top: Dimensions
-                                                                  .height10 /
-                                                              2,
-                                                          bottom: Dimensions
-                                                                  .height10 /
-                                                              2,
-                                                          left: Dimensions
-                                                                  .width20 /
-                                                              4,
-                                                          right: Dimensions
-                                                                  .width20 /
-                                                              4),
-                                                      child: Center(
-                                                        child: BigText(
-                                                          text: "Explore",
-                                                          color: Colors.white,
-                                                        ),
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius
-                                                            .circular(Dimensions
-                                                                    .radius20 /
-                                                                2),
-                                                        color:
-                                                            AppColors.mainColor,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ]))
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                      )
+                                    : Container();
                               }),
                         ),
                       ),
                     )
                   : const NoDataPage(
-                      text: "Pharmacy Empty",
-                      imgPath: "assets/image/No_data.png",
+                      text: "No drug found",
+                      imgPath: "assets/image/defauldDrug.png",
                     );
             }));
   }

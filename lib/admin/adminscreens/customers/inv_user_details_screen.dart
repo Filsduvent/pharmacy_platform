@@ -1,4 +1,5 @@
 // ignore_for_file: sort_child_properties_last
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/user_model.dart';
@@ -40,7 +41,7 @@ class _InvalidUserDetailsScreenState extends State<InvalidUserDetailsScreen> {
               decoration: BoxDecoration(
                   image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(widget.user.profilePhoto))),
+                      image: NetworkImage(widget.user.pharmaIcon))),
             ),
           ),
 
@@ -57,7 +58,11 @@ class _InvalidUserDetailsScreenState extends State<InvalidUserDetailsScreen> {
                     onTap: () {
                       Get.back();
                     },
-                    child: AppIcon(icon: Icons.arrow_back_ios)),
+                    child: AppIcon(
+                      icon: Icons.arrow_back_ios,
+                      iconColor: Colors.white,
+                      backgroundColor: AppColors.secondColor,
+                    )),
               ],
             ),
           ),
@@ -96,7 +101,7 @@ class _InvalidUserDetailsScreenState extends State<InvalidUserDetailsScreen> {
                               iconSize: Dimensions.height10 * 5 / 2,
                               size: Dimensions.height10 * 5,
                             ),
-                            bigText: BigText(text: widget.user.username)),
+                            bigText: BigText(text: widget.user.pharmaName)),
                         SizedBox(
                           height: Dimensions.height20,
                         ),
@@ -220,12 +225,14 @@ class _InvalidUserDetailsScreenState extends State<InvalidUserDetailsScreen> {
               firestore
                   .collection('Users')
                   .doc(id)
-                  .update({"status": "Activated"});
+                  .update({"status": "Activated"}).whenComplete(
+                      () => updateStatusExistingDrugToAvailable());
             } else {
               firestore
                   .collection('Users')
                   .doc(id)
-                  .update({"status": "Deactivated"});
+                  .update({"status": "Deactivated"}).whenComplete(
+                      () => updateStatusExistingDrugToUnavailable());
             }
             // Get.toNamed(RouteHelper.getAdminPharmacistScreen());
             Get.back();
@@ -235,4 +242,38 @@ class _InvalidUserDetailsScreenState extends State<InvalidUserDetailsScreen> {
           },
         ),
       );
+
+  updateStatusExistingDrugToUnavailable() async {
+    await FirebaseFirestore.instance
+        .collection('Medicines')
+        .where('uid', isEqualTo: widget.user.uid)
+        .get()
+        .then((snapshot) {
+      for (int index = 0; index < snapshot.docs.length; index++) {
+        FirebaseFirestore.instance
+            .collection('Medicines')
+            .doc(snapshot.docs[index].id)
+            .update({
+          'status': "Unavailable",
+        });
+      }
+    });
+  }
+
+  updateStatusExistingDrugToAvailable() async {
+    await FirebaseFirestore.instance
+        .collection('Medicines')
+        .where('uid', isEqualTo: widget.user.uid)
+        .get()
+        .then((snapshot) {
+      for (int index = 0; index < snapshot.docs.length; index++) {
+        FirebaseFirestore.instance
+            .collection('Medicines')
+            .doc(snapshot.docs[index].id)
+            .update({
+          'status': "Available",
+        });
+      }
+    });
+  }
 }

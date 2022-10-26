@@ -63,7 +63,7 @@ class _AdminOrderDetailsScreenState extends State<AdminOrderDetailsScreen> {
                                 ),
                                 Container(
                                   margin: EdgeInsets.all(Dimensions.width10),
-                                  height: Dimensions.height45 * 3.7,
+                                  height: Dimensions.height45 * 4.5,
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(
                                           Dimensions.radius30),
@@ -95,7 +95,7 @@ class _AdminOrderDetailsScreenState extends State<AdminOrderDetailsScreen> {
                                             BigText(
                                               text:
                                                   "BIF ${dataMap['totalAmount'].toString()}",
-                                              color: Colors.redAccent,
+                                              color: AppColors.mainColor,
                                             )
                                           ],
                                         ),
@@ -175,6 +175,23 @@ class _AdminOrderDetailsScreenState extends State<AdminOrderDetailsScreen> {
                                         SizedBox(
                                           height: Dimensions.height10,
                                         ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            BigText(
+                                              text: "Payment : ",
+                                              color: Colors.grey,
+                                            ),
+                                            BigText(
+                                              text: dataMap['paymentDetails'],
+                                              color: AppColors.mainColor,
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: Dimensions.height10,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -240,7 +257,7 @@ class _AdminOrderDetailsScreenState extends State<AdminOrderDetailsScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(
                                                       Dimensions.radius30),
-                                              color: AppColors.mainColor),
+                                              color: AppColors.secondColor),
                                           child: Center(
                                             child: BigText(
                                               text: "Running Order",

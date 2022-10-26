@@ -47,7 +47,9 @@ class _PlaceOrderState extends State<PlaceOrder> {
                         textColor: Colors.white,
                         padding: EdgeInsets.all(8.0),
                         splashColor: Colors.deepOrange,
-                        onPressed: () => addOrderDetails(),
+                        onPressed: () {
+                          addOrderDetails();
+                        },
                         child:
                             BigText(text: "Place order", color: Colors.white))
                   ],
@@ -136,7 +138,7 @@ class _PlaceOrderState extends State<PlaceOrder> {
           .setStringList(AppConstants.userCartList, tempList);
     });
 
-    Get.toNamed(RouteHelper.getOrderSuccessScreen());
+    Get.offAllNamed(RouteHelper.getOrderSuccessScreen());
   }
 
   /* Future writeOrderDetailsForUser(Map<String, dynamic> data) async {

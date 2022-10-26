@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pharmacy_plateform/models/drug_model.dart';
+import 'package:pharmacy_plateform/pharmacist/controllers/post_drug_controller.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/styles.dart';
 import '../../../../base/show_custom_snackbar.dart';
@@ -32,7 +33,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
     var quantityController = TextEditingController();
     // var drug = Get.find<SlideDrugController>().slideDrugList[widget.pageId];
     // final SlideDrugController slideDrugController =
-    //     Get.put(SlideDrugController());
+    Get.put(PostDrugController());
     // Future.delayed(Duration.zero, () {
     //   slideDrugController.initData(drug, Get.find<CartController>());
     // });
@@ -51,7 +52,11 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                   onTap: () {
                     Get.toNamed(RouteHelper.getPharmacyMedecinePage());
                   },
-                  child: AppIcon(icon: Icons.clear),
+                  child: AppIcon(
+                    icon: Icons.clear,
+                    iconColor: Colors.white,
+                    backgroundColor: AppColors.mainColor,
+                  ),
                 ),
               ],
             ),
@@ -101,7 +106,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                             ),
                             BigText(
                               text: widget.drug.categories,
-                              color: AppColors.mainColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -118,7 +123,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                             ),
                             BigText(
                               text: widget.drug.manufacturingDate,
-                              color: AppColors.yellowColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -135,7 +140,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                             ),
                             BigText(
                               text: widget.drug.expiringDate,
-                              color: AppColors.mainColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -152,7 +157,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                             ),
                             BigText(
                               text: widget.drug.publishedDate,
-                              color: AppColors.yellowColor,
+                              color: Color(0xFFccc7c5),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -172,7 +177,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                               children: [
                                 BigText(
                                   text: 'BIF',
-                                  color: Colors.redAccent,
+                                  color: AppColors.mainColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width10 / 2,
@@ -198,7 +203,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                             ),
                             BigText(
                               text: widget.drug.quantity.toString(),
-                              color: AppColors.yellowColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -215,7 +220,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                             ),
                             BigText(
                               text: widget.drug.units,
-                              color: AppColors.mainColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -232,7 +237,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                             ),
                             BigText(
                               text: widget.drug.status,
-                              color: AppColors.yellowColor,
+                              color: Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -295,7 +300,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                             },
                             child: BigText(
                               text: "Yes",
-                              color: Colors.redAccent,
+                              color: AppColors.yellowColor,
                             )),
                         TextButton(
                             onPressed: () => Get.back(),
@@ -320,7 +325,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimensions.radius20),
-                  color: AppColors.mainColor,
+                  color: AppColors.secondColor,
                 ),
               ),
             ),
@@ -412,6 +417,12 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                                               showCustomSnackBar(
                                                   "Fill your quantity please",
                                                   title: "quantity");
+                                            } else if (int.parse(
+                                                    quantityController.text) <=
+                                                0) {
+                                              showCustomSnackBar(
+                                                  "The quantity must be greater than 0",
+                                                  title: "quantity");
                                             } else {
                                               final response = await firestore
                                                   .collection('Medicines')
@@ -486,7 +497,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimensions.radius20),
-                  color: AppColors.mainColor,
+                  color: AppColors.secondColor,
                 ),
               ),
             ),
@@ -510,7 +521,7 @@ class _PharmacyDrugDetailsState extends State<PharmacyDrugDetails> {
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(Dimensions.radius20),
-                  color: AppColors.mainColor,
+                  color: AppColors.secondColor,
                 ),
               ),
             ),

@@ -181,7 +181,7 @@ class _ValidPharmacistScreenState extends State<ValidPharmacistScreen> {
                                                           fit: BoxFit.cover,
                                                           image: NetworkImage(
                                                               pharmacist
-                                                                  .profilePhoto)),
+                                                                  .pharmaIcon)),
                                                     ),
                                                   ),
                                                   //text container
@@ -221,7 +221,7 @@ class _ValidPharmacistScreenState extends State<ValidPharmacistScreen> {
                                                           children: [
                                                             BigText(
                                                                 text: pharmacist
-                                                                    .username),
+                                                                    .pharmaName),
                                                             SizedBox(
                                                               height: Dimensions
                                                                   .height10,

@@ -30,6 +30,7 @@ class _AddressScreenState extends State<AddressScreen> {
         centerTitle: true,
         backgroundColor: AppColors.mainColor,
         title: BigText(text: "Address", size: 24, color: Colors.white),
+        automaticallyImplyLeading: false,
       ),
 
       //Body

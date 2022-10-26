@@ -58,7 +58,11 @@ class _InvalidSimpleUserDetailsState extends State<InvalidSimpleUserDetails> {
                       onTap: () {
                         Get.back();
                       },
-                      child: AppIcon(icon: Icons.arrow_back_ios)),
+                      child: AppIcon(
+                        icon: Icons.arrow_back_ios,
+                        iconColor: Colors.white,
+                        backgroundColor: AppColors.secondColor,
+                      )),
                 ],
               ),
             ),

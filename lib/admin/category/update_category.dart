@@ -55,7 +55,7 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                   right: 0,
                   child: Container(
                       width: double.maxFinite,
-                      height: Dimensions.popularFoodImgSize / 1.2,
+                      height: Dimensions.popularFoodImgSize * 1.4,
                       //color: Colors.grey.withOpacity(0.1),
                       //color: Colors.transparent,
                       decoration: BoxDecoration(
@@ -82,7 +82,8 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                           },
                           child: AppIcon(
                             icon: Icons.arrow_back_ios,
-                            iconColor: AppColors.mainColor,
+                            backgroundColor: AppColors.mainColor,
+                            iconColor: Colors.white,
                           )),
                     ],
                   ),
@@ -90,7 +91,7 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
 
                 // choose photo icon
                 Positioned(
-                  top: Dimensions.height45 * 4.5,
+                  top: Dimensions.height45 * 9,
                   left: Dimensions.width45 * 7.5,
                   child: GestureDetector(
                     onTap: () {
@@ -98,8 +99,8 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                     },
                     child: AppIcon(
                       icon: Icons.add_a_photo,
-                      backgroundColor: Colors.white,
-                      iconColor: AppColors.mainColor,
+                      backgroundColor: AppColors.mainColor,
+                      iconColor: Colors.white,
                       iconSize: Dimensions.height30,
                       size: Dimensions.height30 * 2,
                     ),
@@ -111,7 +112,7 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  top: (Dimensions.popularFoodImgSize - 20) / 1.2,
+                  top: (Dimensions.popularFoodImgSize) * 1.4,
                   child: Container(
                     padding: EdgeInsets.only(
                         left: Dimensions.width20,
@@ -179,6 +180,11 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                                         showCustomSnackBar(
                                             "Fill the category name please",
                                             title: "Name");
+                                      } else if (nameController.text.length >
+                                          13) {
+                                        showCustomSnackBar(
+                                            "The category name can't have more than 13 characters",
+                                            title: "Name");
                                       } else if (descriptionController
                                           .text.isEmpty) {
                                         showCustomSnackBar(
@@ -219,7 +225,7 @@ class _UpdateCategoryScreenState extends State<UpdateCategoryScreen> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(
                                           Dimensions.radius30),
-                                      color: AppColors.mainColor),
+                                      color: AppColors.secondColor),
                                   child: Center(
                                     child: BigText(
                                       text: "Edit",

@@ -64,12 +64,17 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                           onTap: () {
                             Get.toNamed(RouteHelper.getMainPharmacyPage());
                           },
-                          child: AppIcon(icon: Icons.arrow_back_ios)),
+                          child: AppIcon(
+                            icon: Icons.arrow_back_ios,
+                            iconColor: AppColors.secondColor,
+                          )),
                       GestureDetector(
                           onTap: () {
                             Get.toNamed(RouteHelper.getSearchDrugScreen());
                           },
-                          child: AppIcon(icon: Icons.search)),
+                          child: AppIcon(
+                              icon: Icons.search,
+                              iconColor: AppColors.secondColor)),
                     ],
                   ),
                 ),
@@ -210,9 +215,12 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                                                           : Color(0xFF9294cc),
                                                       image: DecorationImage(
                                                           fit: BoxFit.cover,
-                                                          image: NetworkImage(
-                                                              drug.photoUrl
-                                                                  .toString()))),
+                                                          image: NetworkImage(drug
+                                                                      .quantity !=
+                                                                  0
+                                                              ? drug.photoUrl
+                                                                  .toString()
+                                                              : "https://t3.ftcdn.net/jpg/01/38/48/40/360_F_138484065_1enzXuW8NlkppNxSv4hVUrYoeF8qgoeY.jpg"))),
                                                 ),
                                               ),
                                               Align(
@@ -284,17 +292,17 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
                                                           children: [
                                                             SmallText(
                                                               text:
-                                                                  "\$${drug.price}",
+                                                                  "BIF${drug.price}",
                                                               size: Dimensions
                                                                   .font20,
-                                                              color: Colors
-                                                                  .redAccent,
+                                                              color: AppColors
+                                                                  .mainColor,
                                                             ),
                                                             SmallText(
                                                               text: drug
                                                                   .categories,
                                                               size: Dimensions
-                                                                  .font20,
+                                                                  .font16,
                                                             ),
                                                           ],
                                                         ),
@@ -358,7 +366,7 @@ class _PharmacyMedicinesScreenState extends State<PharmacyMedicinesScreen> {
 
   buildNavigateButton() => FloatingActionButton(
         child: Icon(Icons.add),
-        backgroundColor: AppColors.mainBlackColor,
+        backgroundColor: AppColors.secondColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(Dimensions.radius15)),
         onPressed: () {

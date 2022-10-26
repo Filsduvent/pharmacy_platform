@@ -203,8 +203,12 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                                                           image: DecorationImage(
                                                               fit: BoxFit.cover,
                                                               image: NetworkImage(drug
-                                                                  .photoUrl
-                                                                  .toString()))),
+                                                                          .quantity !=
+                                                                      0
+                                                                  ? drug
+                                                                      .photoUrl
+                                                                      .toString()
+                                                                  : "https://t3.ftcdn.net/jpg/01/38/48/40/360_F_138484065_1enzXuW8NlkppNxSv4hVUrYoeF8qgoeY.jpg"))),
                                                     ),
                                                   ),
                                                   Align(
@@ -283,11 +287,11 @@ class _ValidateDrugScreenState extends State<ValidateDrugScreen> {
                                                               children: [
                                                                 SmallText(
                                                                   text:
-                                                                      "${drug.price.toString()}Fbu",
+                                                                      "BIF${drug.price.toString()}",
                                                                   size: Dimensions
                                                                       .font20,
-                                                                  color: Colors
-                                                                      .redAccent,
+                                                                  color: AppColors
+                                                                      .mainColor,
                                                                 ),
                                                                 SmallText(
                                                                   text: drug

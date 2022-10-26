@@ -38,7 +38,7 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                 .where('status', isEqualTo: "Activated")
                 .snapshots(),
             builder: (c, snapshot) {
-              return snapshot.hasData
+              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
                   ? SingleChildScrollView(
                       child: Container(
                         margin: EdgeInsets.only(
@@ -250,8 +250,8 @@ class _PharmacyScreenState extends State<PharmacyScreen> {
                       ),
                     )
                   : const NoDataPage(
-                      text: "No drug available",
-                      imgPath: "assets/image/No_data.png",
+                      text: "No pharmacy available",
+                      imgPath: "assets/image/pharmacist.png",
                     );
             }));
   }

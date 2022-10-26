@@ -29,6 +29,11 @@ class AddressController extends GetxController {
       } else if (phoneNumber.isEmpty) {
         showCustomSnackBar("Phone Number field can not be empty",
             title: "Phone Number");
+      } else if (phoneNumber.length != 8) {
+        showCustomSnackBar("Wrong phone number format", title: "Phone number");
+      } else if (int.parse(phoneNumber) < 0) {
+        showCustomSnackBar("Phone number can't be negative",
+            title: "Phone number");
       } else if (province.isEmpty) {
         showCustomSnackBar("Provine field can not be empty", title: "Province");
       } else if (commune.isEmpty) {
@@ -42,6 +47,9 @@ class AddressController extends GetxController {
       } else if (houseNumber.isEmpty) {
         showCustomSnackBar("House Number field can not be empty",
             title: "House Number");
+      } else if (int.parse(houseNumber) < 0) {
+        showCustomSnackBar("House number can't be negative",
+            title: "House number");
       } else {
         _isLoading.value = true;
         final model = AddressModel(

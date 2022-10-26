@@ -62,10 +62,10 @@ class _AdminUnitsMainScreenState extends State<AdminUnitsMainScreen> {
                             icon: Icons.arrow_back_ios,
                             iconColor: AppColors.mainColor,
                           )),
-                      AppIcon(
-                        icon: Icons.search,
-                        iconColor: AppColors.mainColor,
-                      )
+                      // AppIcon(
+                      //   icon: Icons.search,
+                      //   iconColor: AppColors.mainColor,
+                      // )
                     ],
                   ),
                 ),

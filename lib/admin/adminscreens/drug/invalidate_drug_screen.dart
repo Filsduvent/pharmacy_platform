@@ -199,7 +199,11 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                                           image: DecorationImage(
                                                               fit: BoxFit.cover,
                                                               image: NetworkImage(
-                                                                  drug.photoUrl))),
+                                                                  drug.quantity !=
+                                                                          0
+                                                                      ? drug
+                                                                          .photoUrl
+                                                                      : "https://t3.ftcdn.net/jpg/01/38/48/40/360_F_138484065_1enzXuW8NlkppNxSv4hVUrYoeF8qgoeY.jpg"))),
                                                     ),
                                                   ),
                                                   Align(
@@ -277,12 +281,11 @@ class _InvalidateDrugScreenState extends State<InvalidateDrugScreen> {
                                                                       .spaceBetween,
                                                               children: [
                                                                 SmallText(
-                                                                  text: /*"\$${data.price}"*/ "${drug.price.toString()}Fbu",
-                                                                  size: Dimensions
-                                                                      .font20,
-                                                                  color: Colors
-                                                                      .redAccent,
-                                                                ),
+                                                                    text: /*"\$${data.price}"*/ "BIF${drug.price.toString()}",
+                                                                    size: Dimensions
+                                                                        .font20,
+                                                                    color: AppColors
+                                                                        .mainColor),
                                                                 SmallText(
                                                                   text: drug
                                                                       .categories,

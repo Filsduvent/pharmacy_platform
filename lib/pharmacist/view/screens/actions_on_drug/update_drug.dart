@@ -95,7 +95,11 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                             onTap: () {
                               Get.back();
                             },
-                            child: AppIcon(icon: Icons.arrow_back_ios)),
+                            child: AppIcon(
+                              icon: Icons.arrow_back_ios,
+                              iconColor: Colors.white,
+                              backgroundColor: AppColors.mainColor,
+                            )),
                       ],
                     ),
                   ),
@@ -108,8 +112,8 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                       onTap: () => _showImageDialog(),
                       child: AppIcon(
                         icon: Icons.add_a_photo,
-                        backgroundColor: Colors.white,
-                        iconColor: AppColors.mainColor,
+                        backgroundColor: AppColors.mainColor,
+                        iconColor: Colors.white,
                         iconSize: Dimensions.height30,
                         size: Dimensions.height30 * 2,
                       ),
@@ -274,6 +278,12 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                           showCustomSnackBar(
                                               "Fill your title please",
                                               title: "title");
+                                        } else if (titleController
+                                                .text.length >=
+                                            15) {
+                                          showCustomSnackBar(
+                                              "The title can't be over 15 character",
+                                              title: "title");
                                         } else if (_mandate.text.isEmpty) {
                                           showCustomSnackBar(
                                               "Fill manufacturing date  please",
@@ -287,10 +297,22 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                           showCustomSnackBar(
                                               "Fill your price please",
                                               title: "price");
+                                        } else if (int.parse(
+                                                priceController.text) <=
+                                            0) {
+                                          showCustomSnackBar(
+                                              "The price must be greater than 0",
+                                              title: "price");
                                         } else if (quantityController
                                             .text.isEmpty) {
                                           showCustomSnackBar(
                                               "Fill your quantity please",
+                                              title: "quantity");
+                                        } else if (int.parse(
+                                                quantityController.text) <=
+                                            0) {
+                                          showCustomSnackBar(
+                                              "The quantity must be greater than 0",
                                               title: "quantity");
                                         } else if (descriptionController
                                             .text.isEmpty) {
@@ -335,10 +357,10 @@ class _UpdateDrugScreenState extends State<UpdateDrugScreen> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(
                                             Dimensions.radius30),
-                                        color: AppColors.mainColor),
+                                        color: AppColors.secondColor),
                                     child: Center(
                                       child: BigText(
-                                        text: "Update",
+                                        text: "Edit",
                                         size: Dimensions.font20 +
                                             Dimensions.font20 / 2,
                                         color: Colors.white,

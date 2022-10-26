@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../../base/no_data_page.dart';
@@ -26,9 +27,6 @@ class _SearchDrugScreenState extends State<SearchDrugScreen> {
   initSearchingPost(String textEntered) {
     drugDocumentsList = FirebaseFirestore.instance
         .collection('Medicines')
-        // .where('uid',
-        //     isEqualTo:
-        //         AppConstants.sharedPreferences!.getString(AppConstants.userUID))
         .where('title', isGreaterThanOrEqualTo: textEntered)
         .get();
 
@@ -146,183 +144,201 @@ class _SearchDrugScreenState extends State<SearchDrugScreen> {
                                         }).toList();
                                         Drug drug = drugList[index];
 
-                                        return GestureDetector(
-                                            onTap: () {
-                                              Get.to(
-                                                () => PharmacyDrugDetails(
-                                                    pageId: index,
-                                                    page: "drugDetails",
-                                                    drug: drug),
-                                              );
-                                            },
-                                            child: Stack(
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    Get.to(() =>
-                                                        PharmacyDrugDetails(
-                                                            pageId: index,
-                                                            page: "drugDetails",
-                                                            drug: drug));
-                                                  },
-                                                  child: Container(
-                                                    width:
-                                                        Dimensions.width30 * 9,
-                                                    height: Dimensions
-                                                            .pageViewContainer /
-                                                        1.4,
-                                                    margin: EdgeInsets.only(
-                                                        left:
-                                                            Dimensions.width10,
-                                                        right:
-                                                            Dimensions.width10),
-                                                    padding:
-                                                        EdgeInsets.all(0.8),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                Dimensions
-                                                                    .radius30),
-                                                        color: index.isEven
-                                                            ? Color(0xFF69c5df)
-                                                            : Color(0xFF9294cc),
-                                                        image: DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image: NetworkImage(
-                                                                drug.photoUrl
-                                                                    .toString()))),
-                                                  ),
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      Alignment.bottomCenter,
-                                                  child: Container(
-                                                    height: Dimensions
-                                                            .pageViewTextContainer /
-                                                        1.5,
-                                                    margin: EdgeInsets.only(
-                                                        left:
-                                                            Dimensions.width20,
-                                                        right:
-                                                            Dimensions.width20,
-                                                        bottom: Dimensions
-                                                            .height10),
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                Dimensions
-                                                                    .radius20),
-                                                        color: Colors.white,
-                                                        boxShadow: const [
-                                                          BoxShadow(
-                                                              color: Color(
-                                                                  0xFFe8e8e8),
-                                                              blurRadius: 5.0,
-                                                              offset:
-                                                                  Offset(0, 5)),
-                                                          BoxShadow(
+                                        return drug.uid ==
+                                                FirebaseAuth
+                                                    .instance.currentUser!.uid
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  Get.to(
+                                                    () => PharmacyDrugDetails(
+                                                        pageId: index,
+                                                        page: "drugDetails",
+                                                        drug: drug),
+                                                  );
+                                                },
+                                                child: Stack(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        Get.to(() =>
+                                                            PharmacyDrugDetails(
+                                                                pageId: index,
+                                                                page:
+                                                                    "drugDetails",
+                                                                drug: drug));
+                                                      },
+                                                      child: Container(
+                                                        width:
+                                                            Dimensions.width30 *
+                                                                9,
+                                                        height: Dimensions
+                                                                .pageViewContainer /
+                                                            1.4,
+                                                        margin: EdgeInsets.only(
+                                                            left: Dimensions
+                                                                .width10,
+                                                            right: Dimensions
+                                                                .width10),
+                                                        padding:
+                                                            EdgeInsets.all(0.8),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    Dimensions
+                                                                        .radius30),
+                                                            color: index.isEven
+                                                                ? Color(
+                                                                    0xFF69c5df)
+                                                                : Color(
+                                                                    0xFF9294cc),
+                                                            image: DecorationImage(
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                image: NetworkImage(drug
+                                                                            .quantity !=
+                                                                        0
+                                                                    ? drug
+                                                                        .photoUrl
+                                                                        .toString()
+                                                                    : "https://t3.ftcdn.net/jpg/01/38/48/40/360_F_138484065_1enzXuW8NlkppNxSv4hVUrYoeF8qgoeY.jpg"))),
+                                                      ),
+                                                    ),
+                                                    Align(
+                                                      alignment: Alignment
+                                                          .bottomCenter,
+                                                      child: Container(
+                                                        height: Dimensions
+                                                                .pageViewTextContainer /
+                                                            1.5,
+                                                        margin: EdgeInsets.only(
+                                                            left: Dimensions
+                                                                .width20,
+                                                            right: Dimensions
+                                                                .width20,
+                                                            bottom: Dimensions
+                                                                .height10),
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    Dimensions
+                                                                        .radius20),
                                                             color: Colors.white,
-                                                            offset:
-                                                                Offset(0, -5),
-                                                          ),
-                                                          BoxShadow(
-                                                            color: Colors.white,
-                                                            offset:
-                                                                Offset(5, 0),
-                                                          )
-                                                        ]),
-                                                    child: Container(
-                                                      width:
-                                                          Dimensions.pageView,
-                                                      padding: EdgeInsets.only(
-                                                          top: Dimensions
-                                                                  .height10 /
-                                                              3,
-                                                          left: Dimensions
-                                                                  .width15 /
-                                                              3,
-                                                          right: Dimensions
-                                                                  .width15 /
-                                                              3),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          SmallText(
-                                                            text: drug.title,
-                                                            color: AppColors
-                                                                .mainBlackColor,
-                                                            size: Dimensions
-                                                                .font20,
-                                                          ),
-                                                          SizedBox(
-                                                              height: Dimensions
+                                                            boxShadow: const [
+                                                              BoxShadow(
+                                                                  color: Color(
+                                                                      0xFFe8e8e8),
+                                                                  blurRadius:
+                                                                      5.0,
+                                                                  offset:
+                                                                      Offset(0,
+                                                                          5)),
+                                                              BoxShadow(
+                                                                color: Colors
+                                                                    .white,
+                                                                offset: Offset(
+                                                                    0, -5),
+                                                              ),
+                                                              BoxShadow(
+                                                                color: Colors
+                                                                    .white,
+                                                                offset: Offset(
+                                                                    5, 0),
+                                                              )
+                                                            ]),
+                                                        child: Container(
+                                                          width: Dimensions
+                                                              .pageView,
+                                                          padding: EdgeInsets.only(
+                                                              top: Dimensions
                                                                       .height10 /
+                                                                  3,
+                                                              left: Dimensions
+                                                                      .width15 /
+                                                                  3,
+                                                              right: Dimensions
+                                                                      .width15 /
                                                                   3),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
                                                             children: [
                                                               SmallText(
                                                                 text:
-                                                                    "\$${drug.price}",
-                                                                size: Dimensions
-                                                                    .font20,
-                                                                color: Colors
-                                                                    .redAccent,
-                                                              ),
-                                                              SmallText(
-                                                                text: drug
-                                                                    .categories,
+                                                                    drug.title,
+                                                                color: AppColors
+                                                                    .mainBlackColor,
                                                                 size: Dimensions
                                                                     .font20,
                                                               ),
+                                                              SizedBox(
+                                                                  height: Dimensions
+                                                                          .height10 /
+                                                                      3),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  SmallText(
+                                                                    text:
+                                                                        "BIF${drug.price}",
+                                                                    size: Dimensions
+                                                                        .font20,
+                                                                    color: AppColors
+                                                                        .mainColor,
+                                                                  ),
+                                                                  SmallText(
+                                                                    text: drug
+                                                                        .categories,
+                                                                    size: Dimensions
+                                                                        .font16,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              SizedBox(
+                                                                  height: Dimensions
+                                                                          .height10 /
+                                                                      3),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Icon(
+                                                                    Icons
+                                                                        .circle_sharp,
+                                                                    color: AppColors
+                                                                        .iconColor1,
+                                                                    size: Dimensions
+                                                                        .iconSize16,
+                                                                  ),
+                                                                  Icon(
+                                                                    Icons
+                                                                        .location_on,
+                                                                    color: AppColors
+                                                                        .mainColor,
+                                                                    size: Dimensions
+                                                                        .iconSize16,
+                                                                  ),
+                                                                  Icon(
+                                                                    Icons
+                                                                        .access_time_rounded,
+                                                                    color: AppColors
+                                                                        .iconColor2,
+                                                                    size: Dimensions
+                                                                        .iconSize16,
+                                                                  ),
+                                                                ],
+                                                              )
                                                             ],
                                                           ),
-                                                          SizedBox(
-                                                              height: Dimensions
-                                                                      .height10 /
-                                                                  3),
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Icon(
-                                                                Icons
-                                                                    .circle_sharp,
-                                                                color: AppColors
-                                                                    .iconColor1,
-                                                                size: Dimensions
-                                                                    .iconSize16,
-                                                              ),
-                                                              Icon(
-                                                                Icons
-                                                                    .location_on,
-                                                                color: AppColors
-                                                                    .mainColor,
-                                                                size: Dimensions
-                                                                    .iconSize16,
-                                                              ),
-                                                              Icon(
-                                                                Icons
-                                                                    .access_time_rounded,
-                                                                color: AppColors
-                                                                    .iconColor2,
-                                                                size: Dimensions
-                                                                    .iconSize16,
-                                                              ),
-                                                            ],
-                                                          )
-                                                        ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ));
+                                                  ],
+                                                ))
+                                            : Container();
                                       })
                                 ],
                               )

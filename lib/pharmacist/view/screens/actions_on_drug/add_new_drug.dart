@@ -20,7 +20,6 @@ import '../../../../models/units_model.dart';
 import '../../../../utils/app_constants.dart';
 import '../../../../utils/colors.dart';
 import '../../../../utils/dimensions.dart';
-import '../../../../utils/styles.dart';
 import '../../../../widgets/app_icon.dart';
 import '../../../../widgets/big_text.dart';
 import '../widgets/Pharmacy_app_text_field _Date.dart';
@@ -175,7 +174,11 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                           onTap: () {
                             Get.back();
                           },
-                          child: AppIcon(icon: Icons.arrow_back_ios)),
+                          child: AppIcon(
+                            icon: Icons.arrow_back_ios,
+                            iconColor: Colors.white,
+                            backgroundColor: AppColors.mainColor,
+                          )),
                     ],
                   ),
                 ),
@@ -522,17 +525,17 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                                           DropdownButton<dynamic>(
                                             items: unitsItems,
                                             onChanged: (unitsValue) {
-                                              final snackBar = SnackBar(
-                                                content: Text(
-                                                  'Selected Currency value is $unitsValue',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily: robotoRegular
-                                                          .toString()),
-                                                ),
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(snackBar);
+                                              // final snackBar = SnackBar(
+                                              //   content: Text(
+                                              //     'Selected Currency value is $unitsValue',
+                                              //     style: TextStyle(
+                                              //         color: Colors.white,
+                                              //         fontFamily: robotoRegular
+                                              //             .toString()),
+                                              //   ),
+                                              // );
+                                              // Scaffold.of(context)
+                                              //     .showSnackBar(snackBar);
                                               setState(() {
                                                 selectedUnits = unitsValue;
                                                 units = unitsValue.toString();
@@ -578,6 +581,11 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                                       showCustomSnackBar(
                                           "Fill your title please",
                                           title: "title");
+                                    } else if (titleController.text.length >=
+                                        15) {
+                                      showCustomSnackBar(
+                                          "The title can't be over 15 character",
+                                          title: "title");
                                     } else if (_mandate.text.isEmpty) {
                                       showCustomSnackBar(
                                           "Fill manufacturing date  please",
@@ -597,10 +605,22 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                                       showCustomSnackBar(
                                           "Fill your price please",
                                           title: "price");
+                                    } else if (int.parse(
+                                            priceController.text) <=
+                                        0) {
+                                      showCustomSnackBar(
+                                          "The price must be greater than 0",
+                                          title: "price");
                                     } else if (quantityController
                                         .text.isEmpty) {
                                       showCustomSnackBar(
                                           "Fill your quantity please",
+                                          title: "quantity");
+                                    } else if (int.parse(
+                                            quantityController.text) <=
+                                        0) {
+                                      showCustomSnackBar(
+                                          "The quantity must be greater than 0",
                                           title: "quantity");
                                     } else if (units.isEmpty) {
                                       showCustomSnackBar(
@@ -669,7 +689,7 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(
                                           Dimensions.radius30),
-                                      color: AppColors.mainColor),
+                                      color: AppColors.secondColor),
                                   child: Center(
                                     child: BigText(
                                       text: "Add",
@@ -680,6 +700,9 @@ class _AddNewDrugScreenState extends State<AddNewDrugScreen> {
                                   ),
                                 ),
                               ),
+                              SizedBox(
+                                height: Dimensions.height20,
+                              )
                             ],
                           ),
                         ),

@@ -23,6 +23,7 @@ class NavigationDrawerWidget extends StatefulWidget {
 class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
   String? name = "";
   String? image = "";
+  String? status = "";
   final padding = EdgeInsets.symmetric(horizontal: 20);
 
   //Get data from the firebase
@@ -37,6 +38,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
         setState(() {
           name = snapshot.data()!["pharmaName"];
           image = snapshot.data()!["pharmaIcon"];
+          status = snapshot.data()!["status"];
         });
       }
     });
@@ -237,18 +239,55 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     navigator?.pop();
     switch (index) {
       case 0:
-        Get.toNamed(RouteHelper.getMainPharmacyPage());
+        if (status == "Activated") {
+          Get.toNamed(RouteHelper.getMainPharmacyPage());
+        } else {
+          if (firebaseAuth.currentUser != null) {
+            authController.clearShareData();
+            cartControllers.clear();
+            cartControllers.clearCartHistory();
+            authController.logOut();
+          }
+        }
         break;
 
       case 1:
-        Get.toNamed(RouteHelper.getPharmacyMedecinePage());
+        if (status == "Activated") {
+          Get.toNamed(RouteHelper.getPharmacyMedecinePage());
+        } else {
+          if (firebaseAuth.currentUser != null) {
+            authController.clearShareData();
+            cartControllers.clear();
+            cartControllers.clearCartHistory();
+            authController.logOut();
+          }
+        }
         break;
 
       case 2:
-        Get.toNamed(RouteHelper.getPharmacistOrderScreen());
+        if (status == "Activated") {
+          Get.toNamed(RouteHelper.getPharmacistOrderScreen());
+        } else {
+          if (firebaseAuth.currentUser != null) {
+            authController.clearShareData();
+            cartControllers.clear();
+            cartControllers.clearCartHistory();
+            authController.logOut();
+          }
+        }
         break;
+
       case 3:
-        Get.toNamed(RouteHelper.getPersonalizePharmacyScreen());
+        if (status == "Activated") {
+          Get.toNamed(RouteHelper.getPersonalizePharmacyScreen());
+        } else {
+          if (firebaseAuth.currentUser != null) {
+            authController.clearShareData();
+            cartControllers.clear();
+            cartControllers.clearCartHistory();
+            authController.logOut();
+          }
+        }
         break;
     }
   }

@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, avoid_unnecessary_containers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -31,6 +31,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
   PageController pageController = PageController(viewportFraction: 0.85);
   var _currPageValue = 0.0;
   final double _scaleFactor = 0.8;
+  final int force = 0;
   final double _height = Dimensions.pageViewContainer;
   final SlideDrugController slidedrugController =
       Get.put(SlideDrugController());
@@ -66,10 +67,11 @@ class _DrugPageBodyState extends State<DrugPageBody> {
             stream: firestore
                 .collection('Medicines')
                 .where('visibility', isEqualTo: true)
+                .where('status', isEqualTo: "Available")
                 .limit(15)
                 .snapshots(),
             builder: (c, snapshot) {
-              return snapshot.hasData
+              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
                   ? Container(
                       //color: Colors.redAccent,
                       height: Dimensions.pageView,
@@ -82,7 +84,82 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                             }).toList();
                             Drug drug = drugList[position];
                             // final slidedata = drugController.slideDrugList[position];
-                            return _buildPageItem(position, drug);
+                            return drug.quantity != 0
+                                ? _buildPageItem(position, drug)
+                                : Container(
+                                    child: Stack(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            height:
+                                                Dimensions.pageViewContainer,
+                                            margin: EdgeInsets.only(
+                                                left: Dimensions.width10,
+                                                right: Dimensions.width10),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Dimensions.radius30),
+                                              color: position.isEven
+                                                  ? Color(0xFF69c5df)
+                                                  : Color(0xFF9294cc),
+                                            ),
+                                          ),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Container(
+                                            height: Dimensions
+                                                .pageViewTextContainer,
+                                            margin: EdgeInsets.only(
+                                                left: Dimensions.width30,
+                                                right: Dimensions.width30,
+                                                bottom: Dimensions.height30),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions.radius20),
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xFFe8e8e8),
+                                                      blurRadius: 5.0,
+                                                      offset: Offset(0, 5)),
+                                                  BoxShadow(
+                                                    color: Colors.white,
+                                                    offset: Offset(-5, 0),
+                                                  ),
+                                                  BoxShadow(
+                                                    color: Colors.white,
+                                                    offset: Offset(5, 0),
+                                                  )
+                                                ]),
+                                            child: Container(
+                                              padding: EdgeInsets.only(
+                                                  top: Dimensions.height10,
+                                                  left: Dimensions.width15,
+                                                  right: Dimensions.width15),
+                                              margin: EdgeInsets.only(
+                                                left: Dimensions.width45 * 2,
+                                                right: Dimensions.width45 * 2,
+                                              ),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  SmallText(
+                                                    text: "Not Available",
+                                                    size: Dimensions.font16,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
                           }),
                     )
                   : CircularProgressIndicator(
@@ -94,10 +171,11 @@ class _DrugPageBodyState extends State<DrugPageBody> {
             stream: firestore
                 .collection('Medicines')
                 .where('visibility', isEqualTo: true)
+                .where('status', isEqualTo: "Available")
                 .limit(15)
                 .snapshots(),
             builder: (c, snapshot) {
-              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
+              return snapshot.hasData
                   ? DotsIndicator(
                       dotsCount: snapshot.data!.docs.isEmpty
                           ? 1
@@ -230,175 +308,193 @@ class _DrugPageBodyState extends State<DrugPageBody> {
             stream: firestore
                 .collection('Medicines')
                 .where('visibility', isEqualTo: true)
+                .where('status', isEqualTo: "Available")
+                // .where('quantity', isNotEqualTo: '0')
                 .snapshots(),
-            builder: (c, snapshot) {
-              return snapshot.hasData && snapshot.data!.docs.isNotEmpty
+            builder: (c, snap) {
+              return snap.hasData && snap.data!.docs.isNotEmpty
                   ? Container(
                       height: Dimensions.pageView,
                       child: ListView.builder(
                           // physics: NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
-                          itemCount: recentdrugController.recentDrugList.length,
+                          itemCount: snap.data!.docs.length,
                           itemBuilder: (context, index) {
-                            var drugList = snapshot.data!.docs.map((drug) {
+                            List<dynamic> drugList2 =
+                                snap.data!.docs.map((drug) {
                               return Drug.fromSnap(drug);
                             }).toList();
-                            Drug drug = drugList[index];
+                            Drug drug = drugList2[index];
                             // final recentdata =
                             //     recentdrugController.recentDrugList[index];
-                            return GestureDetector(
-                              onTap: () {
-                                Get.to(() => PopularDrugDetail(
-                                      pageId: index,
-                                      page: "home",
-                                      drug: drug,
-                                    ));
-                              },
-                              child: Stack(
-                                children: [
-                                  GestureDetector(
+                            return drug.quantity != 0
+                                ? GestureDetector(
                                     onTap: () {
                                       Get.to(() => PopularDrugDetail(
                                             pageId: index,
-                                            page: "home",
+                                            pages: "home",
                                             drug: drug,
                                           ));
                                     },
-                                    child: Container(
-                                      width: Dimensions.width30 * 9,
-                                      height: Dimensions.pageViewContainer,
-                                      margin: EdgeInsets.only(
-                                          left: Dimensions.width20,
-                                          right: Dimensions.width20),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.radius30),
-                                          color: index.isEven
-                                              ? Color(0xFF69c5df)
-                                              : Color(0xFF9294cc),
-                                          image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image:
-                                                  NetworkImage(drug.photoUrl))),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Container(
-                                      height: Dimensions.pageViewTextContainer,
-                                      margin: EdgeInsets.only(
-                                          left: Dimensions.width20 * 2.4,
-                                          right: Dimensions.width30,
-                                          bottom: Dimensions.height30),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.radius20),
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                color: Color(0xFFe8e8e8),
-                                                blurRadius: 5.0,
-                                                offset: Offset(0, 5)),
-                                            BoxShadow(
-                                              color: Colors.white,
-                                              offset: Offset(-5, 0),
-                                            ),
-                                            BoxShadow(
-                                              color: Colors.white,
-                                              offset: Offset(5, 0),
-                                            )
-                                          ]),
-                                      child: Container(
-                                        padding: EdgeInsets.only(
-                                            top: Dimensions.height10,
-                                            left: Dimensions.width15,
-                                            right: Dimensions.width15),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            BigText(text: drug.title),
-                                            SizedBox(
-                                              height: Dimensions.height10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                // Wrap(
-                                                //   children:
-                                                //       List.generate(5, (index) {
-                                                //     return Icon(Icons.star,
-                                                //         color:
-                                                //             AppColors.mainColor,
-                                                //         size: 15);
-                                                //   }),
-                                                // ),
-                                                SmallText(
-                                                  text: drug.categories,
-                                                  color: AppColors.mainColor,
-                                                ),
-                                                SizedBox(
-                                                  width: Dimensions.width10,
-                                                ),
-                                                SmallText(text: "BIF"),
-                                                SizedBox(
-                                                  width: Dimensions.width10,
-                                                ),
-                                                SmallText(
-                                                  text: drug.price.toString(),
-                                                  color: AppColors.yellowColor,
-                                                ),
-                                                SizedBox(
-                                                  width: Dimensions.width10,
-                                                ),
-                                                SmallText(text: "BY"),
-                                                SizedBox(
-                                                  width: Dimensions.width10,
-                                                ),
-                                                SmallText(
-                                                  text: drug.units,
-                                                  color:
-                                                      AppColors.mainBlackColor,
-                                                ),
-                                              ],
-                                            ),
-                                            SizedBox(
-                                              height: Dimensions.height20,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                IconAndTextWidget(
-                                                    icon: Icons.delivery_dining,
-                                                    text: "Deliver",
-                                                    iconColor:
-                                                        AppColors.iconColor1),
-                                                IconAndTextWidget(
-                                                    icon: Icons.location_on,
-                                                    text: "Side",
-                                                    iconColor:
-                                                        AppColors.mainColor),
-                                                IconAndTextWidget(
-                                                    icon: Icons
-                                                        .access_time_rounded,
-                                                    text: "Time",
-                                                    iconColor:
-                                                        AppColors.iconColor2)
-                                              ],
-                                            )
-                                          ],
+                                    child: Stack(
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            Get.to(() => PopularDrugDetail(
+                                                  pageId: index,
+                                                  pages: "home",
+                                                  drug: drug,
+                                                ));
+                                          },
+                                          child: Container(
+                                            width: Dimensions.width30 * 9,
+                                            height:
+                                                Dimensions.pageViewContainer,
+                                            margin: EdgeInsets.only(
+                                                left: Dimensions.width20,
+                                                right: Dimensions.width20),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions.radius30),
+                                                color: index.isEven
+                                                    ? Color(0xFF69c5df)
+                                                    : Color(0xFF9294cc),
+                                                image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        drug.photoUrl))),
+                                          ),
                                         ),
-                                      ),
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Container(
+                                            height: Dimensions
+                                                .pageViewTextContainer,
+                                            margin: EdgeInsets.only(
+                                                left: Dimensions.width20 * 2.4,
+                                                right: Dimensions.width30,
+                                                bottom: Dimensions.height30),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions.radius20),
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                      color: Color(0xFFe8e8e8),
+                                                      blurRadius: 5.0,
+                                                      offset: Offset(0, 5)),
+                                                  BoxShadow(
+                                                    color: Colors.white,
+                                                    offset: Offset(-5, 0),
+                                                  ),
+                                                  BoxShadow(
+                                                    color: Colors.white,
+                                                    offset: Offset(5, 0),
+                                                  )
+                                                ]),
+                                            child: Container(
+                                              padding: EdgeInsets.only(
+                                                  top: Dimensions.height10,
+                                                  left: Dimensions.width15,
+                                                  right: Dimensions.width15),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  BigText(text: drug.title),
+                                                  SizedBox(
+                                                    height: Dimensions.height10,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      // Wrap(
+                                                      //   children:
+                                                      //       List.generate(5, (index) {
+                                                      //     return Icon(Icons.star,
+                                                      //         color:
+                                                      //             AppColors.mainColor,
+                                                      //         size: 15);
+                                                      //   }),
+                                                      // ),
+                                                      SmallText(
+                                                        text: drug.categories,
+                                                        color:
+                                                            AppColors.mainColor,
+                                                      ),
+                                                      SizedBox(
+                                                        width:
+                                                            Dimensions.width10,
+                                                      ),
+                                                      SmallText(text: "BIF"),
+                                                      SizedBox(
+                                                        width:
+                                                            Dimensions.width10,
+                                                      ),
+                                                      SmallText(
+                                                        text: drug.price
+                                                            .toString(),
+                                                        color: AppColors
+                                                            .yellowColor,
+                                                      ),
+                                                      SizedBox(
+                                                        width:
+                                                            Dimensions.width10,
+                                                      ),
+                                                      SmallText(text: "BY"),
+                                                      SizedBox(
+                                                        width:
+                                                            Dimensions.width10,
+                                                      ),
+                                                      SmallText(
+                                                        text: drug.units,
+                                                        color: AppColors
+                                                            .mainBlackColor,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height: Dimensions.height20,
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      IconAndTextWidget(
+                                                          icon: Icons
+                                                              .delivery_dining,
+                                                          text: "Deliver",
+                                                          iconColor: AppColors
+                                                              .iconColor1),
+                                                      IconAndTextWidget(
+                                                          icon:
+                                                              Icons.location_on,
+                                                          text: "Side",
+                                                          iconColor: AppColors
+                                                              .mainColor),
+                                                      IconAndTextWidget(
+                                                          icon: Icons
+                                                              .access_time_rounded,
+                                                          text: "Time",
+                                                          iconColor: AppColors
+                                                              .iconColor2)
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
+                                  )
+                                : Container();
                           }),
                     )
                   : CircularProgressIndicator(
@@ -435,6 +531,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                 .collection('Medicines')
                 .where('units', isEqualTo: "Boxes")
                 .where('visibility', isEqualTo: true)
+                .where('status', isEqualTo: "Available")
                 .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData && snapshot.data!.docs.isNotEmpty
@@ -449,133 +546,144 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                         Drug drug = drugList[index];
                         // final recentdata =
                         //     recentdrugController.recentDrugList[index];
-                        return GestureDetector(
-                          onTap: () {
-                            Get.to(() => RecentDrugDetail(
-                                pageId: index, page: "home", drug: drug));
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                left: Dimensions.width20,
-                                right: Dimensions.width20,
-                                bottom: Dimensions.height10),
-                            child: Row(
-                              children: [
-                                //image section
-                                Container(
-                                  width: Dimensions.listViewImgSize,
-                                  height: Dimensions.listViewImgSize,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.radius20),
-                                    color: Colors.white38,
-                                    image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(drug.photoUrl)),
+                        return drug.quantity != 0
+                            ? GestureDetector(
+                                onTap: () {
+                                  Get.to(() => RecentDrugDetail(
+                                      pageId: index, page: "home", drug: drug));
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(
+                                      left: Dimensions.width20,
+                                      right: Dimensions.width20,
+                                      bottom: Dimensions.height10),
+                                  child: Row(
+                                    children: [
+                                      //image section
+                                      Container(
+                                        width: Dimensions.listViewImgSize,
+                                        height: Dimensions.listViewImgSize,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.radius20),
+                                          color: Colors.white38,
+                                          image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image:
+                                                  NetworkImage(drug.photoUrl)),
+                                        ),
+                                      ),
+                                      //text container
+                                      Expanded(
+                                        child: Container(
+                                          height:
+                                              Dimensions.listViewTextContSize,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(
+                                                  Dimensions.radius20),
+                                              bottomRight: Radius.circular(
+                                                  Dimensions.radius20),
+                                            ),
+                                            color: Colors.white,
+                                          ),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                left: Dimensions.width10,
+                                                right: Dimensions.width10),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                BigText(text: drug.title),
+                                                SizedBox(
+                                                  height: Dimensions.height10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    // Wrap(
+                                                    //   children:
+                                                    //       List.generate(5, (index) {
+                                                    //     return Icon(Icons.star,
+                                                    //         color:
+                                                    //             AppColors.mainColor,
+                                                    //         size: 15);
+                                                    //   }),
+                                                    // ),
+                                                    SmallText(
+                                                      text: drug.categories,
+                                                      color:
+                                                          AppColors.mainColor,
+                                                    ),
+                                                    SizedBox(
+                                                      width: Dimensions.width10,
+                                                    ),
+                                                    SmallText(text: "BIF"),
+                                                    SizedBox(
+                                                      width: Dimensions.width10,
+                                                    ),
+                                                    SmallText(
+                                                      text:
+                                                          drug.price.toString(),
+                                                      color:
+                                                          AppColors.yellowColor,
+                                                    ),
+                                                    SizedBox(
+                                                      width: Dimensions.width10,
+                                                    ),
+                                                    SmallText(text: "BY"),
+                                                    SizedBox(
+                                                      width: Dimensions.width10,
+                                                    ),
+                                                    SmallText(
+                                                      text: drug.units,
+                                                      color: AppColors
+                                                          .mainBlackColor,
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: Dimensions.height10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    IconAndTextWidget(
+                                                        icon: Icons
+                                                            .delivery_dining,
+                                                        text: "Deliver",
+                                                        iconColor: AppColors
+                                                            .iconColor1),
+                                                    IconAndTextWidget(
+                                                        icon: Icons.location_on,
+                                                        text: "Side",
+                                                        iconColor: AppColors
+                                                            .mainColor),
+                                                    IconAndTextWidget(
+                                                        icon: Icons
+                                                            .access_time_rounded,
+                                                        text: "Time",
+                                                        iconColor: AppColors
+                                                            .iconColor2)
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                //text container
-                                Expanded(
-                                  child: Container(
-                                    height: Dimensions.listViewTextContSize,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(
-                                            Dimensions.radius20),
-                                        bottomRight: Radius.circular(
-                                            Dimensions.radius20),
-                                      ),
-                                      color: Colors.white,
-                                    ),
-                                    child: Padding(
-                                      padding: EdgeInsets.only(
-                                          left: Dimensions.width10,
-                                          right: Dimensions.width10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          BigText(text: drug.title),
-                                          SizedBox(
-                                            height: Dimensions.height10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              // Wrap(
-                                              //   children:
-                                              //       List.generate(5, (index) {
-                                              //     return Icon(Icons.star,
-                                              //         color:
-                                              //             AppColors.mainColor,
-                                              //         size: 15);
-                                              //   }),
-                                              // ),
-                                              SmallText(
-                                                text: drug.categories,
-                                                color: AppColors.mainColor,
-                                              ),
-                                              SizedBox(
-                                                width: Dimensions.width10,
-                                              ),
-                                              SmallText(text: "BIF"),
-                                              SizedBox(
-                                                width: Dimensions.width10,
-                                              ),
-                                              SmallText(
-                                                text: drug.price.toString(),
-                                                color: AppColors.yellowColor,
-                                              ),
-                                              SizedBox(
-                                                width: Dimensions.width10,
-                                              ),
-                                              SmallText(text: "BY"),
-                                              SizedBox(
-                                                width: Dimensions.width10,
-                                              ),
-                                              SmallText(
-                                                text: drug.units,
-                                                color: AppColors.mainBlackColor,
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: Dimensions.height10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              IconAndTextWidget(
-                                                  icon: Icons.delivery_dining,
-                                                  text: "Deliver",
-                                                  iconColor:
-                                                      AppColors.iconColor1),
-                                              IconAndTextWidget(
-                                                  icon: Icons.location_on,
-                                                  text: "Side",
-                                                  iconColor:
-                                                      AppColors.mainColor),
-                                              IconAndTextWidget(
-                                                  icon:
-                                                      Icons.access_time_rounded,
-                                                  text: "Time",
-                                                  iconColor:
-                                                      AppColors.iconColor2)
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
+                              )
+                            : Container();
                       })
                   : CircularProgressIndicator(
                       color: AppColors.mainColor,
@@ -620,7 +728,7 @@ class _DrugPageBodyState extends State<DrugPageBody> {
               // Get.toNamed(RouteHelper.getPopularDrug(index, "home"));
               Get.to(() => PopularDrugDetail(
                     pageId: index,
-                    page: "home",
+                    pages: "home",
                     drug: drug,
                   ));
             },

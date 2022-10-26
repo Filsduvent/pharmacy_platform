@@ -60,10 +60,10 @@ class _CategoriesMainScreenState extends State<CategoriesMainScreen> {
                             icon: Icons.arrow_back_ios,
                             iconColor: AppColors.mainColor,
                           )),
-                      AppIcon(
-                        icon: Icons.search,
-                        iconColor: AppColors.mainColor,
-                      )
+                      // AppIcon(
+                      //   icon: Icons.search,
+                      //   iconColor: AppColors.mainColor,
+                      // )
                     ],
                   ),
                 ),

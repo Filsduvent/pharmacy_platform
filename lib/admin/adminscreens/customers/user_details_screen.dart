@@ -1,5 +1,6 @@
 // ignore_for_file: sort_child_properties_last
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../models/user_model.dart';
@@ -40,7 +41,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: NetworkImage(widget.user.profilePhoto))),
+                        image: NetworkImage(widget.user.pharmaIcon))),
               ),
             ),
 
@@ -54,12 +55,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                      onTap: () {
-                        //   Get.toNamed(
-                        //       RouteHelper.getAdminPharmacistScreen());
-                        Get.back();
-                      },
-                      child: AppIcon(icon: Icons.arrow_back_ios)),
+                    onTap: () {
+                      //   Get.toNamed(
+                      //       RouteHelper.getAdminPharmacistScreen());
+                      Get.back();
+                    },
+                    child: AppIcon(
+                        icon: Icons.arrow_back_ios,
+                        iconColor: Colors.white,
+                        backgroundColor: AppColors.secondColor),
+                  )
                 ],
               ),
             ),
@@ -98,7 +103,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                 iconSize: Dimensions.height10 * 5 / 2,
                                 size: Dimensions.height10 * 5,
                               ),
-                              bigText: BigText(text: widget.user.username)),
+                              bigText: BigText(text: widget.user.pharmaName)),
                           SizedBox(
                             height: Dimensions.height20,
                           ),
@@ -218,12 +223,14 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               firestore
                   .collection('Users')
                   .doc(id)
-                  .update({"status": "Deactivated"});
+                  .update({"status": "Deactivated"}).whenComplete(
+                      () => updateStatusExistingDrugToUnavailable());
             } else {
               firestore
                   .collection('Users')
                   .doc(id)
-                  .update({"status": "Activated"});
+                  .update({"status": "Activated"}).whenComplete(
+                      () => updateStatusExistingDrugToAvailable());
             }
             // Get.toNamed(RouteHelper.getAdminPharmacistScreen());
             Get.back();
@@ -233,4 +240,38 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
           },
         ),
       );
+
+  updateStatusExistingDrugToUnavailable() async {
+    await FirebaseFirestore.instance
+        .collection('Medicines')
+        .where('uid', isEqualTo: widget.user.uid)
+        .get()
+        .then((snapshot) {
+      for (int index = 0; index < snapshot.docs.length; index++) {
+        FirebaseFirestore.instance
+            .collection('Medicines')
+            .doc(snapshot.docs[index].id)
+            .update({
+          'status': "Unavailable",
+        });
+      }
+    });
+  }
+
+  updateStatusExistingDrugToAvailable() async {
+    await FirebaseFirestore.instance
+        .collection('Medicines')
+        .where('uid', isEqualTo: widget.user.uid)
+        .get()
+        .then((snapshot) {
+      for (int index = 0; index < snapshot.docs.length; index++) {
+        FirebaseFirestore.instance
+            .collection('Medicines')
+            .doc(snapshot.docs[index].id)
+            .update({
+          'status': "Available",
+        });
+      }
+    });
+  }
 }

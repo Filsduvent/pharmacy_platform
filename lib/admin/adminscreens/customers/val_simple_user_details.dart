@@ -59,7 +59,11 @@ class _ValidSimpleUserDetailsState extends State<ValidSimpleUserDetails> {
                         //       RouteHelper.getAdminPharmacistScreen());
                         Get.back();
                       },
-                      child: AppIcon(icon: Icons.arrow_back_ios)),
+                      child: AppIcon(
+                        icon: Icons.arrow_back_ios,
+                        iconColor: Colors.white,
+                        backgroundColor: AppColors.secondColor,
+                      )),
                 ],
               ),
             ),

@@ -56,39 +56,31 @@ class _HomePageState extends State<HomePage> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.home),
-        title: ("Home"),
-        activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
-            .secondColor,
-      ),
+          icon: Icon(CupertinoIcons.home),
+          title: ("Home"),
+          activeColorPrimary: AppColors.mainColor,
+          inactiveColorPrimary: CupertinoColors.systemGrey),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.archivebox_fill),
+        icon: Icon(CupertinoIcons.shopping_cart),
         title: ("Orders"),
         activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
-            .secondColor,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(Icons.medical_information),
-        title: ("Pharmacy"),
-        activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
-            .secondColor,
-      ),
+          icon: Icon(Icons.medical_services),
+          title: ("Pharmacy"),
+          activeColorPrimary: AppColors.mainColor,
+          inactiveColorPrimary: CupertinoColors.systemGrey),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.cart_fill),
-        title: ("Cart"),
-        activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
-            .secondColor,
-      ),
+          icon: Icon(CupertinoIcons.archivebox),
+          title: ("History"),
+          activeColorPrimary: AppColors.mainColor,
+          inactiveColorPrimary: CupertinoColors.systemGrey),
       PersistentBottomNavBarItem(
         icon: Icon(CupertinoIcons.person),
-        title: ("Me"),
+        title: ("Profile"),
         activeColorPrimary: AppColors.mainColor,
-        inactiveColorPrimary: /*CupertinoColors.systemGrey*/ AppColors
-            .secondColor,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
     ];
   }
@@ -151,7 +143,7 @@ class _HomePageState extends State<HomePage> {
         duration: Duration(milliseconds: 200),
       ),
       navBarStyle:
-          NavBarStyle.style1, // Choose the nav bar style with this property.
+          NavBarStyle.style2, // Choose the nav bar style with this property.
     );
   }
 }

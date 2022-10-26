@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pharmacy_plateform/base/custom_loader.dart';
+import 'package:pharmacy_plateform/screens/authentication/signin_screen.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import '../../utils/colors.dart';
 import '../../utils/dimensions.dart';
@@ -35,10 +36,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   var selectedType;
   List<String> _accountType = [
-    'Admin',
     'Pharmacy owner',
     'Customer',
-    'Provider'
   ];
   var role = "Customer";
   File? imageFile;
@@ -411,17 +410,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                               ),
                               SizedBox(
-                                height: Dimensions.height10,
+                                height: Dimensions.screenHeight * 0.05,
                               ),
                               //Tag line
                               RichText(
                                   text: TextSpan(
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () => Get.back(),
                                       text: "Have an account already?",
                                       style: TextStyle(
                                           color: Colors.grey[500],
-                                          fontSize: Dimensions.font20))),
+                                          fontSize: Dimensions.font20),
+                                      children: [
+                                    TextSpan(
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () => Get.to(
+                                            () => SignInScreen(),
+                                            transition: Transition.fade),
+                                      text: " Login",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.mainBlackColor,
+                                          fontSize: Dimensions.font20),
+                                    )
+                                  ])),
                               SizedBox(
                                 height: Dimensions.screenHeight * 0.05,
                               ),

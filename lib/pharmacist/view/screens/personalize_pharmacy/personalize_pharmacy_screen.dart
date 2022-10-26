@@ -94,7 +94,11 @@ class _PersonalizePharmacyScreenState extends State<PersonalizePharmacyScreen> {
                   onTap: () {
                     Get.toNamed(RouteHelper.getMainPharmacyPage());
                   },
-                  child: AppIcon(icon: Icons.arrow_back_ios)),
+                  child: AppIcon(
+                    icon: Icons.arrow_back_ios,
+                    iconColor: Colors.white,
+                    backgroundColor: AppColors.mainColor,
+                  )),
             ],
           ),
         ),
@@ -453,6 +457,9 @@ class _PersonalizePharmacyScreenState extends State<PersonalizePharmacyScreen> {
     try {
       if (nameController.text.isEmpty) {
         showCustomSnackBar("Fill your pharmacy name please", title: "name");
+      } else if (nameController.text.length >= 16) {
+        showCustomSnackBar("The pharmacy Name can't be over 15 characters",
+            title: "Pharmacy Name");
       } else {
         await FirebaseFirestore.instance
             .collection("Users")
@@ -473,7 +480,10 @@ class _PersonalizePharmacyScreenState extends State<PersonalizePharmacyScreen> {
   Future _updatePharmaAddress() async {
     try {
       if (addressController.text.isEmpty) {
-        showCustomSnackBar("Fill your address please", title: "address");
+        showCustomSnackBar("Fill your address please", title: "Address");
+      } else if (addressController.text.length >= 20) {
+        showCustomSnackBar("The address can't be over 20 characters",
+            title: "Address");
       } else {
         await FirebaseFirestore.instance
             .collection("Users")

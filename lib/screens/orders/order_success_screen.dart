@@ -50,7 +50,7 @@ class OrderSuccessScreen extends StatelessWidget {
                 padding: EdgeInsets.all(Dimensions.height10),
                 child: GestureDetector(
                   onTap: () {
-                    Get.toNamed(RouteHelper.getInitial());
+                    Get.offAllNamed(RouteHelper.getInitial());
                   },
                   child: Container(
                     width: double.maxFinite,

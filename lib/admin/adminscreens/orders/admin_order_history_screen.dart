@@ -23,6 +23,7 @@ class _AdminOrderHistoryScreenState extends State<AdminOrderHistoryScreen> {
         body: StreamBuilder<QuerySnapshot>(
             stream: firestore
                 .collection('Orders')
+                .orderBy('orderStatus', descending: true)
                 .where('orderStatus', isNotEqualTo: "Pending")
                 .snapshots(),
             builder: (c, snapshot) {

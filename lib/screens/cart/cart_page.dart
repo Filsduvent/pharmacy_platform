@@ -22,6 +22,8 @@ class CartPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<CartModel> retVal = [];
+    final SlideDrugController slideDrugController =
+        Get.put(SlideDrugController());
     return Scaffold(
       body: Stack(
         children: [
@@ -33,12 +35,13 @@ class CartPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcon(
-                  icon: Icons.arrow_back_ios,
-                  iconColor: Colors.white,
-                  backgroundColor: AppColors.mainColor,
-                  iconSize: Dimensions.iconSize24,
-                ),
+                // AppIcon(
+                //   icon: Icons.arrow_back_ios,
+                //   iconColor: Colors.white,
+                //   backgroundColor: AppColors.mainColor,
+                //   iconSize: Dimensions.iconSize24,
+                // ),
+
                 SizedBox(
                   width: Dimensions.width20 * 5,
                 ),
@@ -53,12 +56,49 @@ class CartPage extends StatelessWidget {
                     iconSize: Dimensions.iconSize24,
                   ),
                 ),
-                AppIcon(
-                  icon: Icons.shopping_cart,
-                  iconColor: Colors.white,
-                  backgroundColor: AppColors.mainColor,
-                  iconSize: Dimensions.iconSize24,
-                ),
+                GetBuilder<SlideDrugController>(builder: (controller) {
+                  return GestureDetector(
+                    onTap: () {
+                      if (controller.totalItems >= 1) {
+                        Get.toNamed(RouteHelper.getCartPage());
+                      }
+                    },
+                    child: Stack(
+                      children: [
+                        AppIcon(
+                          icon: Icons.shopping_cart,
+                          iconColor: Colors.white,
+                          backgroundColor: AppColors.mainColor,
+                          iconSize: Dimensions.iconSize24,
+                        ),
+                        controller.totalItems >= 1
+                            ? Positioned(
+                                right: 0,
+                                top: 0,
+                                child: AppIcon(
+                                  icon: Icons.circle,
+                                  size: 20,
+                                  iconColor: Colors.transparent,
+                                  backgroundColor: AppColors.secondColor,
+                                ),
+                              )
+                            : Container(),
+                        controller.totalItems >= 1
+                            ? Positioned(
+                                right: 3,
+                                top: 3,
+                                child: BigText(
+                                  text:
+                                      slideDrugController.totalItems.toString(),
+                                  size: 12,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : Container()
+                      ],
+                    ),
+                  );
+                }),
               ],
             ),
           ),
@@ -183,7 +223,6 @@ class CartPage extends StatelessWidget {
                                                         "",
                                                 color: Colors.black54,
                                               ),
-                                              SmallText(text: "Pills"),
                                               Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -191,8 +230,8 @@ class CartPage extends StatelessWidget {
                                                 children: [
                                                   BigText(
                                                     text:
-                                                        "\$ ${cartController.getItems[index].price.toString() /*cartContents[index]['price'].toString()*/}",
-                                                    color: Colors.redAccent,
+                                                        "BIF ${cartController.getItems[index].price.toString() /*cartContents[index]['price'].toString()*/}",
+                                                    color: AppColors.mainColor,
                                                   ),
                                                   Container(
                                                     padding: EdgeInsets.only(
@@ -314,7 +353,7 @@ class CartPage extends StatelessWidget {
                           ),
                           BigText(
                               text:
-                                  "\$ ${cartController.totalAmount.toString()} "),
+                                  "BIF ${cartController.totalAmount.toString()} "),
                           SizedBox(
                             width: Dimensions.width10 / 2,
                           ),
@@ -324,7 +363,7 @@ class CartPage extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (firebaseAuth.currentUser != null) {
-                          Get.toNamed(RouteHelper.getAddressScreen());
+                          Get.offAllNamed(RouteHelper.getAddressScreen());
                           //cartController.addToHistory();
                         } else {
                           Get.toNamed(RouteHelper.getSignInPage());
@@ -339,7 +378,7 @@ class CartPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius:
                               BorderRadius.circular(Dimensions.radius20),
-                          color: AppColors.mainColor,
+                          color: AppColors.secondColor,
                         ),
                         child: BigText(
                           text: 'Check out',

@@ -36,6 +36,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_barcode_scanner: ^2.0.0
+  flutter_launcher_icons: ^0.10.0
   get: ^4.6.1
   image_cropper: ^2.0.0
   image_picker: ^0.8.5+3
@@ -43,13 +44,18 @@ dependencies:
   liquid_swipe: ^3.0.0
   persistent_bottom_nav_bar: ^4.0.2
   shared_preferences: ^2.0.13
-  uuid: ^3.0.6
   smooth_page_indicator: ^1.0.0+2
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/image/pharmacy_platform_logo.jpg"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

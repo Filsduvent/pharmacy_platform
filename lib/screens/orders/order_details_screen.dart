@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pharmacy_plateform/models/address_model.dart';
 import 'package:pharmacy_plateform/screens/address/address_card.dart';
+import 'package:pharmacy_plateform/screens/orders/my_orders_screen.dart';
+import 'package:pharmacy_plateform/screens/orders/orders_screen.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
@@ -55,7 +57,7 @@ class OrderDetailsScreen extends StatelessWidget {
                           ),
                           Container(
                             margin: EdgeInsets.all(Dimensions.width10),
-                            height: Dimensions.height45 * 3,
+                            height: Dimensions.height45 * 3.7,
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.circular(Dimensions.radius30),
@@ -87,7 +89,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                       BigText(
                                         text:
                                             "BIF ${dataMap['totalAmount'].toString()}",
-                                        color: Colors.redAccent,
+                                        color: AppColors.mainColor,
                                       )
                                     ],
                                   ),
@@ -133,6 +135,23 @@ class OrderDetailsScreen extends StatelessWidget {
                                   SizedBox(
                                     height: Dimensions.height10,
                                   ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      BigText(
+                                        text: "Payment : ",
+                                        color: Colors.grey,
+                                      ),
+                                      BigText(
+                                        text: dataMap['paymentDetails'],
+                                        color: AppColors.mainColor,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: Dimensions.height10,
+                                  ),
                                 ],
                               ),
                             ),
@@ -154,7 +173,9 @@ class OrderDetailsScreen extends StatelessWidget {
                                             ['quantity'],
                                       )
                                     : Center(
-                                        child: CircularProgressIndicator(),
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.mainColor,
+                                        ),
                                       );
                               }),
 
@@ -172,7 +193,9 @@ class OrderDetailsScreen extends StatelessWidget {
                                         model: AddressModel.fromJson(snap.data!
                                             .data() as Map<String, dynamic>))
                                     : Center(
-                                        child: CircularProgressIndicator(),
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.mainColor,
+                                        ),
                                       );
                               }),
 
@@ -185,9 +208,36 @@ class OrderDetailsScreen extends StatelessWidget {
                               ? Container()
                               : GestureDetector(
                                   onTap: () async {
-                                    confirmedUserOrderReceived(
-                                        context, getOrderId);
-                                    Get.back();
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Are you sure?'),
+                                          content: BigText(
+                                            text: "This action is irreversible",
+                                            color: AppColors.mainBlackColor,
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                                onPressed: () {
+                                                  confirmedUserOrderReceived(
+                                                      context, getOrderId);
+                                                  Get.offAll(OrderScreen());
+                                                },
+                                                child: BigText(
+                                                  text: "Yes",
+                                                  color: Colors.redAccent,
+                                                )),
+                                            TextButton(
+                                                onPressed: () => Get.back(),
+                                                child: BigText(
+                                                  text: "No",
+                                                  color: AppColors.mainColor,
+                                                ))
+                                          ],
+                                        );
+                                      },
+                                    );
                                   },
                                   child: Container(
                                     width: Dimensions.screenWidth - 20,
@@ -195,7 +245,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(
                                             Dimensions.radius30),
-                                        color: AppColors.mainColor),
+                                        color: AppColors.secondColor),
                                     child: Center(
                                       child: BigText(
                                         text: "Confirm reception",
@@ -213,7 +263,9 @@ class OrderDetailsScreen extends StatelessWidget {
                       ),
                     )
                   : Center(
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: AppColors.mainColor,
+                      ),
                     );
             }),
       ),

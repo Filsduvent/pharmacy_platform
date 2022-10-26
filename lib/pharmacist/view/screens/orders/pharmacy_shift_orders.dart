@@ -3,7 +3,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pharmacy_plateform/pharmacist/view/screens/orders/pharmacist_order_card.dart';
-import 'package:pharmacy_plateform/utils/colors.dart';
 import '../../../../base/no_data_page.dart';
 import '../../../../utils/app_constants.dart';
 
@@ -22,7 +21,7 @@ class _PharmacyShiftOrdersState extends State<PharmacyShiftOrders> {
         body: StreamBuilder<QuerySnapshot>(
             stream: firestore
                 .collection('Orders')
-                .where('orderStatus', isEqualTo: "Pending")
+                .where('orderStatus', isEqualTo: "Running")
                 .snapshots(),
             builder: (c, snapshot) {
               return snapshot.hasData && snapshot.data!.docs.isNotEmpty
@@ -42,7 +41,7 @@ class _PharmacyShiftOrdersState extends State<PharmacyShiftOrders> {
                                         as Map<String, dynamic>)['productID'])
                                 .get(),
                             builder: (c, snap) {
-                              return snap.hasData
+                              return snap.hasData && snap.data!.docs.isNotEmpty
                                   ? PharmacistOrderCard(
                                       itemCount: snap.data!.docs.length,
                                       data: snap.data!.docs,
@@ -57,11 +56,7 @@ class _PharmacyShiftOrdersState extends State<PharmacyShiftOrders> {
                                               .data() as Map<String, dynamic>)[
                                           'orderedProduct'][0]['quantity'],
                                     )
-                                  : Center(
-                                      child: CircularProgressIndicator(
-                                        color: AppColors.mainColor,
-                                      ),
-                                    );
+                                  : Container();
                             });
                       })
                   : NoDataPage(

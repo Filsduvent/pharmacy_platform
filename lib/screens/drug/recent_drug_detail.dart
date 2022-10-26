@@ -1,12 +1,12 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables, sort_child_properties_last
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pharmacy_plateform/controllers/recent_drug_controller.dart';
 import 'package:pharmacy_plateform/controllers/slide_drug_controller.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/widgets/expandable_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../controllers/cart_controller.dart';
 import '../../models/drug_model.dart';
 import '../../utils/app_constants.dart';
@@ -33,6 +33,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
   String? email = "";
   String? phone = "";
   String? address = "";
+  String? status = "";
 
   Future _getDataFromDatabase() async {
     await FirebaseFirestore.instance
@@ -51,6 +52,20 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
     });
   }
 
+  Future _getStatusFromDatabase() async {
+    await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .get()
+        .then((snapshot) async {
+      if (snapshot.exists) {
+        setState(() {
+          status = snapshot.data()!["status"];
+        });
+      }
+    });
+  }
+
   @override
   void initState() {
     // ignore: todo
@@ -58,6 +73,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
     super.initState();
 
     _getDataFromDatabase();
+    _getStatusFromDatabase();
   }
 
   @override
@@ -86,7 +102,10 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                         Get.toNamed(RouteHelper.getInitial());
                       }
                     },
-                    child: AppIcon(icon: Icons.clear),
+                    child: AppIcon(
+                      icon: Icons.clear,
+                      iconColor: AppColors.secondColor,
+                    ),
                   ),
                   //AppIcon(icon: Icons.shopping_cart_outlined),
 
@@ -99,7 +118,10 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                       },
                       child: Stack(
                         children: [
-                          AppIcon(icon: Icons.shopping_cart_outlined),
+                          AppIcon(
+                            icon: Icons.shopping_cart_outlined,
+                            iconColor: AppColors.secondColor,
+                          ),
                           controller.totalItems >= 1
                               ? Positioned(
                                   right: 0,
@@ -180,7 +202,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.categories,
-                              color: AppColors.mainColor,
+                              color: const Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -197,7 +219,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.manufacturingDate,
-                              color: AppColors.yellowColor,
+                              color: const Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -214,7 +236,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.expiringDate,
-                              color: AppColors.mainColor,
+                              color: const Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -231,7 +253,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.publishedDate,
-                              color: AppColors.yellowColor,
+                              color: const Color(0xFFccc7c5),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -251,7 +273,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                               children: [
                                 BigText(
                                   text: 'BIF',
-                                  color: Colors.redAccent,
+                                  color: AppColors.mainColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width10 / 2,
@@ -277,7 +299,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.quantity.toString(),
-                              color: AppColors.yellowColor,
+                              color: const Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -294,7 +316,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.units,
-                              color: AppColors.mainColor,
+                              color: const Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -311,7 +333,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                             ),
                             BigText(
                               text: widget.drug.status,
-                              color: AppColors.yellowColor,
+                              color: const Color(0xFFccc7c5),
                             ),
                           ],
                         ),
@@ -330,7 +352,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                         ),
                         BigText(
                           text: "Pharmacy informations",
-                          color: AppColors.secondColor,
+                          color: AppColors.mainBlackColor,
                         ),
                         SizedBox(
                           height: Dimensions.height20,
@@ -341,12 +363,15 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                               children: [
                                 BigText(
                                   text: "Pharmacy Name",
-                                  color: AppColors.yellowColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: pharmaName!),
+                                BigText(
+                                  text: pharmaName!,
+                                  color: const Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -356,12 +381,15 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                               children: [
                                 BigText(
                                   text: "Email",
-                                  color: AppColors.mainColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: email!),
+                                BigText(
+                                  text: email!,
+                                  color: const Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -370,14 +398,14 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                             Row(
                               children: [
                                 BigText(
-                                  text: " Phone",
-                                  color: AppColors.yellowColor,
-                                ),
+                                    text: " Phone",
+                                    color: AppColors.mainBlackColor),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
                                 BigText(
                                   text: phone!,
+                                  color: const Color(0xFFccc7c5),
                                 )
                               ],
                             ),
@@ -388,12 +416,15 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                               children: [
                                 BigText(
                                   text: "Address",
-                                  color: AppColors.mainColor,
+                                  color: AppColors.mainBlackColor,
                                 ),
                                 SizedBox(
                                   width: Dimensions.width30,
                                 ),
-                                BigText(text: address!),
+                                BigText(
+                                  text: address!,
+                                  color: const Color(0xFFccc7c5),
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -435,7 +466,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                       child: AppIcon(
                           iconSize: Dimensions.iconSize24,
                           iconColor: Colors.white,
-                          backgroundColor: AppColors.mainColor,
+                          backgroundColor: AppColors.secondColor,
                           icon: Icons.remove),
                     ),
                     BigText(
@@ -451,7 +482,7 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                       child: AppIcon(
                           iconSize: Dimensions.iconSize24,
                           iconColor: Colors.white,
-                          backgroundColor: AppColors.mainColor,
+                          backgroundColor: AppColors.secondColor,
                           icon: Icons.add),
                     )
                   ],
@@ -471,44 +502,49 @@ class _RecentDrugDetailState extends State<RecentDrugDetail> {
                       topLeft: Radius.circular(Dimensions.radius20 * 2),
                     )),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      padding: EdgeInsets.only(
-                          top: Dimensions.height20,
-                          bottom: Dimensions.height20,
-                          left: Dimensions.width20,
-                          right: Dimensions.width20),
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.radius20),
-                        color: Colors.white,
-                      ),
-                      child: Icon(
-                        Icons.favorite,
-                        color: AppColors.mainColor,
-                      ),
-                    ),
+                    // Container(
+                    //   padding: EdgeInsets.only(
+                    //       top: Dimensions.height20,
+                    //       bottom: Dimensions.height20,
+                    //       left: Dimensions.width20,
+                    //       right: Dimensions.width20),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius:
+                    //         BorderRadius.circular(Dimensions.radius20),
+                    //     color: Colors.white,
+                    //   ),
+                    //   child: Icon(
+                    //     Icons.favorite,
+                    //     color: AppColors.mainColor,
+                    //   ),
+                    // ),
                     GestureDetector(
                       onTap: () {
-                        if (slideDrugController.inCartItems >
-                            widget.drug.quantity) {
-                          Get.snackbar(
-                            "Item count",
-                            "Your requested quantity is greater than the available one please check the quantity",
-                            backgroundColor: AppColors.mainColor,
-                            colorText: Colors.white,
-                            icon: const Icon(
-                              Icons.alarm,
-                              color: Colors.white,
-                            ),
-                            barBlur: 20,
-                            isDismissible: true,
-                            duration: const Duration(seconds: 5),
-                          );
+                        if (firebaseAuth.currentUser != null &&
+                            status == "Activated") {
+                          if (slideDrugController.inCartItems >
+                              widget.drug.quantity) {
+                            Get.snackbar(
+                              "Item count",
+                              "Your requested quantity is greater than the available one please check the quantity",
+                              backgroundColor: AppColors.mainColor,
+                              colorText: Colors.white,
+                              icon: const Icon(
+                                Icons.alarm,
+                                color: Colors.white,
+                              ),
+                              barBlur: 20,
+                              isDismissible: true,
+                              duration: const Duration(seconds: 5),
+                            );
+                          } else {
+                            slideDrugController.addItem(widget.drug);
+                            addItemToCartById(widget.drug.id);
+                          }
                         } else {
-                          slideDrugController.addItem(drug);
-                          addItemToCartById(drug.id);
+                          Get.toNamed(RouteHelper.getSignInPage());
                         }
                       },
                       child: Container(

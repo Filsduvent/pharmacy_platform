@@ -93,7 +93,7 @@ class _AccountScreenState extends State<AccountScreen> {
       ),
 
       //Body
-      body: firebaseAuth.currentUser != null
+      body: firebaseAuth.currentUser != null && status == "Activated"
           ? Stack(
               children: [
                 Positioned(
@@ -327,7 +327,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                 autofocus: false,
                                                 controller: phoneController,
                                                 keyboardType:
-                                                    TextInputType.name,
+                                                    TextInputType.phone,
                                                 textInputAction:
                                                     TextInputAction.done,
                                                 decoration:
@@ -489,7 +489,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     });
                                                   }
 
-                                                  authController.logOut();
+                                                  authController
+                                                      .logOutForCustomer();
                                                 }
                                               },
                                               child: BigText(
@@ -690,12 +691,15 @@ class _AccountScreenState extends State<AccountScreen> {
     try {
       if (usernameController.text.isEmpty) {
         showCustomSnackBar("Fill your username please", title: "username");
+      } else if (usernameController.text.length >= 16) {
+        showCustomSnackBar("The username can't be over 15 characters",
+            title: "UserName");
       } else {
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .update({'username': usernameController.text}).then((value) {
-          Get.to(UpdateSuccessScreen());
+          Get.off(UpdateSuccessScreen());
         });
       }
     } catch (e) {
@@ -711,12 +715,17 @@ class _AccountScreenState extends State<AccountScreen> {
       if (phoneController.text.isEmpty) {
         showCustomSnackBar("Fill your phone number please",
             title: "phone number");
+      } else if (phoneController.text.length != 8) {
+        showCustomSnackBar("Wrong phone number format", title: "Phone number");
+      } else if (int.parse(phoneController.text) < 0) {
+        showCustomSnackBar("Phone number can't be negative",
+            title: "Phone number");
       } else {
         await FirebaseFirestore.instance
             .collection("Users")
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .update({'phone': phoneController.text}).then((value) {
-          Get.to(UpdateSuccessScreen());
+          Get.off(UpdateSuccessScreen());
         });
       }
     } catch (e) {

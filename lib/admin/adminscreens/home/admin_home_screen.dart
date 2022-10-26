@@ -427,14 +427,14 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             }),
                         CategoryCard(
                           imgSrc: "assets/image/pharmacist.png",
-                          title: "Pharmacists",
+                          title: "PHARMACIES",
                           press: () {
                             Get.toNamed(RouteHelper.getAdminPharmacistScreen());
                           },
                         ),
                         CategoryCard(
                             imgSrc: "assets/image/customer.png",
-                            title: "Customers",
+                            title: "CUSTOMERS",
                             press: () {
                               Get.toNamed(
                                   RouteHelper.getSimpleCustomerScreen());
@@ -471,8 +471,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   void onSelected(BuildContext context, MenuItemsAdmin item) {
     switch (item) {
-      case MenuItemsListAdmin.itemSettings:
-        break;
       case MenuItemsListAdmin.itemProfile:
         Get.toNamed(RouteHelper.getAdminProfileScreen());
         break;
@@ -497,10 +495,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                         authController.logOut();
                       }
                     },
-                    child: BigText(
-                      text: "Yes",
-                      color: AppColors.yellowColor,
-                    )),
+                    child: BigText(text: "Yes", color: Colors.redAccent)),
                 TextButton(
                     onPressed: () => Get.back(),
                     child: BigText(
