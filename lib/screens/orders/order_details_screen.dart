@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pharmacy_plateform/models/address_model.dart';
 import 'package:pharmacy_plateform/screens/address/address_card.dart';
-import 'package:pharmacy_plateform/screens/orders/my_orders_screen.dart';
 import 'package:pharmacy_plateform/screens/orders/orders_screen.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';

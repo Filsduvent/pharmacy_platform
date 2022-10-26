@@ -245,7 +245,9 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(
                                         Dimensions.radius30),
-                                    color: Colors.grey.shade100,
+                                    color: index.isEven
+                                        ? Color(0xFF69c5df)
+                                        : Color(0xFF9294cc),
                                   ),
                                   height: Dimensions.height30 * 2,
                                   width: Dimensions.width30 * 2,
@@ -566,7 +568,9 @@ class _DrugPageBodyState extends State<DrugPageBody> {
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               Dimensions.radius20),
-                                          color: Colors.white38,
+                                          color: index.isEven
+                                              ? Color(0xFF69c5df)
+                                              : Color(0xFF9294cc),
                                           image: DecorationImage(
                                               fit: BoxFit.cover,
                                               image:
