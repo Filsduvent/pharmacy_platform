@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:pharmacy_plateform/models/address_model.dart';
 import 'package:pharmacy_plateform/screens/address/address_card.dart';
-import 'package:pharmacy_plateform/screens/orders/orders_screen.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
@@ -207,36 +206,43 @@ class OrderDetailsScreen extends StatelessWidget {
                               ? Container()
                               : GestureDetector(
                                   onTap: () async {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text('Are you sure?'),
-                                          content: BigText(
-                                            text: "This action is irreversible",
-                                            color: AppColors.mainBlackColor,
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                                onPressed: () {
-                                                  confirmedUserOrderReceived(
-                                                      context, getOrderId);
-                                                  Get.offAll(OrderScreen());
-                                                },
-                                                child: BigText(
-                                                  text: "Yes",
-                                                  color: Colors.redAccent,
-                                                )),
-                                            TextButton(
-                                                onPressed: () => Get.back(),
-                                                child: BigText(
-                                                  text: "No",
-                                                  color: AppColors.mainColor,
-                                                ))
-                                          ],
-                                        );
-                                      },
-                                    );
+                                    confirmedUserOrderReceived(
+                                        context, getOrderId);
+                                    Get.back();
+                                    // showDialog(
+                                    //   context: context,
+                                    //   builder: (context) {
+                                    //     return AlertDialog(
+                                    //       title: const Text('Are you sure?'),
+                                    //       content: BigText(
+                                    //         text: "This action is irreversible",
+                                    //         color: AppColors.mainBlackColor,
+                                    //       ),
+                                    //       actions: [
+                                    //         TextButton(
+                                    //             onPressed: () {
+
+                                    //               // Get.offAll(OrderScreen());
+                                    //               Navigator.push(
+                                    //                   context,
+                                    //                   MaterialPageRoute(
+                                    //                       builder: (context) =>
+                                    //                           OrderScreen()));
+                                    //             },
+                                    //             child: BigText(
+                                    //               text: "Yes",
+                                    //               color: Colors.redAccent,
+                                    //             )),
+                                    //         TextButton(
+                                    //             onPressed: () => Get.back(),
+                                    //             child: BigText(
+                                    //               text: "No",
+                                    //               color: AppColors.mainColor,
+                                    //             ))
+                                    //       ],
+                                    //     );
+                                    //   },
+                                    // );
                                   },
                                   child: Container(
                                     width: Dimensions.screenWidth - 20,

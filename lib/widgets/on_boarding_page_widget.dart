@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:pharmacy_plateform/utils/dimensions.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
@@ -41,7 +43,7 @@ class OnBoardingPageWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Roboto',
-                  color: const Color(0xFFccc7c5),
+                  color: /*const Color(0xFFccc7c5)*/ AppColors.mainBlackColor,
                   fontSize: Dimensions.font20,
                   height: 1.2,
                 ),

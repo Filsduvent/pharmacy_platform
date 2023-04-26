@@ -5,10 +5,6 @@ import 'package:pharmacy_plateform/utils/dimensions.dart';
 import 'package:pharmacy_plateform/widgets/app_icon.dart';
 import 'package:pharmacy_plateform/widgets/big_text.dart';
 
-import '../utils/dimensions.dart';
-import 'app_icon.dart';
-import 'big_text.dart';
-
 class AccountWidget extends StatelessWidget {
   AppIcon appIcon;
   BigText bigText;

@@ -27,22 +27,22 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  cloud_firestore: ^3.1.17
+  cloud_firestore: ^4.2.0
   cupertino_icons: ^1.0.2
   dots_indicator: ^2.0.0
-  firebase_auth: ^3.3.18
-  firebase_core: ^1.17.0
-  firebase_storage: ^10.2.17
+  firebase_auth: ^4.2.1
+  firebase_core: ^2.4.0
+  firebase_storage: ^11.0.8
   flutter:
     sdk: flutter
   flutter_barcode_scanner: ^2.0.0
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.11.0
   get: ^4.6.1
-  image_cropper: ^2.0.0
+  image_cropper: ^3.0.1
   image_picker: ^0.8.5+3
   intl: ^0.17.0
   liquid_swipe: ^3.0.0
-  persistent_bottom_nav_bar: ^4.0.2
+  persistent_bottom_nav_bar: ^5.0.2
   shared_preferences: ^2.0.13
   smooth_page_indicator: ^1.0.0+2
   uuid: ^3.0.6

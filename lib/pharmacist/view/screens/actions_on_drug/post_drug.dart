@@ -319,17 +319,17 @@ class _PostDrugFormState extends State<PostDrugForm> {
                                           DropdownButton<dynamic>(
                                             items: unitsItems,
                                             onChanged: (unitsValue) {
-                                              final snackBar = SnackBar(
-                                                content: Text(
-                                                  'Selected Currency value is $unitsValue',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily: robotoRegular
-                                                          .toString()),
-                                                ),
-                                              );
-                                              Scaffold.of(context)
-                                                  .showSnackBar(snackBar);
+                                              // final snackBar = SnackBar(
+                                              //   content: Text(
+                                              //     'Selected Currency value is $unitsValue',
+                                              //     style: TextStyle(
+                                              //         color: Colors.white,
+                                              //         fontFamily: robotoRegular
+                                              //             .toString()),
+                                              //   ),
+                                              // );
+                                              // Scaffold.of(context)
+                                              //     .showSnackBar(snackBar);
                                               setState(() {
                                                 selectedUnits = unitsValue;
                                                 units = unitsValue.toString();

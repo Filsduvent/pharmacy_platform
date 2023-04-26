@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:pharmacy_plateform/base/custom_loader.dart';
 import 'package:pharmacy_plateform/routes/route_helper.dart';
 import 'package:pharmacy_plateform/utils/app_constants.dart';
-import 'package:pharmacy_plateform/widgets/big_text.dart';
 import '../../utils/colors.dart';
 
 class PlaceOrder extends StatefulWidget {
@@ -42,16 +41,16 @@ class _PlaceOrderState extends State<PlaceOrder> {
                       child: Image.asset('assets/image/truck.png'),
                     ),
                     SizedBox(height: 10.0),
-                    FlatButton(
-                        color: AppColors.mainColor,
-                        textColor: Colors.white,
-                        padding: EdgeInsets.all(8.0),
-                        splashColor: Colors.deepOrange,
-                        onPressed: () {
-                          addOrderDetails();
-                        },
-                        child:
-                            BigText(text: "Place order", color: Colors.white))
+                    // FlatButton(
+                    //     color: AppColors.mainColor,
+                    //     textColor: Colors.white,
+                    //     padding: EdgeInsets.all(8.0),
+                    //     splashColor: Colors.deepOrange,
+                    //     onPressed: () {
+                    //       addOrderDetails();
+                    //     },
+                    //     child:
+                    //         BigText(text: "Place order", color: Colors.white))
                   ],
                 ),
               ),
